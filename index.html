@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="description" content="Catálogo de productos de ZonaShop" />
+
+    <title>ZonaShop</title>
+  </head>
+
+  <body>
+    <header class="encabezado">
+      <a class="marca" href="/"> ZonaShop </a>
+
+      <button class="boton-carrito" type="button">
+        Carrito
+        <span id="cantidad-carrito">0</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="presentacion">
+        <div class="presentacion__contenido">
+          <p class="presentacion__etiqueta">Catálogo en línea</p>
+
+          <h1>Encuentra tu próximo favorito</h1>
+
+          <p>
+            Consulta nuestros productos, precios y disponibilidad actualizada.
+          </p>
+        </div>
+      </section>
+
+      <section class="catalogo" aria-labelledby="titulo-catalogo">
+        <div class="catalogo__encabezado">
+          <div>
+            <p class="seccion-etiqueta">Explorar</p>
+
+            <h2 id="titulo-catalogo">Productos</h2>
+          </div>
+
+          <form id="formulario-filtros" class="filtros">
+            <label>
+              Buscar producto
+
+              <input id="busqueda" type="search" placeholder="Ej. camiseta" />
+            </label>
+
+            <label>
+              Categoría
+
+              <select id="categoria">
+                <option value="">Todas las categorías</option>
+              </select>
+            </label>
+
+            <button type="submit">Buscar</button>
+          </form>
+        </div>
+
+        <p id="estado" class="estado" role="status">Cargando catálogo...</p>
+
+        <div id="productos" class="productos" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
