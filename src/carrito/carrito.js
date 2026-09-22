@@ -8,7 +8,6 @@ const elementos = {
   modal: document.querySelector("#modal-carrito"),
   botonCerrar: document.querySelector("#boton-cerrar-carrito"),
   botonVaciar: document.querySelector("#boton-vaciar-carrito"),
-  botonWhatsApp: document.querySelector("#boton-finalizar-whatsapp"),
   lista: document.querySelector("#lista-carrito"),
   estado: document.querySelector("#estado-carrito"),
   total: document.querySelector("#total-carrito"),
@@ -118,10 +117,6 @@ function actualizarResumen() {
 
   if (elementos.botonVaciar) {
     elementos.botonVaciar.disabled = cantidad === 0;
-  }
-
-  if (elementos.botonWhatsApp) {
-    elementos.botonWhatsApp.disabled = cantidad === 0;
   }
 }
 
@@ -292,50 +287,6 @@ function vaciarCarrito() {
 }
 
 
-function crearMensajeWhatsApp() {
-  const lineas = [
-    "Hola, quiero realizar el siguiente pedido en ZonaShop:",
-    "",
-  ];
-
-  carrito.forEach((item) => {
-    const subtotal = Number(item.precio) * item.cantidad;
-
-    lineas.push(
-      `• ${item.nombre} x${item.cantidad} — ${formatearPrecio(subtotal)}`,
-    );
-  });
-
-  lineas.push(
-    "",
-    `Total: ${formatearPrecio(obtenerValorTotal())}`,
-    "",
-    "Quedo atento(a) para confirmar disponibilidad y entrega.",
-  );
-
-  return lineas.join("\n");
-}
-
-
-function finalizarPorWhatsApp() {
-  if (carrito.length === 0) {
-    mostrarAviso(
-      "Agrega al menos un producto antes de continuar.",
-      true,
-    );
-    return;
-  }
-
-  const mensaje = encodeURIComponent(crearMensajeWhatsApp());
-
-  window.open(
-    `https://wa.me/?text=${mensaje}`,
-    "_blank",
-    "noopener,noreferrer",
-  );
-}
-
-
 export function agregarAlCarrito(producto) {
   const existencias = Number(producto.existencias);
 
@@ -404,11 +355,6 @@ export function iniciarCarrito() {
   elementos.botonVaciar?.addEventListener(
     "click",
     vaciarCarrito,
-  );
-
-  elementos.botonWhatsApp?.addEventListener(
-    "click",
-    finalizarPorWhatsApp,
   );
 
   elementos.modal?.addEventListener(
