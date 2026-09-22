@@ -74,6 +74,63 @@ select {
   }
 }
 
+.boton-cuenta {
+  margin-left: auto;
+  padding: 0.65rem 1rem;
+  color: $color-principal;
+  background: #ffffff;
+  border: 1px solid $color-principal;
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
+.modal-cliente {
+  width: min(720px, calc(100% - 2rem));
+  max-height: 90vh;
+  padding: 0;
+  border: 0;
+  border-radius: 1rem;
+
+  &::backdrop { background: rgba(15, 28, 45, 0.62); }
+
+  &__contenido { position: relative; padding: clamp(1.5rem, 4vw, 2.5rem); }
+  &__cerrar {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: 0;
+    background: transparent;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+}
+
+.formulario-cliente {
+  display: grid;
+  gap: 1rem;
+
+  label { display: grid; gap: 0.35rem; font-weight: 650; }
+  input, select { width: 100%; padding: 0.7rem; border: 1px solid $color-borde; border-radius: 0.5rem; }
+  button { padding: 0.8rem; color: #fff; background: $color-principal; border: 0; border-radius: 0.55rem; cursor: pointer; }
+
+  &__doble { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+}
+
+.boton-enlace { margin: 1rem 0; color: $color-secundario; background: transparent; border: 0; cursor: pointer; }
+.cliente-sesion { display: grid; gap: 1.25rem; }
+.checkout-cliente { display: grid; gap: 0.75rem; padding: 1rem; background: #edf4fa; border-radius: 0.75rem; }
+.checkout-cliente label { display: grid; gap: 0.35rem; }
+.checkout-cliente select { padding: 0.7rem; }
+.checkout-cliente button { padding: 0.85rem; color: #fff; background: $color-acento; border: 0; border-radius: 0.55rem; cursor: pointer; }
+.lista-pedidos { display: grid; gap: 0.65rem; padding-left: 1.2rem; }
+.mensaje-error { color: #a53636; }
+.boton-secundario { padding: 0.7rem; background: #fff; border: 1px solid $color-borde; border-radius: 0.55rem; cursor: pointer; }
+
+@media (max-width: 620px) {
+  .encabezado { flex-wrap: wrap; gap: 0.75rem; }
+  .formulario-cliente__doble { grid-template-columns: 1fr; }
+}
+
 
 .presentacion {
   padding: 5rem max(5vw, 1rem);

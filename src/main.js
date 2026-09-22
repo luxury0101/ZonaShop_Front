@@ -27,6 +27,10 @@ import {
   obtenerProductos,
 } from "./api/catalogo.js";
 
+import {
+  iniciarModuloClientes,
+} from "./clientes/clientes.js";
+
 
 const formulario = document.querySelector(
   "#formulario-filtros",
@@ -276,6 +280,7 @@ selectorCategoria.addEventListener(
 async function iniciarAplicacion() {
   iniciarCarrito();
   iniciarDetalleProducto();
+  await iniciarModuloClientes();
 
   try {
     await Promise.all([

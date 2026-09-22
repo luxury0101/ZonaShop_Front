@@ -28,6 +28,14 @@
       </div>
 
       <button
+        id="boton-cuenta-cliente"
+        class="boton-cuenta"
+        type="button"
+      >
+        Ingresar
+      </button>
+
+      <button
         id="boton-abrir-carrito"
         class="boton-carrito"
         type="button"
@@ -433,6 +441,76 @@
             Vaciar carrito
           </button>
         </div>
+      </div>
+    </dialog>
+
+    <dialog id="modal-cliente" class="modal-cliente">
+      <div class="modal-cliente__contenido">
+        <button
+          id="boton-cerrar-cliente"
+          class="modal-cliente__cerrar"
+          type="button"
+          aria-label="Cerrar mi cuenta"
+        >×</button>
+
+        <p class="seccion-etiqueta">Clientes ZonaShop</p>
+        <h2 id="cliente-nombre">Mi cuenta</h2>
+        <p id="mensaje-cliente" role="status" aria-live="polite"></p>
+
+        <form id="formulario-cliente-login" class="formulario-cliente">
+          <label>Correo
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>Contraseña
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button type="submit">Iniciar sesión</button>
+        </form>
+
+        <form id="formulario-cliente-registro" class="formulario-cliente" hidden>
+          <div class="formulario-cliente__doble">
+            <label>Nombre<input name="nombre" required /></label>
+            <label>Apellido<input name="apellido" required /></label>
+          </div>
+          <label>Correo<input name="email" type="email" autocomplete="email" required /></label>
+          <label>Teléfono<input name="telefono" type="tel" autocomplete="tel" required /></label>
+          <label>Contraseña<input name="password" type="password" autocomplete="new-password" minlength="8" required /></label>
+          <button type="submit">Crear cuenta</button>
+        </form>
+
+        <button id="alternar-formulario-cliente" class="boton-enlace" type="button">
+          Crear una cuenta
+        </button>
+
+        <section id="cliente-sesion" class="cliente-sesion" hidden>
+          <h3>Dirección de entrega</h3>
+          <form id="formulario-direccion" class="formulario-cliente">
+            <div class="formulario-cliente__doble">
+              <label>Nombre de la dirección<input name="nombre" value="Principal" required /></label>
+              <label>Destinatario<input name="destinatario" required /></label>
+              <label>Teléfono<input name="telefono" type="tel" required /></label>
+              <label>Departamento<input name="departamento" required /></label>
+              <label>Ciudad<input name="ciudad" required /></label>
+              <label>Código postal<input name="codigo_postal" /></label>
+            </div>
+            <label>Dirección<input name="direccion" autocomplete="street-address" required /></label>
+            <label>Complemento<input name="complemento" /></label>
+            <button type="submit">Guardar dirección</button>
+          </form>
+
+          <div class="checkout-cliente">
+            <h3>Finalizar compra</h3>
+            <label>Dirección
+              <select id="direccion-checkout" required></select>
+            </label>
+            <button id="boton-pagar-wompi" type="button">Pagar con Wompi</button>
+            <small>Pago seguro en ambiente Sandbox. No se cobrará dinero real.</small>
+          </div>
+
+          <h3>Mis pedidos</h3>
+          <ul id="lista-pedidos-cliente" class="lista-pedidos"></ul>
+          <button id="boton-salir-cliente" class="boton-secundario" type="button">Cerrar sesión</button>
+        </section>
       </div>
     </dialog>
 

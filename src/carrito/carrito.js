@@ -279,7 +279,7 @@ function renderizarCarrito() {
 }
 
 
-function vaciarCarrito() {
+export function vaciarCarrito() {
   carrito = [];
   guardarCarrito();
   renderizarCarrito();
@@ -335,6 +335,14 @@ export function agregarAlCarrito(producto) {
   mostrarAviso(
     `${producto.nombre} se agregó al carrito.`,
   );
+}
+
+
+export function obtenerItemsCarrito() {
+  return carrito.map((item) => ({
+    producto: item.id,
+    cantidad: item.cantidad,
+  }));
 }
 
 
