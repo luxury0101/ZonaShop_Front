@@ -82,47 +82,47 @@ export function obtenerProductos({
 }
 
 
-export function crearProducto({
+function construirDatosProducto({
   categoria,
   nombre,
   descripcion = "",
   precio,
   existencias,
+  imagen,
 }) {
+  const datos = new FormData();
+
+  datos.append("categoria", categoria);
+  datos.append("nombre", nombre);
+  datos.append("descripcion", descripcion);
+  datos.append("precio", String(precio));
+  datos.append("existencias", String(existencias));
+
+  if (imagen instanceof File) {
+    datos.append("imagen", imagen);
+  }
+
+  return datos;
+}
+
+
+export function crearProducto(datosProducto) {
   return solicitar("/productos/", {
     method: "POST",
-    body: JSON.stringify({
-      categoria,
-      nombre,
-      descripcion,
-      precio,
-      existencias,
-    }),
+    body: construirDatosProducto(datosProducto),
   });
 }
 
 
 export function actualizarProducto(
   productoId,
-  {
-    categoria,
-    nombre,
-    descripcion = "",
-    precio,
-    existencias,
-  },
+  datosProducto,
 ) {
   return solicitar(
     `/productos/${productoId}/`,
     {
       method: "PATCH",
-      body: JSON.stringify({
-        categoria,
-        nombre,
-        descripcion,
-        precio,
-        existencias,
-      }),
+      body: construirDatosProducto(datosProducto),
     },
   );
 }
