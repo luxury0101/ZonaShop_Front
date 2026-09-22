@@ -888,3 +888,180 @@ select {
     cursor: wait;
   }
 }
+
+// ================================
+// Administración de productos
+// ================================
+
+.separador-administracion {
+  height: 1px;
+  margin: 2.5rem 0;
+  background: $color-borde;
+}
+
+
+.formulario-producto {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 1rem;
+  align-items: center;
+
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+
+  background: $color-fondo;
+  border: 1px solid $color-borde;
+  border-radius: 0.8rem;
+
+  label {
+    color: #3f5062;
+    font-weight: 700;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.8rem;
+
+    color: $color-texto;
+    background: #ffffff;
+    border: 1px solid #b9c3ce;
+    border-radius: 0.55rem;
+
+    font: inherit;
+
+    &:focus {
+      border-color: $color-secundario;
+      outline: 3px solid
+        rgba($color-secundario, 0.15);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  &__acciones {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 0.75rem;
+    justify-content: flex-end;
+
+    button {
+      padding: 0.75rem 1rem;
+      border-radius: 0.55rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #boton-guardar-producto {
+      color: #ffffff;
+      background: $color-principal;
+      border: 1px solid $color-principal;
+
+      &:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
+    }
+
+    #boton-cancelar-producto {
+      color: $color-principal;
+      background: #ffffff;
+      border: 1px solid $color-principal;
+
+      &[hidden] {
+        display: none;
+      }
+    }
+  }
+}
+
+
+.mensaje-producto {
+  grid-column: 1 / -1;
+  min-height: 1.3rem;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+
+.tabla-productos-contenedor {
+  overflow-x: auto;
+}
+
+
+.tabla-productos {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid $color-borde;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th {
+    color: $color-principal;
+    background: #edf3f8;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+
+#boton-cancelar-eliminacion-producto {
+  color: $color-principal;
+  background: #ffffff;
+  border: 1px solid $color-principal;
+}
+
+
+#boton-confirmar-eliminacion-producto {
+  color: #ffffff;
+  background: #a53636;
+  border: 1px solid #a53636;
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: wait;
+  }
+}
+
+
+@media (max-width: 800px) {
+  .formulario-producto {
+    grid-template-columns: 1fr;
+
+    &__acciones,
+    .mensaje-producto {
+      grid-column: 1;
+    }
+
+    &__acciones {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .tabla-productos__acciones {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
