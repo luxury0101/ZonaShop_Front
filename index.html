@@ -27,7 +27,12 @@
         <button id="boton-cerrar-sesion" type="button">Cerrar sesión</button>
       </div>
 
-      <button class="boton-carrito" type="button">
+      <button
+        id="boton-abrir-carrito"
+        class="boton-carrito"
+        type="button"
+        aria-haspopup="dialog"
+      >
         Carrito
         <span id="cantidad-carrito">0</span>
       </button>
@@ -319,6 +324,61 @@
             type="button"
           >
             Sí, eliminar
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+
+    <dialog id="modal-carrito" class="modal-carrito">
+      <div class="modal-carrito__contenido">
+        <div class="modal-carrito__encabezado">
+          <div>
+            <p class="seccion-etiqueta">Tu selección</p>
+            <h2>Carrito de compras</h2>
+          </div>
+
+          <button
+            id="boton-cerrar-carrito"
+            class="modal-carrito__cerrar"
+            type="button"
+            aria-label="Cerrar carrito"
+          >
+            ×
+          </button>
+        </div>
+
+        <p id="estado-carrito" class="estado-carrito" role="status"></p>
+
+        <div
+          id="lista-carrito"
+          class="lista-carrito"
+          aria-live="polite"
+        ></div>
+
+        <div class="resumen-carrito">
+          <span>Total</span>
+          <strong id="total-carrito">$ 0</strong>
+        </div>
+
+        <p
+          id="aviso-carrito"
+          class="aviso-carrito"
+          role="status"
+          aria-live="polite"
+          hidden
+        ></p>
+
+        <div class="modal-carrito__acciones">
+          <button id="boton-vaciar-carrito" type="button">
+            Vaciar carrito
+          </button>
+
+          <button
+            id="boton-finalizar-whatsapp"
+            type="button"
+          >
+            Finalizar por WhatsApp
           </button>
         </div>
       </div>
