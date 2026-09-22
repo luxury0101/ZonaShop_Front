@@ -1,6 +1,10 @@
 import "./styles/main.scss";
 
 import {
+  restaurarSesion,
+} from "./auth/sesion.js";
+
+import {
   obtenerCategorias,
   obtenerProductos,
 } from "./api/catalogo.js";
@@ -185,10 +189,17 @@ selectorCategoria.addEventListener(
 
 async function iniciarAplicacion() {
   try {
-    await cargarCategorias();
+    await Promise.all([
+      restaurarSesion(),
+      cargarCategorias(),
+    ]);
+
     await cargarProductos();
   } catch (error) {
-    console.error(error);
+    console.error(
+      "No fue posible iniciar la aplicación:",
+      error,
+    );
 
     estado.textContent =
       "No fue posible cargar la información inicial.";

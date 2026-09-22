@@ -265,6 +265,16 @@ select {
 
 
 @media (max-width: 800px) {
+
+  .navegacion {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+  .sesion-activa {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
   .catalogo__encabezado,
   .filtros {
     align-items: stretch;
@@ -277,4 +287,129 @@ select {
       width: 100%;
     }
   }
+}
+
+.navegacion {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+
+.sesion-activa {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+
+.boton-secundario {
+  padding: 0.65rem 1rem;
+
+  color: $color-principal;
+  background: #ffffff;
+  border: 1px solid $color-principal;
+  border-radius: 0.6rem;
+
+  cursor: pointer;
+}
+
+
+.dialogo-login {
+  width: min(92vw, 440px);
+  padding: 0;
+
+  border: 0;
+  border-radius: 1rem;
+
+  box-shadow:
+    0 25px 70px rgba(15, 31, 48, 0.3);
+
+  &::backdrop {
+    background: rgba(13, 26, 40, 0.7);
+    backdrop-filter: blur(3px);
+  }
+}
+
+
+.formulario-login {
+  display: grid;
+  gap: 1.2rem;
+
+  padding: 1.7rem;
+
+  label {
+    color: #3f5062;
+    font-weight: 700;
+  }
+
+  input {
+    display: block;
+
+    width: 100%;
+    margin-top: 0.45rem;
+    padding: 0.8rem;
+
+    border: 1px solid #b9c3ce;
+    border-radius: 0.55rem;
+
+    &:focus {
+      border-color: $color-secundario;
+      outline: 3px solid
+        rgba($color-secundario, 0.15);
+    }
+  }
+}
+.dialogo-login__encabezado {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0.25rem 0 0;
+  }
+}
+
+
+.boton-cerrar {
+  width: 2.4rem;
+  height: 2.4rem;
+
+  color: #536273;
+  background: transparent;
+  border: 0;
+
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+
+.boton-principal {
+  padding: 0.85rem;
+
+  color: #ffffff;
+  background: $color-principal;
+  border: 0;
+  border-radius: 0.6rem;
+
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: wait;
+  }
+}
+
+
+.mensaje-login {
+  min-height: 1.3rem;
+  margin: 0;
+
+  color: #aa3131;
+  font-size: 0.9rem;
 }
