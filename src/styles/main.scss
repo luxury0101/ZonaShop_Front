@@ -1130,15 +1130,9 @@ select {
       font-weight: 700;
       cursor: pointer;
 
-      &:first-child {
-        color: $color-principal;
-        background: #e7edf4;
-      }
-
-      &:last-child {
-        color: #ffffff;
-        background: #218c4e;
-      }
+      color: #a53636;
+      background: #ffffff;
+      border: 1px solid #d8a8a8;
 
       &:disabled {
         opacity: 0.5;
