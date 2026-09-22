@@ -6,6 +6,11 @@ import {
 } from "./carrito/carrito.js";
 
 import {
+  abrirDetalleProducto,
+  iniciarDetalleProducto,
+} from "./catalogo/detalle.js";
+
+import {
   restaurarSesion,
 } from "./auth/sesion.js";
 
@@ -69,6 +74,20 @@ function crearTarjetaProducto(producto) {
 
   tarjeta.className = "producto";
 
+  const visual = document.createElement("div");
+  visual.className = "producto__visual";
+
+  if (producto.imagen) {
+    const imagen = document.createElement("img");
+    imagen.src = producto.imagen;
+    imagen.alt = producto.nombre;
+    imagen.loading = "lazy";
+    visual.append(imagen);
+  } else {
+    visual.textContent = "Sin imagen";
+    visual.classList.add("producto__visual--vacio");
+  }
+
   const categoria = crearTexto(
     "span",
     producto.categoria_nombre,
@@ -118,13 +137,33 @@ function crearTarjetaProducto(producto) {
     () => agregarAlCarrito(producto),
   );
 
+  const botonDetalle = crearTexto(
+    "button",
+    "Ver detalle",
+    "producto__detalle",
+  );
+
+  botonDetalle.type = "button";
+  botonDetalle.addEventListener(
+    "click",
+    () => abrirDetalleProducto(
+      producto,
+      agregarAlCarrito,
+    ),
+  );
+
+  const acciones = document.createElement("div");
+  acciones.className = "producto__acciones";
+  acciones.append(botonDetalle, boton);
+
   tarjeta.append(
+    visual,
     categoria,
     nombre,
     descripcion,
     precio,
     disponibilidad,
-    boton,
+    acciones,
   );
 
   return tarjeta;
@@ -236,6 +275,7 @@ selectorCategoria.addEventListener(
 
 async function iniciarAplicacion() {
   iniciarCarrito();
+  iniciarDetalleProducto();
 
   try {
     await Promise.all([
