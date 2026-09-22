@@ -177,6 +177,22 @@
             required
           />
 
+          <label for="producto-imagen">Imagen</label>
+          <div class="campo-imagen-producto">
+            <input
+              id="producto-imagen"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+            />
+            <img
+              id="vista-previa-producto"
+              class="vista-previa-producto"
+              alt="Vista previa del producto"
+              hidden
+            />
+            <small>Formatos JPG, PNG o WEBP. Máximo 5 MB.</small>
+          </div>
+
           <div class="formulario-producto__acciones">
             <button id="boton-guardar-producto" type="submit">
               Crear producto
@@ -203,6 +219,7 @@
           <table class="tabla-productos">
             <thead>
               <tr>
+                <th scope="col">Imagen</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Categoría</th>
                 <th scope="col">Precio</th>
@@ -212,7 +229,7 @@
             </thead>
             <tbody id="lista-productos-admin">
               <tr>
-                <td colspan="5">Cargando productos...</td>
+                <td colspan="6">Cargando productos...</td>
               </tr>
             </tbody>
           </table>
@@ -329,6 +346,48 @@
       </div>
     </dialog>
 
+
+
+    <dialog id="modal-detalle-producto" class="modal-detalle-producto">
+      <div class="detalle-producto">
+        <button
+          id="boton-cerrar-detalle-producto"
+          class="detalle-producto__cerrar"
+          type="button"
+          aria-label="Cerrar detalle del producto"
+        >
+          ×
+        </button>
+
+        <div class="detalle-producto__visual">
+          <img
+            id="detalle-producto-imagen"
+            alt=""
+            hidden
+          />
+          <div
+            id="detalle-producto-sin-imagen"
+            class="detalle-producto__sin-imagen"
+          >
+            Sin imagen
+          </div>
+        </div>
+
+        <div class="detalle-producto__informacion">
+          <p
+            id="detalle-producto-categoria"
+            class="seccion-etiqueta"
+          ></p>
+          <h2 id="detalle-producto-nombre"></h2>
+          <p id="detalle-producto-descripcion"></p>
+          <strong id="detalle-producto-precio"></strong>
+          <span id="detalle-producto-stock"></span>
+          <button id="detalle-producto-agregar" type="button">
+            Agregar al carrito
+          </button>
+        </div>
+      </div>
+    </dialog>
 
     <dialog id="modal-carrito" class="modal-carrito">
       <div class="modal-carrito__contenido">
