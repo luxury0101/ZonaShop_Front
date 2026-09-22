@@ -1,6 +1,11 @@
 import "./styles/main.scss";
 
 import {
+  agregarAlCarrito,
+  iniciarCarrito,
+} from "./carrito/carrito.js";
+
+import {
   restaurarSesion,
 } from "./auth/sesion.js";
 
@@ -107,6 +112,11 @@ function crearTarjetaProducto(producto) {
 
   boton.type = "button";
   boton.disabled = producto.agotado;
+
+  boton.addEventListener(
+    "click",
+    () => agregarAlCarrito(producto),
+  );
 
   tarjeta.append(
     categoria,
@@ -225,6 +235,8 @@ selectorCategoria.addEventListener(
 
 
 async function iniciarAplicacion() {
+  iniciarCarrito();
+
   try {
     await Promise.all([
       restaurarSesion(),
