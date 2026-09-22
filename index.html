@@ -120,6 +120,98 @@
             </tbody>
           </table>
         </div>
+        <div class="separador-administracion"></div>
+
+        <div class="panel-administracion__encabezado">
+          <div>
+            <p class="seccion-etiqueta">Administración</p>
+            <h2>Gestión de productos</h2>
+            <p>
+              Crea, actualiza y elimina los productos disponibles en ZonaShop.
+            </p>
+          </div>
+        </div>
+
+        <form id="formulario-producto" class="formulario-producto">
+          <input id="producto-id" type="hidden" />
+
+          <label for="producto-categoria">Categoría</label>
+          <select id="producto-categoria" required>
+            <option value="">Selecciona una categoría</option>
+          </select>
+
+          <label for="producto-nombre">Nombre</label>
+          <input
+            id="producto-nombre"
+            type="text"
+            maxlength="150"
+            required
+          />
+
+          <label for="producto-descripcion">Descripción</label>
+          <textarea
+            id="producto-descripcion"
+            rows="3"
+          ></textarea>
+
+          <label for="producto-precio">Precio</label>
+          <input
+            id="producto-precio"
+            type="number"
+            min="0.01"
+            step="0.01"
+            required
+          />
+
+          <label for="producto-existencias">Existencias</label>
+          <input
+            id="producto-existencias"
+            type="number"
+            min="0"
+            step="1"
+            required
+          />
+
+          <div class="formulario-producto__acciones">
+            <button id="boton-guardar-producto" type="submit">
+              Crear producto
+            </button>
+
+            <button
+              id="boton-cancelar-producto"
+              type="button"
+              hidden
+            >
+              Cancelar edición
+            </button>
+          </div>
+
+          <p
+            id="mensaje-producto"
+            class="mensaje-producto"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </form>
+
+        <div class="tabla-productos-contenedor">
+          <table class="tabla-productos">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Existencias</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="lista-productos-admin">
+              <tr>
+                <td colspan="5">Cargando productos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
       <section class="catalogo" aria-labelledby="titulo-catalogo">
         <div class="catalogo__encabezado">
@@ -202,6 +294,30 @@
           </button>
 
           <button id="boton-confirmar-eliminacion" type="button">
+            Sí, eliminar
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="modal-eliminar-producto" class="modal-confirmacion">
+      <div class="modal-confirmacion__contenido">
+        <div class="modal-confirmacion__icono">!</div>
+        <h2>Eliminar producto</h2>
+        <p id="mensaje-eliminar-producto">
+          ¿Deseas eliminar este producto?
+        </p>
+        <div class="modal-confirmacion__acciones">
+          <button
+            id="boton-cancelar-eliminacion-producto"
+            type="button"
+          >
+            Cancelar
+          </button>
+          <button
+            id="boton-confirmar-eliminacion-producto"
+            type="button"
+          >
             Sí, eliminar
           </button>
         </div>
