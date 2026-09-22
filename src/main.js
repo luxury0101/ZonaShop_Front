@@ -9,6 +9,10 @@ import {
 } from "./admin/categorias.js";
 
 import {
+  iniciarAdministracionProductos,
+} from "./admin/productos.js";
+
+import {
   obtenerCategorias,
   obtenerProductos,
 } from "./api/catalogo.js";
@@ -226,6 +230,7 @@ async function iniciarAplicacion() {
       restaurarSesion(),
       cargarCategorias(),
       iniciarAdministracionCategorias(),
+      iniciarAdministracionProductos(),
     ]);
 
     await cargarProductos();
@@ -255,5 +260,12 @@ window.addEventListener(
   },
 );
 
+
+window.addEventListener(
+  "productos:actualizados",
+  async () => {
+    await cargarProductos();
+  },
+);
 
 iniciarAplicacion();
