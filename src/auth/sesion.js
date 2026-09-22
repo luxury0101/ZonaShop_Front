@@ -13,27 +13,41 @@ function obtenerElementos() {
     botonAbrirLogin: document.querySelector(
       "#boton-abrir-login",
     ),
-    
+
+    botonCancelarLogin: document.querySelector(
+      "#boton-cancelar-login",
+    ),
+
     botonCerrarSesion: document.querySelector(
       "#boton-cerrar-sesion",
     ),
+
     formularioLogin: document.querySelector(
       "#formulario-login",
     ),
+
     modalLogin: document.querySelector(
       "#modal-login",
     ),
+
     mensajeLogin: document.querySelector(
       "#mensaje-login",
     ),
+
     nombreUsuario: document.querySelector(
       "#nombre-usuario",
     ),
+
     zonaInvitado: document.querySelector(
       "#zona-invitado",
     ),
+
     zonaAdministrador: document.querySelector(
       "#zona-administrador",
+    ),
+
+    panelAdministracion: document.querySelector(
+      "#panel-administracion",
     ),
   };
 }
@@ -70,11 +84,17 @@ function actualizarInterfaz(usuario) {
   const autenticado = Boolean(usuario);
 
   if (elementos.zonaInvitado) {
-    elementos.zonaInvitado.hidden = autenticado;
+    elementos.zonaInvitado.hidden =
+      autenticado;
   }
 
   if (elementos.zonaAdministrador) {
     elementos.zonaAdministrador.hidden =
+      !autenticado;
+  }
+
+  if (elementos.panelAdministracion) {
+    elementos.panelAdministracion.hidden =
       !autenticado;
   }
 
@@ -177,6 +197,13 @@ function registrarEventos() {
     "click",
     () => {
       elementos.modalLogin?.showModal();
+    },
+  );
+
+  elementos.botonCancelarLogin?.addEventListener(
+    "click",
+    () => {
+      elementos.modalLogin?.close();
     },
   );
 

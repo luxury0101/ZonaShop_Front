@@ -5,6 +5,10 @@ import {
 } from "./auth/sesion.js";
 
 import {
+  iniciarAdministracionCategorias,
+} from "./admin/categorias.js";
+
+import {
   obtenerCategorias,
   obtenerProductos,
 } from "./api/catalogo.js";
@@ -135,16 +139,45 @@ function mostrarProductos(productos) {
 
 
 async function cargarCategorias() {
-  const categorias = await obtenerCategorias();
+  const categoriaSeleccionada =
+    selectorCategoria.value;
+
+  const categorias =
+    await obtenerCategorias();
+
+  selectorCategoria.replaceChildren();
+
+  const opcionGeneral =
+    document.createElement("option");
+
+  opcionGeneral.value = "";
+  opcionGeneral.textContent =
+    "Todas las categorías";
+
+  selectorCategoria.append(opcionGeneral);
 
   categorias.forEach((categoria) => {
-    const opcion = document.createElement("option");
+    const opcion =
+      document.createElement("option");
 
     opcion.value = categoria.id;
     opcion.textContent = categoria.nombre;
 
     selectorCategoria.append(opcion);
   });
+
+  const seleccionTodaviaExiste =
+    Array.from(
+      selectorCategoria.options,
+    ).some(
+      (opcion) =>
+        opcion.value === categoriaSeleccionada,
+    );
+
+  selectorCategoria.value =
+    seleccionTodaviaExiste
+      ? categoriaSeleccionada
+      : "";
 }
 
 
@@ -192,6 +225,7 @@ async function iniciarAplicacion() {
     await Promise.all([
       restaurarSesion(),
       cargarCategorias(),
+      iniciarAdministracionCategorias(),
     ]);
 
     await cargarProductos();
@@ -205,6 +239,21 @@ async function iniciarAplicacion() {
       "No fue posible cargar la información inicial.";
   }
 }
+
+window.addEventListener(
+  "categorias:actualizadas",
+  async () => {
+    try {
+      await cargarCategorias();
+      await cargarProductos();
+    } catch (error) {
+      console.error(
+        "No fue posible actualizar el catálogo:",
+        error,
+      );
+    }
+  },
+);
 
 
 iniciarAplicacion();

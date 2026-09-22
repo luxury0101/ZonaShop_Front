@@ -45,7 +45,82 @@
           </p>
         </div>
       </section>
+      <section
+        id="panel-administracion"
+        class="panel-administracion"
+        aria-labelledby="titulo-administracion"
+        hidden
+      >
+        <div class="panel-administracion__encabezado">
+          <div>
+            <p class="seccion-etiqueta">Administración</p>
 
+            <h2 id="titulo-administracion">Gestión de categorías</h2>
+
+            <p>
+              Crea, actualiza y elimina las categorías disponibles en ZonaShop.
+            </p>
+          </div>
+        </div>
+
+        <form id="formulario-categoria" class="formulario-categoria">
+          <input id="categoria-id" name="categoriaId" type="hidden" />
+
+          <label for="categoria-nombre"> Nombre </label>
+
+          <input
+            id="categoria-nombre"
+            name="nombre"
+            type="text"
+            maxlength="100"
+            required
+          />
+
+          <label for="categoria-descripcion"> Descripción </label>
+
+          <textarea
+            id="categoria-descripcion"
+            name="descripcion"
+            rows="3"
+          ></textarea>
+
+          <div class="formulario-categoria__acciones">
+            <button id="boton-guardar-categoria" type="submit">
+              Crear categoría
+            </button>
+
+            <button id="boton-cancelar-edicion" type="button" hidden>
+              Cancelar edición
+            </button>
+          </div>
+
+          <p
+            id="mensaje-categoria"
+            class="mensaje-categoria"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </form>
+
+        <div class="tabla-categorias-contenedor">
+          <table class="tabla-categorias">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Productos</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody id="lista-categorias">
+              <tr>
+                <td colspan="4">Cargando categorías...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
       <section class="catalogo" aria-labelledby="titulo-catalogo">
         <div class="catalogo__encabezado">
           <div>
@@ -112,6 +187,25 @@
           <button id="boton-cancelar-login" type="button">Cancelar</button>
         </div>
       </form>
+    </dialog>
+    <dialog id="modal-eliminar-categoria" class="modal-confirmacion">
+      <div class="modal-confirmacion__contenido">
+        <div class="modal-confirmacion__icono">!</div>
+
+        <h2>Eliminar categoría</h2>
+
+        <p id="mensaje-eliminar-categoria">¿Deseas eliminar esta categoría?</p>
+
+        <div class="modal-confirmacion__acciones">
+          <button id="boton-cancelar-eliminacion" type="button">
+            Cancelar
+          </button>
+
+          <button id="boton-confirmar-eliminacion" type="button">
+            Sí, eliminar
+          </button>
+        </div>
+      </div>
     </dialog>
 
     <script type="module" src="/src/main.js"></script>
