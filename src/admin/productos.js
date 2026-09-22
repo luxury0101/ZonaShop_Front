@@ -29,6 +29,12 @@ const elementos = {
   existencias: document.querySelector(
     "#producto-existencias",
   ),
+  imagen: document.querySelector(
+    "#producto-imagen",
+  ),
+  vistaPrevia: document.querySelector(
+    "#vista-previa-producto",
+  ),
   botonGuardar: document.querySelector(
     "#boton-guardar-producto",
   ),
@@ -95,6 +101,9 @@ function limpiarFormulario() {
   elementos.botonGuardar.textContent =
     "Crear producto";
 
+  elementos.vistaPrevia.hidden = true;
+  elementos.vistaPrevia.removeAttribute("src");
+
   elementos.botonCancelar.hidden = true;
 }
 
@@ -126,6 +135,14 @@ function seleccionarProducto(producto) {
   elementos.existencias.value =
     producto.existencias;
 
+  if (producto.imagen) {
+    elementos.vistaPrevia.src = producto.imagen;
+    elementos.vistaPrevia.hidden = false;
+  } else {
+    elementos.vistaPrevia.hidden = true;
+    elementos.vistaPrevia.removeAttribute("src");
+  }
+
   elementos.botonGuardar.textContent =
     "Guardar cambios";
 
@@ -147,6 +164,22 @@ function abrirConfirmacion(producto) {
 
 function crearFilaProducto(producto) {
   const fila = document.createElement("tr");
+
+  const celdaImagen = document.createElement("td");
+  const miniatura = document.createElement("div");
+  miniatura.className = "miniatura-producto";
+
+  if (producto.imagen) {
+    const imagen = document.createElement("img");
+    imagen.src = producto.imagen;
+    imagen.alt = producto.nombre;
+    miniatura.append(imagen);
+  } else {
+    miniatura.textContent = "Sin imagen";
+  }
+
+  celdaImagen.append(miniatura);
+  fila.append(celdaImagen);
 
   const valores = [
     producto.nombre,
@@ -193,7 +226,7 @@ function mostrarProductos(productos) {
     const fila = document.createElement("tr");
     const celda = document.createElement("td");
 
-    celda.colSpan = 5;
+    celda.colSpan = 6;
     celda.textContent =
       "No existen productos registrados.";
 
@@ -300,12 +333,24 @@ async function manejarFormulario(evento) {
 
   elementos.botonGuardar.disabled = true;
 
+  const imagen = elementos.imagen.files[0];
+
+  if (imagen && imagen.size > 5 * 1024 * 1024) {
+    mostrarMensaje(
+      "La imagen no puede superar los 5 MB.",
+      true,
+    );
+    elementos.botonGuardar.disabled = false;
+    return;
+  }
+
   const datos = {
     categoria,
     nombre,
     descripcion,
     precio,
     existencias,
+    imagen,
   };
 
   try {
@@ -394,6 +439,21 @@ export async function iniciarAdministracionProductos() {
   elementos.formulario?.addEventListener(
     "submit",
     manejarFormulario,
+  );
+
+  elementos.imagen?.addEventListener(
+    "change",
+    () => {
+      const archivo = elementos.imagen.files[0];
+
+      if (!archivo) {
+        return;
+      }
+
+      elementos.vistaPrevia.src =
+        URL.createObjectURL(archivo);
+      elementos.vistaPrevia.hidden = false;
+    },
   );
 
   elementos.botonCancelar?.addEventListener(
