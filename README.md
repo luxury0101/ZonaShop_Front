@@ -51,6 +51,7 @@ npm run preview
 - `src/carrito/`: carrito local para invitados y sincronizado para usuarios.
 - `src/catalogo/`: detalle de productos.
 - `src/pedidos/`: historial y detalle de compras del usuario.
+- `src/perfil/`: datos personales, dirección principal y cambio de contraseña.
 - `src/ui/`: notificaciones accesibles y componentes compartidos.
 - `src/styles/`: estilos SCSS adaptables.
 
@@ -65,6 +66,8 @@ La arquitectura general, el modelo de datos y la matriz de aceptación se mantie
 - El pago es una simulación local: los datos de tarjeta se validan en el navegador,
   pero nunca se envían al backend ni se conservan en almacenamiento.
 - Al completar la compra, el pedido queda disponible en **Mis pedidos**.
+- El checkout permite reutilizar o guardar la dirección principal de entrega.
+- El panel administrativo permite filtrar pedidos y actualizar su estado.
 
 Vite atiende `/admin` durante desarrollo. En producción, el hosting del frontend
 debe redirigir las rutas de la SPA hacia `index.html`.

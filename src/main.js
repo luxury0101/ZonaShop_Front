@@ -28,6 +28,8 @@ import {
 } from "./api/catalogo.js";
 import { mensajeDeError, notificar } from "./ui/notificaciones.js";
 import { iniciarPedidos } from "./pedidos/pedidos.js";
+import { iniciarPerfil } from "./perfil/perfil.js";
+import { iniciarAdministracionPedidos } from "./admin/pedidos.js";
 
 
 const formulario = document.querySelector(
@@ -321,6 +323,8 @@ botonLimpiarFiltros.addEventListener("click", limpiarFiltros);
 async function iniciarAplicacion() {
   iniciarDetalleProducto();
   iniciarPedidos();
+  iniciarPerfil();
+  iniciarAdministracionPedidos();
 
   try {
     await Promise.all([

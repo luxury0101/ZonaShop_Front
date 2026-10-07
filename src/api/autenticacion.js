@@ -43,11 +43,13 @@ export function guardarCarritoCuenta(items, fusionar = false) {
 }
 
 
-export function completarCompra(items) {
+export function completarCompra(items, envio, guardarDireccion = false) {
   return clienteApi("/api/auth/pedidos/", {
     method: "POST",
     body: JSON.stringify({
       items: items.map(({ id, cantidad }) => ({ id, cantidad })),
+      envio,
+      guardarDireccion,
     }),
   });
 }
@@ -55,4 +57,31 @@ export function completarCompra(items) {
 
 export function obtenerPedidos() {
   return clienteApi("/api/auth/pedidos/");
+}
+
+
+export function obtenerPerfil() {
+  return clienteApi("/api/auth/perfil/");
+}
+
+
+export function actualizarPerfil(datos) {
+  return clienteApi("/api/auth/perfil/", {
+    method: "PATCH",
+    body: JSON.stringify(datos),
+  });
+}
+
+
+export function obtenerPedidosAdministracion(estado = "") {
+  const consulta = estado ? `?estado=${encodeURIComponent(estado)}` : "";
+  return clienteApi(`/api/auth/admin/pedidos/${consulta}`);
+}
+
+
+export function actualizarEstadoPedido(numero, estado) {
+  return clienteApi(`/api/auth/admin/pedidos/${numero}/`, {
+    method: "PATCH",
+    body: JSON.stringify({ estado }),
+  });
 }

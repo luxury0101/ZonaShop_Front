@@ -211,6 +211,14 @@ function registrarEventos() {
     });
   });
   ui.botonCerrarSesion?.addEventListener("click", manejarLogout);
+  window.addEventListener("perfil:actualizado", (evento) => {
+    if (!usuarioActual) return;
+    actualizarInterfaz({
+      ...usuarioActual,
+      nombre: evento.detail?.perfil?.nombre || usuarioActual.nombre,
+      email: evento.detail?.perfil?.email || usuarioActual.email,
+    });
+  });
   ui.botonMenu?.addEventListener("click", () => {
     const abierto = ui.accionesHeader.classList.toggle("acciones-header--abierto");
     ui.botonMenu.setAttribute("aria-expanded", String(abierto));

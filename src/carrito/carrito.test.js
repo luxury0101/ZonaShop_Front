@@ -13,6 +13,7 @@ const dependencias = vi.hoisted(() => ({
   obtenerProducto: vi.fn(),
   completarCompra: vi.fn(),
   guardarCarritoCuenta: vi.fn(),
+  obtenerPerfil: vi.fn(),
   abrirLogin: vi.fn(),
   obtenerUsuarioActual: vi.fn(),
 }));
@@ -24,6 +25,7 @@ vi.mock("../api/catalogo.js", () => ({
 vi.mock("../api/autenticacion.js", () => ({
   completarCompra: dependencias.completarCompra,
   guardarCarritoCuenta: dependencias.guardarCarritoCuenta,
+  obtenerPerfil: dependencias.obtenerPerfil,
 }));
 
 vi.mock("../auth/sesion.js", () => ({
@@ -67,6 +69,7 @@ describe("carrito", () => {
     dependencias.obtenerProducto.mockReset();
     dependencias.completarCompra.mockReset();
     dependencias.guardarCarritoCuenta.mockReset();
+    dependencias.obtenerPerfil.mockReset();
     dependencias.abrirLogin.mockReset();
     dependencias.obtenerUsuarioActual.mockReset();
     dependencias.obtenerUsuarioActual.mockReturnValue(null);

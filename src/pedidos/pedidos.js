@@ -61,7 +61,20 @@ function crearPedido(pedido) {
     fila.append(descripcion, subtotal);
     items.append(fila);
   });
-  detalle.append(resumen, items);
+  const envio = document.createElement("div");
+  envio.className = "pedido__envio";
+  const tituloEnvio = document.createElement("strong");
+  const direccion = document.createElement("p");
+  const contacto = document.createElement("p");
+  tituloEnvio.textContent = "Entrega";
+  direccion.textContent = [
+    pedido.envio.direccion,
+    pedido.envio.ciudad,
+    pedido.envio.departamento,
+  ].filter(Boolean).join(", ") || "Sin dirección registrada";
+  contacto.textContent = `${pedido.envio.destinatario} · ${pedido.envio.telefono}`;
+  envio.append(tituloEnvio, direccion, contacto);
+  detalle.append(resumen, items, envio);
   return detalle;
 }
 

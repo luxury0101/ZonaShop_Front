@@ -1,5 +1,9 @@
 import { obtenerProducto } from "../api/catalogo.js";
-import { completarCompra, guardarCarritoCuenta } from "../api/autenticacion.js";
+import {
+  completarCompra,
+  guardarCarritoCuenta,
+  obtenerPerfil,
+} from "../api/autenticacion.js";
 import { abrirLogin, obtenerUsuarioActual } from "../auth/sesion.js";
 import { mensajeDeError, notificar } from "../ui/notificaciones.js";
 
@@ -377,7 +381,30 @@ function mostrarResumenPago() {
   }
 }
 
-function abrirPago() {
+async function cargarDireccionPago() {
+  try {
+    const perfil = await obtenerPerfil();
+    const valores = {
+      destinatario: perfil.nombre,
+      telefono: perfil.telefono,
+      direccion: perfil.direccion,
+      ciudad: perfil.ciudad,
+      departamento: perfil.departamento,
+      codigo_postal: perfil.codigo_postal,
+      instrucciones: perfil.instrucciones_envio,
+    };
+    Object.entries(valores).forEach(([campo, valor]) => {
+      if (elementos.formularioPago?.elements[campo]) {
+        elementos.formularioPago.elements[campo].value = valor || "";
+      }
+    });
+  } catch (error) {
+    notificar("No fue posible cargar tu dirección guardada", "advertencia");
+  }
+}
+
+
+async function abrirPago() {
   if (carrito.length === 0) return;
   if (!obtenerUsuarioActual()) {
     pagoPendienteDeLogin = true;
@@ -386,6 +413,7 @@ function abrirPago() {
     abrirLogin();
     return;
   }
+  await cargarDireccionPago();
   mostrarResumenPago();
   elementos.modal?.close();
   elementos.modalPago?.showModal();
@@ -430,9 +458,23 @@ async function procesarPago(evento) {
   elementos.confirmarPago.disabled = true;
   elementos.confirmarPago.classList.add("boton--cargando");
   elementos.confirmarPago.textContent = "Procesando pago...";
+  const datosFormulario = new FormData(elementos.formularioPago);
+  const envio = {
+    destinatario: String(datosFormulario.get("destinatario") || "").trim(),
+    telefono: String(datosFormulario.get("telefono") || "").trim(),
+    direccion: String(datosFormulario.get("direccion") || "").trim(),
+    ciudad: String(datosFormulario.get("ciudad") || "").trim(),
+    departamento: String(datosFormulario.get("departamento") || "").trim(),
+    codigo_postal: String(datosFormulario.get("codigo_postal") || "").trim(),
+    instrucciones: String(datosFormulario.get("instrucciones") || "").trim(),
+  };
   try {
     await Promise.all([
-      completarCompra(carrito),
+      completarCompra(
+        carrito,
+        envio,
+        elementos.formularioPago.elements.guardarDireccion.checked,
+      ),
       new Promise((resolver) => window.setTimeout(resolver, 1700)),
     ]);
     carrito = [];

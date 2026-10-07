@@ -35,7 +35,7 @@
             <summary id="nombre-usuario">Mi cuenta</summary>
             <div class="menu-usuario__opciones">
               <button id="boton-mis-pedidos" type="button">Mis pedidos</button>
-              <a href="#mi-perfil">Mi perfil</a>
+              <button id="boton-mi-perfil" type="button">Mi perfil</button>
               <a id="enlace-administracion" href="/admin" hidden>Panel de administración</a>
               <button id="boton-cerrar-sesion" type="button">Cerrar sesión</button>
             </div>
@@ -256,6 +256,27 @@
             </tbody>
           </table>
         </div>
+        <div class="separador-administracion"></div>
+        <div class="panel-administracion__encabezado">
+          <div>
+            <p class="seccion-etiqueta">Administración</p>
+            <h2>Gestión de pedidos</h2>
+            <p>Consulta la información de entrega y actualiza el estado de cada pedido.</p>
+          </div>
+          <label class="filtro-pedidos-admin" for="filtro-estado-pedidos">
+            Estado
+            <select id="filtro-estado-pedidos">
+              <option value="">Todos</option>
+              <option value="pagado">Pagado</option>
+              <option value="preparando">Preparando</option>
+              <option value="enviado">Enviado</option>
+              <option value="entregado">Entregado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </label>
+        </div>
+        <p id="estado-pedidos-admin" role="status">Cargando pedidos...</p>
+        <div id="lista-pedidos-admin" class="lista-pedidos-admin"></div>
       </section>
       <section id="productos-catalogo" class="catalogo contenedor" aria-labelledby="titulo-catalogo">
         <div class="catalogo__encabezado">
@@ -317,6 +338,48 @@
           <button id="boton-login" type="submit">Iniciar sesión</button>
           <button id="boton-cancelar-login" type="button">Cancelar</button>
         </div>
+      </form>
+    </dialog>
+
+    <dialog id="modal-perfil" class="modal-perfil">
+      <form id="formulario-perfil" class="perfil">
+        <div class="pago__encabezado">
+          <div><p class="seccion-etiqueta">Tu cuenta</p><h2>Mi perfil</h2></div>
+          <button id="boton-cerrar-perfil" type="button" aria-label="Cerrar perfil">×</button>
+        </div>
+        <fieldset>
+          <legend>Datos personales</legend>
+          <label for="perfil-nombre">Nombre</label>
+          <input id="perfil-nombre" name="nombre" minlength="2" maxlength="150" required />
+          <label for="perfil-email">Correo electrónico</label>
+          <input id="perfil-email" name="email" type="email" required />
+        </fieldset>
+        <fieldset>
+          <legend>Dirección principal de envío</legend>
+          <label for="perfil-telefono">Teléfono</label>
+          <input id="perfil-telefono" name="telefono" autocomplete="tel" maxlength="20" />
+          <label for="perfil-direccion">Dirección</label>
+          <input id="perfil-direccion" name="direccion" autocomplete="street-address" maxlength="255" />
+          <div class="pago__fila">
+            <div><label for="perfil-ciudad">Ciudad</label><input id="perfil-ciudad" name="ciudad" maxlength="100" /></div>
+            <div><label for="perfil-departamento">Departamento</label><input id="perfil-departamento" name="departamento" maxlength="100" /></div>
+          </div>
+          <label for="perfil-codigo-postal">Código postal</label>
+          <input id="perfil-codigo-postal" name="codigo_postal" autocomplete="postal-code" maxlength="20" />
+          <label for="perfil-instrucciones">Indicaciones de entrega</label>
+          <textarea id="perfil-instrucciones" name="instrucciones_envio" maxlength="500" rows="3"></textarea>
+        </fieldset>
+        <fieldset>
+          <legend>Cambiar contraseña <small>(opcional)</small></legend>
+          <label for="perfil-password-actual">Contraseña actual</label>
+          <input id="perfil-password-actual" name="passwordActual" type="password" autocomplete="current-password" />
+          <label for="perfil-password-nueva">Nueva contraseña</label>
+          <input id="perfil-password-nueva" name="passwordNueva" type="password" minlength="8" autocomplete="new-password" />
+          <label for="perfil-password-confirmacion">Confirmar nueva contraseña</label>
+          <input id="perfil-password-confirmacion" name="passwordConfirmacion" type="password" minlength="8" autocomplete="new-password" />
+        </fieldset>
+        <p id="mensaje-perfil" class="mensaje-formulario" aria-live="polite"></p>
+        <button id="boton-guardar-perfil" class="boton-pagar" type="submit">Guardar cambios</button>
       </form>
     </dialog>
 
@@ -506,6 +569,24 @@
           <button id="boton-cerrar-pago" type="button" aria-label="Cerrar pago">×</button>
         </div>
         <div id="resumen-pago" class="pago__resumen"></div>
+        <fieldset class="pago__envio">
+          <legend>Datos de envío</legend>
+          <label for="pago-destinatario">Nombre de quien recibe</label>
+          <input id="pago-destinatario" name="destinatario" autocomplete="name" required />
+          <label for="pago-telefono">Teléfono</label>
+          <input id="pago-telefono" name="telefono" autocomplete="tel" maxlength="20" required />
+          <label for="pago-direccion">Dirección</label>
+          <input id="pago-direccion" name="direccion" autocomplete="street-address" maxlength="255" required />
+          <div class="pago__fila">
+            <div><label for="pago-ciudad">Ciudad</label><input id="pago-ciudad" name="ciudad" maxlength="100" required /></div>
+            <div><label for="pago-departamento">Departamento</label><input id="pago-departamento" name="departamento" maxlength="100" required /></div>
+          </div>
+          <label for="pago-codigo-postal">Código postal</label>
+          <input id="pago-codigo-postal" name="codigo_postal" autocomplete="postal-code" maxlength="20" />
+          <label for="pago-instrucciones">Indicaciones de entrega</label>
+          <textarea id="pago-instrucciones" name="instrucciones" maxlength="500" rows="2"></textarea>
+          <label class="campo-checkbox"><input id="pago-guardar-direccion" name="guardarDireccion" type="checkbox" checked /> Guardar esta dirección en mi perfil</label>
+        </fieldset>
         <p class="pago__aviso">Simulación: los datos de la tarjeta no se envían ni se guardan.</p>
         <label for="pago-titular">Nombre del titular</label>
         <input id="pago-titular" name="titular" autocomplete="cc-name" required aria-describedby="error-pago-titular" />
