@@ -98,5 +98,15 @@ describe("cliente de la API", () => {
       status: 403,
     });
   });
+
+  it("propaga fallos de conexión", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      new TypeError("Failed to fetch"),
+    );
+
+    await expect(
+      solicitar("productos"),
+    ).rejects.toThrow("Failed to fetch");
+  });
 });
 
