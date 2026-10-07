@@ -26,6 +26,8 @@ import {
   obtenerCategorias,
   obtenerProductos,
 } from "./api/catalogo.js";
+import { mensajeDeError, notificar } from "./ui/notificaciones.js";
+import { iniciarPedidos } from "./pedidos/pedidos.js";
 
 
 const formulario = document.querySelector(
@@ -50,6 +52,7 @@ const contenedorProductos = document.querySelector(
 );
 
 const estado = document.querySelector("#estado");
+const botonBuscar = formulario.querySelector('button[type="submit"]');
 
 
 function formatearPrecio(valor) {
@@ -182,6 +185,15 @@ function mostrarProductos(productos) {
     estado.textContent =
       "No se encontraron productos con esos filtros.";
 
+    const vacio = document.createElement("div");
+    const mensaje = crearTexto("p", "Prueba con otra búsqueda o elimina los filtros.");
+    const limpiar = crearTexto("button", "Limpiar filtros", "boton-limpiar");
+    vacio.className = "catalogo-vacio";
+    limpiar.type = "button";
+    limpiar.addEventListener("click", limpiarFiltros);
+    vacio.append(mensaje, limpiar);
+    contenedorProductos.append(vacio);
+
     return;
   }
 
@@ -241,8 +253,16 @@ async function cargarCategorias() {
 
 async function cargarProductos() {
   estado.textContent = "Cargando catálogo...";
-
-  contenedorProductos.replaceChildren();
+  botonBuscar.disabled = true;
+  botonBuscar.classList.add("boton--cargando");
+  contenedorProductos.replaceChildren(
+    ...Array.from({ length: 3 }, () => {
+      const esqueleto = document.createElement("div");
+      esqueleto.className = "producto-esqueleto";
+      esqueleto.setAttribute("aria-hidden", "true");
+      return esqueleto;
+    }),
+  );
 
   try {
     const productos = await obtenerProductos({
@@ -258,7 +278,20 @@ async function cargarProductos() {
     estado.textContent =
       "No fue posible conectar con el catálogo. " +
       "Comprueba que el backend esté ejecutándose.";
+    contenedorProductos.replaceChildren();
+    notificar(mensajeDeError(error), "error");
+  } finally {
+    botonBuscar.disabled = false;
+    botonBuscar.classList.remove("boton--cargando");
   }
+}
+
+
+function limpiarFiltros() {
+  campoBusqueda.value = "";
+  selectorCategoria.value = "";
+  selectorOrden.value = "";
+  cargarProductos();
 }
 
 
@@ -282,16 +315,12 @@ selectorCategoria.addEventListener(
 selectorOrden.addEventListener("change", cargarProductos);
 
 
-botonLimpiarFiltros.addEventListener("click", () => {
-  campoBusqueda.value = "";
-  selectorCategoria.value = "";
-  selectorOrden.value = "";
-  cargarProductos();
-});
+botonLimpiarFiltros.addEventListener("click", limpiarFiltros);
 
 
 async function iniciarAplicacion() {
   iniciarDetalleProducto();
+  iniciarPedidos();
 
   try {
     await Promise.all([

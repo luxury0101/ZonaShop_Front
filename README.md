@@ -50,6 +50,8 @@ npm run preview
 - `src/auth/`: registro, login unificado, roles y rutas protegidas.
 - `src/carrito/`: carrito local para invitados y sincronizado para usuarios.
 - `src/catalogo/`: detalle de productos.
+- `src/pedidos/`: historial y detalle de compras del usuario.
+- `src/ui/`: notificaciones accesibles y componentes compartidos.
 - `src/styles/`: estilos SCSS adaptables.
 
 La arquitectura general, el modelo de datos y la matriz de aceptación se mantienen en el repositorio del backend.
@@ -60,6 +62,9 @@ La arquitectura general, el modelo de datos y la matriz de aceptación se mantie
 - Los clientes ven su nombre, perfil, pedidos y cierre de sesión.
 - Los administradores usan el mismo formulario y son enviados a `/admin`.
 - El carrito local se fusiona con el carrito guardado al iniciar sesión.
+- El pago es una simulación local: los datos de tarjeta se validan en el navegador,
+  pero nunca se envían al backend ni se conservan en almacenamiento.
+- Al completar la compra, el pedido queda disponible en **Mis pedidos**.
 
 Vite atiende `/admin` durante desarrollo. En producción, el hosting del frontend
 debe redirigir las rutas de la SPA hacia `index.html`.

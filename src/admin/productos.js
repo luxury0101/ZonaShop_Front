@@ -5,6 +5,7 @@ import {
   obtenerCategorias,
   obtenerProductos,
 } from "../api/catalogo.js";
+import { mensajeDeError, notificar } from "../ui/notificaciones.js";
 
 
 const elementos = {
@@ -332,6 +333,7 @@ async function manejarFormulario(evento) {
   }
 
   elementos.botonGuardar.disabled = true;
+  elementos.botonGuardar.classList.add("boton--cargando");
 
   const imagen = elementos.imagen.files[0];
 
@@ -363,12 +365,14 @@ async function manejarFormulario(evento) {
       mostrarMensaje(
         "Producto actualizado correctamente.",
       );
+      notificar("Producto editado correctamente", "exito");
     } else {
       await crearProducto(datos);
 
       mostrarMensaje(
         "Producto creado correctamente.",
       );
+      notificar("Producto creado correctamente", "exito");
     }
 
     limpiarFormulario();
@@ -380,13 +384,15 @@ async function manejarFormulario(evento) {
       ),
     );
   } catch (error) {
+    const mensaje = mensajeDeError(error);
     mostrarMensaje(
-      error.message ||
-      "No fue posible guardar el producto.",
+      mensaje,
       true,
     );
+    notificar(mensaje, "error");
   } finally {
     elementos.botonGuardar.disabled = false;
+    elementos.botonGuardar.classList.remove("boton--cargando");
   }
 }
 
@@ -398,6 +404,7 @@ async function ejecutarEliminacion() {
 
   elementos.botonConfirmarEliminacion.disabled =
     true;
+  elementos.botonConfirmarEliminacion.classList.add("boton--cargando");
 
   try {
     await eliminarProducto(
@@ -410,6 +417,7 @@ async function ejecutarEliminacion() {
     mostrarMensaje(
       "Producto eliminado correctamente.",
     );
+    notificar("Producto eliminado correctamente", "exito");
 
     await cargarProductosAdministrativos();
 
@@ -420,17 +428,18 @@ async function ejecutarEliminacion() {
     );
   } catch (error) {
     elementos.modalEliminar.close();
-
+    const mensaje = mensajeDeError(error);
     mostrarMensaje(
-      error.message ||
-      "No fue posible eliminar el producto.",
+      mensaje,
       true,
     );
+    notificar(mensaje, "error");
   } finally {
     productoPendienteDeEliminar = null;
 
     elementos.botonConfirmarEliminacion.disabled =
       false;
+    elementos.botonConfirmarEliminacion.classList.remove("boton--cargando");
   }
 }
 

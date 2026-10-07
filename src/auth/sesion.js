@@ -4,6 +4,7 @@ import {
   iniciarSesion,
   registrarUsuario,
 } from "../api/autenticacion.js";
+import { mensajeDeError, notificar } from "../ui/notificaciones.js";
 
 
 let usuarioActual = null;
@@ -18,6 +19,8 @@ function elementos() {
     botonCancelarLogin: document.querySelector("#boton-cancelar-login"),
     botonCancelarRegistro: document.querySelector("#boton-cancelar-registro"),
     botonCerrarSesion: document.querySelector("#boton-cerrar-sesion"),
+    botonLogin: document.querySelector("#boton-login"),
+    botonRegistro: document.querySelector("#boton-registro"),
     formularioLogin: document.querySelector("#formulario-login"),
     formularioRegistro: document.querySelector("#formulario-registro"),
     modalLogin: document.querySelector("#modal-login"),
@@ -38,6 +41,39 @@ function mostrarMensaje(elemento, mensaje, esError = false) {
   elemento.textContent = mensaje;
   elemento.classList.toggle("mensaje-error", esError);
   elemento.classList.toggle("mensaje-exito", !esError && Boolean(mensaje));
+}
+
+
+function mostrarErrorCampo(campo, mensaje) {
+  const error = document.querySelector(`#error-${campo.id}`);
+  if (error) error.textContent = mensaje;
+  campo.setAttribute("aria-invalid", String(Boolean(mensaje)));
+}
+
+
+function validarCampo(campo, formulario) {
+  let mensaje = "";
+  const valor = campo.value.trim();
+  if (!valor) mensaje = "Este campo es obligatorio.";
+  else if (campo.type === "email" && !campo.validity.valid) {
+    mensaje = "Escribe un correo electrónico válido.";
+  } else if (campo.name === "nombre" && valor.length < 2) {
+    mensaje = "El nombre debe tener al menos 2 caracteres.";
+  } else if (campo.name === "password" && formulario.id === "formulario-registro" && campo.value.length < 8) {
+    mensaje = "La contraseña debe tener al menos 8 caracteres.";
+  } else if (campo.name === "passwordConfirmacion") {
+    const password = formulario.elements.password?.value || "";
+    if (campo.value !== password) mensaje = "Las contraseñas no coinciden.";
+  }
+  mostrarErrorCampo(campo, mensaje);
+  return !mensaje;
+}
+
+
+function validarFormulario(formulario) {
+  return Array.from(formulario.querySelectorAll("input"))
+    .map((campo) => validarCampo(campo, formulario))
+    .every(Boolean);
 }
 
 
@@ -79,6 +115,9 @@ async function manejarLogin(evento) {
   const datos = new FormData(formulario);
   const email = String(datos.get("email") || "").trim();
   const password = String(datos.get("password") || "");
+  if (!validarFormulario(formulario)) return;
+  ui.botonLogin.disabled = true;
+  ui.botonLogin.classList.add("boton--cargando");
   mostrarMensaje(ui.mensajeLogin, "Iniciando sesión...");
 
   try {
@@ -86,11 +125,18 @@ async function manejarLogin(evento) {
     actualizarInterfaz(respuesta.usuario);
     formulario.reset();
     ui.modalLogin.close();
+    notificar(`Bienvenido, ${respuesta.usuario.nombre}`, "exito");
     if (respuesta.usuario.rol === "administrador") {
+      sessionStorage.setItem("zonashop_notificacion", `Bienvenido, ${respuesta.usuario.nombre}`);
       window.location.assign("/admin");
     }
   } catch (error) {
-    mostrarMensaje(ui.mensajeLogin, error.message, true);
+    const mensaje = mensajeDeError(error);
+    mostrarMensaje(ui.mensajeLogin, mensaje, true);
+    notificar(mensaje, "error");
+  } finally {
+    ui.botonLogin.disabled = false;
+    ui.botonLogin.classList.remove("boton--cargando");
   }
 }
 
@@ -101,19 +147,24 @@ async function manejarRegistro(evento) {
   const formulario = evento.currentTarget;
   const datos = Object.fromEntries(new FormData(formulario));
 
-  if (datos.password !== datos.passwordConfirmacion) {
-    mostrarMensaje(ui.mensajeRegistro, "Las contraseñas no coinciden.", true);
-    return;
-  }
+  if (!validarFormulario(formulario)) return;
 
+  ui.botonRegistro.disabled = true;
+  ui.botonRegistro.classList.add("boton--cargando");
   mostrarMensaje(ui.mensajeRegistro, "Creando cuenta...");
   try {
     const respuesta = await registrarUsuario(datos);
     actualizarInterfaz(respuesta.usuario);
     formulario.reset();
     ui.modalRegistro.close();
+    notificar("Registro exitoso. Tu cuenta está lista.", "exito");
   } catch (error) {
-    mostrarMensaje(ui.mensajeRegistro, error.message, true);
+    const mensaje = mensajeDeError(error);
+    mostrarMensaje(ui.mensajeRegistro, mensaje, true);
+    notificar(mensaje, "error");
+  } finally {
+    ui.botonRegistro.disabled = false;
+    ui.botonRegistro.classList.remove("boton--cargando");
   }
 }
 
@@ -124,22 +175,41 @@ async function manejarLogout() {
   try {
     await cerrarSesion();
     actualizarInterfaz(null);
-    window.location.assign("/");
+    if (window.location.pathname !== "/") {
+      sessionStorage.setItem("zonashop_notificacion", "Sesión cerrada correctamente.");
+      window.location.assign("/");
+    } else {
+      notificar("Sesión cerrada correctamente.", "informacion");
+    }
   } catch (error) {
-    window.alert(`No se pudo cerrar sesión: ${error.message}`);
+    notificar(mensajeDeError(error), "error");
     ui.botonCerrarSesion.disabled = false;
   }
 }
 
 
+export function abrirLogin() {
+  const ui = elementos();
+  mostrarMensaje(ui.mensajeLogin, "");
+  ui.modalLogin?.showModal();
+  document.querySelector("#login-email")?.focus();
+}
+
+
 function registrarEventos() {
   const ui = elementos();
-  ui.botonAbrirLogin?.addEventListener("click", () => ui.modalLogin.showModal());
+  ui.botonAbrirLogin?.addEventListener("click", abrirLogin);
   ui.botonAbrirRegistro?.addEventListener("click", () => ui.modalRegistro.showModal());
   ui.botonCancelarLogin?.addEventListener("click", () => ui.modalLogin.close());
   ui.botonCancelarRegistro?.addEventListener("click", () => ui.modalRegistro.close());
   ui.formularioLogin?.addEventListener("submit", manejarLogin);
   ui.formularioRegistro?.addEventListener("submit", manejarRegistro);
+  [ui.formularioLogin, ui.formularioRegistro].forEach((formulario) => {
+    formulario?.querySelectorAll("input").forEach((campo) => {
+      campo.addEventListener("input", () => validarCampo(campo, formulario));
+      campo.addEventListener("blur", () => validarCampo(campo, formulario));
+    });
+  });
   ui.botonCerrarSesion?.addEventListener("click", manejarLogout);
   ui.botonMenu?.addEventListener("click", () => {
     const abierto = ui.accionesHeader.classList.toggle("acciones-header--abierto");
@@ -150,6 +220,11 @@ function registrarEventos() {
 
 export async function restaurarSesion() {
   registrarEventos();
+  const notificacionPendiente = sessionStorage.getItem("zonashop_notificacion");
+  if (notificacionPendiente) {
+    sessionStorage.removeItem("zonashop_notificacion");
+    notificar(notificacionPendiente, "exito");
+  }
   try {
     const respuesta = await consultarSesion();
     const usuario = respuesta.autenticado ? respuesta.usuario : null;

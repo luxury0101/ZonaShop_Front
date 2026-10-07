@@ -34,7 +34,7 @@
           <details id="menu-usuario" class="menu-usuario" hidden>
             <summary id="nombre-usuario">Mi cuenta</summary>
             <div class="menu-usuario__opciones">
-              <a href="#mis-pedidos">Mis pedidos</a>
+              <button id="boton-mis-pedidos" type="button">Mis pedidos</button>
               <a href="#mi-perfil">Mi perfil</a>
               <a id="enlace-administracion" href="/admin" hidden>Panel de administración</a>
               <button id="boton-cerrar-sesion" type="button">Cerrar sesión</button>
@@ -307,12 +307,14 @@
         <h2>Iniciar sesión</h2>
         <p>Accede con la misma cuenta como cliente o administrador.</p>
         <label for="login-email">Correo electrónico</label>
-        <input id="login-email" name="email" type="text" autocomplete="username" required />
+        <input id="login-email" name="email" type="email" autocomplete="username" required aria-describedby="error-login-email" />
+        <small id="error-login-email" class="error-campo" aria-live="polite"></small>
         <label for="login-password">Contraseña</label>
-        <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required aria-describedby="error-login-password" />
+        <small id="error-login-password" class="error-campo" aria-live="polite"></small>
         <p id="mensaje-login" class="mensaje-formulario" aria-live="polite"></p>
         <div class="formulario-autenticacion__acciones">
-          <button type="submit">Iniciar sesión</button>
+          <button id="boton-login" type="submit">Iniciar sesión</button>
           <button id="boton-cancelar-login" type="button">Cancelar</button>
         </div>
       </form>
@@ -323,16 +325,20 @@
         <h2>Crear cuenta</h2>
         <p>Regístrate para conservar tu carrito y consultar tus pedidos.</p>
         <label for="registro-nombre">Nombre</label>
-        <input id="registro-nombre" name="nombre" type="text" minlength="2" maxlength="150" autocomplete="name" required />
+        <input id="registro-nombre" name="nombre" type="text" minlength="2" maxlength="150" autocomplete="name" required aria-describedby="error-registro-nombre" />
+        <small id="error-registro-nombre" class="error-campo" aria-live="polite"></small>
         <label for="registro-email">Correo electrónico</label>
-        <input id="registro-email" name="email" type="email" autocomplete="email" required />
+        <input id="registro-email" name="email" type="email" autocomplete="email" required aria-describedby="error-registro-email" />
+        <small id="error-registro-email" class="error-campo" aria-live="polite"></small>
         <label for="registro-password">Contraseña</label>
-        <input id="registro-password" name="password" type="password" minlength="8" autocomplete="new-password" required />
+        <input id="registro-password" name="password" type="password" minlength="8" autocomplete="new-password" required aria-describedby="error-registro-password" />
+        <small id="error-registro-password" class="error-campo" aria-live="polite"></small>
         <label for="registro-confirmacion">Confirmar contraseña</label>
-        <input id="registro-confirmacion" name="passwordConfirmacion" type="password" minlength="8" autocomplete="new-password" required />
+        <input id="registro-confirmacion" name="passwordConfirmacion" type="password" minlength="8" autocomplete="new-password" required aria-describedby="error-registro-confirmacion" />
+        <small id="error-registro-confirmacion" class="error-campo" aria-live="polite"></small>
         <p id="mensaje-registro" class="mensaje-formulario" aria-live="polite"></p>
         <div class="formulario-autenticacion__acciones">
-          <button type="submit">Crear cuenta</button>
+          <button id="boton-registro" type="submit">Crear cuenta</button>
           <button id="boton-cancelar-registro" type="button">Cancelar</button>
         </div>
       </form>
@@ -451,8 +457,12 @@
         ></div>
 
         <div class="resumen-carrito">
-          <span>Total</span>
-          <strong id="total-carrito">$ 0</strong>
+          <span>Subtotal</span>
+          <strong id="subtotal-carrito">$ 0</strong>
+          <span>Envío</span>
+          <strong>Gratis</strong>
+          <span class="resumen-carrito__total">Total</span>
+          <strong id="total-carrito" class="resumen-carrito__total">$ 0</strong>
         </div>
 
         <p
@@ -464,12 +474,62 @@
         ></p>
 
         <div class="modal-carrito__acciones">
+          <button id="boton-seguir-comprando" type="button">
+            Seguir comprando
+          </button>
           <button id="boton-vaciar-carrito" type="button">
             Vaciar carrito
+          </button>
+          <button id="boton-pagar" class="boton-pagar" type="button">
+            Pagar
           </button>
         </div>
       </div>
     </dialog>
+
+    <dialog id="modal-vaciar-carrito" class="modal-confirmacion">
+      <div class="modal-confirmacion__contenido">
+        <div class="modal-confirmacion__icono">!</div>
+        <h2>Vaciar carrito</h2>
+        <p>¿Deseas eliminar todos los productos del carrito?</p>
+        <div class="modal-confirmacion__acciones">
+          <button id="boton-cancelar-vaciado" type="button">Cancelar</button>
+          <button id="boton-confirmar-vaciado" type="button">Sí, vaciar</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="modal-pago" class="modal-pago">
+      <form id="formulario-pago" class="pago">
+        <div class="pago__encabezado">
+          <div><p class="seccion-etiqueta">Pago seguro simulado</p><h2>Finalizar compra</h2></div>
+          <button id="boton-cerrar-pago" type="button" aria-label="Cerrar pago">×</button>
+        </div>
+        <div id="resumen-pago" class="pago__resumen"></div>
+        <p class="pago__aviso">Simulación: los datos de la tarjeta no se envían ni se guardan.</p>
+        <label for="pago-titular">Nombre del titular</label>
+        <input id="pago-titular" name="titular" autocomplete="cc-name" required aria-describedby="error-pago-titular" />
+        <small id="error-pago-titular" class="error-campo" aria-live="polite"></small>
+        <label for="pago-tarjeta">Número de tarjeta</label>
+        <input id="pago-tarjeta" name="tarjeta" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="0000 0000 0000 0000" required aria-describedby="error-pago-tarjeta" />
+        <small id="error-pago-tarjeta" class="error-campo" aria-live="polite"></small>
+        <div class="pago__fila">
+          <div><label for="pago-vencimiento">Vencimiento</label><input id="pago-vencimiento" name="vencimiento" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/AA" required aria-describedby="error-pago-vencimiento" /><small id="error-pago-vencimiento" class="error-campo" aria-live="polite"></small></div>
+          <div><label for="pago-cvv">CVV</label><input id="pago-cvv" name="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" required aria-describedby="error-pago-cvv" /><small id="error-pago-cvv" class="error-campo" aria-live="polite"></small></div>
+        </div>
+        <button id="boton-confirmar-pago" class="boton-pagar" type="submit">Pagar</button>
+      </form>
+    </dialog>
+
+    <dialog id="modal-pedidos" class="modal-pedidos">
+      <div class="pedidos">
+        <div class="pedidos__encabezado"><div><p class="seccion-etiqueta">Tu cuenta</p><h2>Mis pedidos</h2></div><button id="boton-cerrar-pedidos" type="button" aria-label="Cerrar pedidos">×</button></div>
+        <p id="estado-pedidos" role="status"></p>
+        <div id="lista-pedidos" class="lista-pedidos"></div>
+      </div>
+    </dialog>
+
+    <div id="contenedor-notificaciones" class="notificaciones" aria-live="polite" aria-atomic="false"></div>
 
     <footer class="pie-pagina">
       <div class="contenedor pie-pagina__rejilla">

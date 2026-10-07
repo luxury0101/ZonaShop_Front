@@ -11,10 +11,24 @@ import {
 
 const dependencias = vi.hoisted(() => ({
   obtenerProducto: vi.fn(),
+  completarCompra: vi.fn(),
+  guardarCarritoCuenta: vi.fn(),
+  abrirLogin: vi.fn(),
+  obtenerUsuarioActual: vi.fn(),
 }));
 
 vi.mock("../api/catalogo.js", () => ({
   obtenerProducto: dependencias.obtenerProducto,
+}));
+
+vi.mock("../api/autenticacion.js", () => ({
+  completarCompra: dependencias.completarCompra,
+  guardarCarritoCuenta: dependencias.guardarCarritoCuenta,
+}));
+
+vi.mock("../auth/sesion.js", () => ({
+  abrirLogin: dependencias.abrirLogin,
+  obtenerUsuarioActual: dependencias.obtenerUsuarioActual,
 }));
 
 
@@ -25,11 +39,20 @@ function prepararInterfaz() {
     <dialog id="modal-carrito"></dialog>
     <button id="boton-cerrar-carrito"></button>
     <button id="boton-vaciar-carrito"></button>
+    <button id="boton-pagar"></button>
+    <button id="boton-seguir-comprando"></button>
     <div id="lista-carrito"></div>
     <p id="estado-carrito"></p>
+    <strong id="subtotal-carrito"></strong>
     <strong id="total-carrito"></strong>
     <p id="aviso-carrito"></p>
+    <dialog id="modal-vaciar-carrito"></dialog>
+    <dialog id="modal-pago"></dialog>
   `;
+  document.querySelectorAll("dialog").forEach((dialogo) => {
+    dialogo.showModal = vi.fn();
+    dialogo.close = vi.fn();
+  });
 }
 
 
@@ -42,6 +65,11 @@ async function cargarModulo() {
 describe("carrito", () => {
   beforeEach(() => {
     dependencias.obtenerProducto.mockReset();
+    dependencias.completarCompra.mockReset();
+    dependencias.guardarCarritoCuenta.mockReset();
+    dependencias.abrirLogin.mockReset();
+    dependencias.obtenerUsuarioActual.mockReset();
+    dependencias.obtenerUsuarioActual.mockReturnValue(null);
     localStorage.clear();
     prepararInterfaz();
   });
@@ -116,7 +144,7 @@ describe("carrito", () => {
     );
     expect(guardado[0].cantidad).toBe(1);
     expect(document.querySelector("#aviso-carrito").textContent)
-      .toContain("todas las unidades disponibles");
+      .toContain("Solo quedan 1 unidades disponibles");
   });
 
   it("revalida precio y existencias al restaurar el carrito", async () => {
@@ -227,5 +255,23 @@ describe("carrito", () => {
     expect(localStorage.getItem("zonashop_carrito")).toBeNull();
     expect(document.querySelector("#cantidad-carrito").textContent)
       .toBe("0");
+  });
+
+  it("conserva el carrito y abre el login al pagar sin sesión", async () => {
+    const { agregarAlCarrito, iniciarCarrito } = await cargarModulo();
+    await iniciarCarrito();
+    agregarAlCarrito({
+      id: 41,
+      nombre: "Camisa",
+      precio: "45000.00",
+      existencias: 2,
+      agotado: false,
+    });
+
+    document.querySelector("#boton-pagar").click();
+
+    expect(dependencias.abrirLogin).toHaveBeenCalledOnce();
+    expect(JSON.parse(localStorage.getItem("zonashop_carrito")))
+      .toEqual([expect.objectContaining({ id: 41, cantidad: 1 })]);
   });
 });

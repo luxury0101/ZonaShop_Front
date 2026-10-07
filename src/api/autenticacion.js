@@ -41,3 +41,18 @@ export function guardarCarritoCuenta(items, fusionar = false) {
     }),
   });
 }
+
+
+export function completarCompra(items) {
+  return clienteApi("/api/auth/pedidos/", {
+    method: "POST",
+    body: JSON.stringify({
+      items: items.map(({ id, cantidad }) => ({ id, cantidad })),
+    }),
+  });
+}
+
+
+export function obtenerPedidos() {
+  return clienteApi("/api/auth/pedidos/");
+}
