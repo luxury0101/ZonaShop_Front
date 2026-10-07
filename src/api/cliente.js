@@ -53,6 +53,25 @@ async function leerRespuesta(respuesta) {
 }
 
 
+function obtenerMensajeError(datos, estado) {
+  if (typeof datos?.detail === "string") {
+    return datos.detail;
+  }
+
+  if (datos && typeof datos === "object") {
+    const mensajes = Object.values(datos)
+      .flatMap((valor) => Array.isArray(valor) ? valor : [valor])
+      .filter((valor) => typeof valor === "string");
+
+    if (mensajes.length > 0) {
+      return mensajes.join(" ");
+    }
+  }
+
+  return `Error HTTP ${estado}`;
+}
+
+
 export async function clienteApi(
   ruta,
   opciones = {},
@@ -92,10 +111,7 @@ export async function clienteApi(
   const datos = await leerRespuesta(respuesta);
 
   if (!respuesta.ok) {
-    const mensaje =
-      datos?.detail ||
-      datos?.mensaje ||
-      `Error HTTP ${respuesta.status}`;
+    const mensaje = obtenerMensajeError(datos, respuesta.status);
 
     const error = new Error(mensaje);
 

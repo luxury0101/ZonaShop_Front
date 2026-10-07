@@ -55,6 +55,7 @@ export function eliminarCategoria(
 export function obtenerProductos({
   categoria = "",
   busqueda = "",
+  orden = "",
 } = {}) {
   const parametros = new URLSearchParams();
 
@@ -70,6 +71,10 @@ export function obtenerProductos({
       "buscar",
       busqueda.trim(),
     );
+  }
+
+  if (orden) {
+    parametros.set("orden", orden);
   }
 
   const consulta = parametros.toString();

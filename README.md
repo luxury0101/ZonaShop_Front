@@ -47,9 +47,19 @@ npm run preview
 
 - `src/api/`: cliente HTTP y operaciones de la API.
 - `src/admin/`: gestión administrativa de categorías y productos.
-- `src/auth/`: sesión administrativa.
-- `src/carrito/`: carrito y persistencia local.
+- `src/auth/`: registro, login unificado, roles y rutas protegidas.
+- `src/carrito/`: carrito local para invitados y sincronizado para usuarios.
 - `src/catalogo/`: detalle de productos.
 - `src/styles/`: estilos SCSS adaptables.
 
 La arquitectura general, el modelo de datos y la matriz de aceptación se mantienen en el repositorio del backend.
+
+## Flujo de autenticación
+
+- Los invitados pueden registrarse o iniciar sesión desde el header.
+- Los clientes ven su nombre, perfil, pedidos y cierre de sesión.
+- Los administradores usan el mismo formulario y son enviados a `/admin`.
+- El carrito local se fusiona con el carrito guardado al iniciar sesión.
+
+Vite atiende `/admin` durante desarrollo. En producción, el hosting del frontend
+debe redirigir las rutas de la SPA hacia `index.html`.

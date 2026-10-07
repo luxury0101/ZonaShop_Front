@@ -1,9 +1,11 @@
 import { obtenerProducto } from "../api/catalogo.js";
+import { guardarCarritoCuenta } from "../api/autenticacion.js";
 
 
 const CLAVE_ALMACENAMIENTO = "zonashop_carrito";
 
 let carrito = [];
+let usuarioAutenticado = false;
 
 const elementos = {
   botonAbrir: document.querySelector("#boton-abrir-carrito"),
@@ -37,10 +39,57 @@ function formatearPrecio(centavos) {
 
 
 function guardarCarrito() {
+  if (usuarioAutenticado) {
+    window.clearTimeout(guardarCarrito.temporizador);
+    guardarCarrito.temporizador = window.setTimeout(async () => {
+      try {
+        await guardarCarritoCuenta(carrito);
+      } catch (error) {
+        mostrarAviso(
+          "No fue posible guardar el carrito en tu cuenta.",
+          true,
+        );
+      }
+    }, 250);
+    return;
+  }
+
   localStorage.setItem(
     CLAVE_ALMACENAMIENTO,
     JSON.stringify(carrito),
   );
+}
+
+
+function adaptarCarritoCuenta(items) {
+  return items.map((item) => ({
+    id: item.id,
+    nombre: item.nombre,
+    precioCentavos: convertirACentavos(item.precio),
+    cantidad: item.cantidad,
+    existencias: item.existencias,
+  }));
+}
+
+
+async function sincronizarCarrito(usuario) {
+  if (!usuario) {
+    usuarioAutenticado = false;
+    return;
+  }
+
+  try {
+    const items = await guardarCarritoCuenta(carrito, true);
+    usuarioAutenticado = true;
+    carrito = adaptarCarritoCuenta(items);
+    localStorage.removeItem(CLAVE_ALMACENAMIENTO);
+    renderizarCarrito();
+  } catch (error) {
+    mostrarAviso(
+      "Iniciaste sesión, pero no fue posible sincronizar el carrito.",
+      true,
+    );
+  }
 }
 
 
@@ -464,6 +513,10 @@ export async function iniciarCarrito() {
       }
     },
   );
+
+  window.addEventListener("sesion:cambiada", (evento) => {
+    sincronizarCarrito(evento.detail?.usuario);
+  });
 
   if (carrito.length > 0) {
     await revalidarCarrito();

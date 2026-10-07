@@ -40,6 +40,11 @@ const campoBusqueda = document.querySelector(
   "#busqueda",
 );
 
+const selectorOrden = document.querySelector("#orden");
+const botonLimpiarFiltros = document.querySelector(
+  "#boton-limpiar-filtros",
+);
+
 const contenedorProductos = document.querySelector(
   "#productos",
 );
@@ -243,6 +248,7 @@ async function cargarProductos() {
     const productos = await obtenerProductos({
       categoria: selectorCategoria.value,
       busqueda: campoBusqueda.value,
+      orden: selectorOrden.value,
     });
 
     mostrarProductos(productos);
@@ -271,6 +277,17 @@ selectorCategoria.addEventListener(
     cargarProductos();
   },
 );
+
+
+selectorOrden.addEventListener("change", cargarProductos);
+
+
+botonLimpiarFiltros.addEventListener("click", () => {
+  campoBusqueda.value = "";
+  selectorCategoria.value = "";
+  selectorOrden.value = "";
+  cargarProductos();
+});
 
 
 async function iniciarAplicacion() {
