@@ -1,3 +1,6 @@
+import { obtenerProducto } from "../api/catalogo.js";
+
+
 const CLAVE_ALMACENAMIENTO = "zonashop_carrito";
 
 let carrito = [];
@@ -15,12 +18,21 @@ const elementos = {
 };
 
 
-function formatearPrecio(valor) {
+function convertirACentavos(valor) {
+  const numero = Number(valor);
+
+  return Number.isFinite(numero)
+    ? Math.round(numero * 100)
+    : 0;
+}
+
+
+function formatearPrecio(centavos) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
-  }).format(Number(valor));
+  }).format(centavos / 100);
 }
 
 
@@ -45,7 +57,12 @@ function cargarCarrito() {
           item.id != null &&
           Number.isInteger(item.cantidad) &&
           item.cantidad > 0,
-      )
+      ).map((item) => ({
+        ...item,
+        precioCentavos: Number.isInteger(item.precioCentavos)
+          ? item.precioCentavos
+          : convertirACentavos(item.precio),
+      }))
       : [];
   } catch (error) {
     console.error("No se pudo recuperar el carrito:", error);
@@ -63,10 +80,10 @@ function obtenerCantidadTotal() {
 }
 
 
-function obtenerValorTotal() {
+function obtenerValorTotalCentavos() {
   return carrito.reduce(
     (total, item) =>
-      total + Number(item.precio) * item.cantidad,
+      total + item.precioCentavos * item.cantidad,
     0,
   );
 }
@@ -99,7 +116,7 @@ function mostrarAviso(mensaje, esError = false) {
 
 function actualizarResumen() {
   const cantidad = obtenerCantidadTotal();
-  const total = obtenerValorTotal();
+  const total = obtenerValorTotalCentavos();
 
   if (elementos.cantidad) {
     elementos.cantidad.textContent = cantidad;
@@ -232,7 +249,7 @@ function crearItemCarrito(item) {
 
   const precioUnitario = document.createElement("p");
   precioUnitario.textContent =
-    `${formatearPrecio(item.precio)} por unidad`;
+    `${formatearPrecio(item.precioCentavos)} por unidad`;
 
   informacion.append(nombre, precioUnitario);
 
@@ -241,7 +258,7 @@ function crearItemCarrito(item) {
   const subtotal = document.createElement("strong");
   subtotal.className = "item-carrito__subtotal";
   subtotal.textContent = formatearPrecio(
-    Number(item.precio) * item.cantidad,
+    item.precioCentavos * item.cantidad,
   );
 
   const botonEliminar = document.createElement("button");
@@ -287,6 +304,86 @@ function vaciarCarrito() {
 }
 
 
+async function revalidarCarrito() {
+  const resultados = await Promise.all(
+    carrito.map(async (item) => {
+      try {
+        return {
+          item,
+          producto: await obtenerProducto(item.id),
+        };
+      } catch (error) {
+        return { item, error };
+      }
+    }),
+  );
+
+  const carritoActualizado = [];
+  let productosAjustados = 0;
+  let falloConexion = false;
+
+  resultados.forEach(({ item, producto, error }) => {
+    if (error) {
+      if (error.status === 404) {
+        productosAjustados += 1;
+        return;
+      }
+
+      falloConexion = true;
+      carritoActualizado.push(item);
+      return;
+    }
+
+    const existencias = Number(producto.existencias);
+
+    if (
+      producto.agotado ||
+      !Number.isFinite(existencias) ||
+      existencias < 1
+    ) {
+      productosAjustados += 1;
+      return;
+    }
+
+    const precioCentavos = convertirACentavos(producto.precio);
+    const cantidad = Math.min(item.cantidad, existencias);
+
+    if (
+      cantidad !== item.cantidad ||
+      precioCentavos !== item.precioCentavos ||
+      producto.nombre !== item.nombre ||
+      existencias !== Number(item.existencias)
+    ) {
+      productosAjustados += 1;
+    }
+
+    carritoActualizado.push({
+      id: producto.id,
+      nombre: producto.nombre,
+      precioCentavos,
+      cantidad,
+      existencias,
+    });
+  });
+
+  carrito = carritoActualizado;
+  guardarCarrito();
+  renderizarCarrito();
+
+  if (falloConexion) {
+    mostrarAviso(
+      "No fue posible actualizar todos los productos del carrito. " +
+      "Se conservaron temporalmente los datos guardados.",
+      true,
+    );
+  } else if (productosAjustados > 0) {
+    mostrarAviso(
+      "El carrito se actualizó con los precios y existencias actuales.",
+    );
+  }
+}
+
+
 export function agregarAlCarrito(producto) {
   const existencias = Number(producto.existencias);
 
@@ -308,7 +405,9 @@ export function agregarAlCarrito(producto) {
 
   if (itemExistente) {
     itemExistente.existencias = existencias;
-    itemExistente.precio = Number(producto.precio);
+    itemExistente.precioCentavos = convertirACentavos(
+      producto.precio,
+    );
     itemExistente.nombre = producto.nombre;
 
     if (itemExistente.cantidad >= existencias) {
@@ -324,7 +423,7 @@ export function agregarAlCarrito(producto) {
     carrito.push({
       id: producto.id,
       nombre: producto.nombre,
-      precio: Number(producto.precio),
+      precioCentavos: convertirACentavos(producto.precio),
       cantidad: 1,
       existencias,
     });
@@ -338,7 +437,7 @@ export function agregarAlCarrito(producto) {
 }
 
 
-export function iniciarCarrito() {
+export async function iniciarCarrito() {
   cargarCarrito();
   renderizarCarrito();
 
@@ -365,4 +464,8 @@ export function iniciarCarrito() {
       }
     },
   );
+
+  if (carrito.length > 0) {
+    await revalidarCarrito();
+  }
 }

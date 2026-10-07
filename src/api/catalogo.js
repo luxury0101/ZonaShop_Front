@@ -82,6 +82,11 @@ export function obtenerProductos({
 }
 
 
+export function obtenerProducto(productoId) {
+  return solicitar(`/productos/${productoId}/`);
+}
+
+
 function construirDatosProducto({
   categoria,
   nombre,

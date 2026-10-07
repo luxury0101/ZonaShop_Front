@@ -274,11 +274,11 @@ selectorCategoria.addEventListener(
 
 
 async function iniciarAplicacion() {
-  iniciarCarrito();
   iniciarDetalleProducto();
 
   try {
     await Promise.all([
+      iniciarCarrito(),
       restaurarSesion(),
       cargarCategorias(),
       iniciarAdministracionCategorias(),

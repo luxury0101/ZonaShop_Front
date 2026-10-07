@@ -9,6 +9,15 @@ import {
 } from "vitest";
 
 
+const dependencias = vi.hoisted(() => ({
+  obtenerProducto: vi.fn(),
+}));
+
+vi.mock("../api/catalogo.js", () => ({
+  obtenerProducto: dependencias.obtenerProducto,
+}));
+
+
 function prepararInterfaz() {
   document.body.innerHTML = `
     <button id="boton-abrir-carrito"></button>
@@ -32,6 +41,7 @@ async function cargarModulo() {
 
 describe("carrito", () => {
   beforeEach(() => {
+    dependencias.obtenerProducto.mockReset();
     localStorage.clear();
     prepararInterfaz();
   });
@@ -39,7 +49,7 @@ describe("carrito", () => {
   it("inicia vacío", async () => {
     const { iniciarCarrito } = await cargarModulo();
 
-    iniciarCarrito();
+    await iniciarCarrito();
 
     expect(document.querySelector("#cantidad-carrito").textContent)
       .toBe("0");
@@ -55,7 +65,7 @@ describe("carrito", () => {
       iniciarCarrito,
     } = await cargarModulo();
 
-    iniciarCarrito();
+    await iniciarCarrito();
     agregarAlCarrito({
       id: 7,
       nombre: "Camiseta negra",
@@ -97,7 +107,7 @@ describe("carrito", () => {
       agotado: false,
     };
 
-    iniciarCarrito();
+    await iniciarCarrito();
     agregarAlCarrito(producto);
     agregarAlCarrito(producto);
 
@@ -109,7 +119,7 @@ describe("carrito", () => {
       .toContain("todas las unidades disponibles");
   });
 
-  it("restaura una selección válida del almacenamiento local", async () => {
+  it("revalida precio y existencias al restaurar el carrito", async () => {
     localStorage.setItem(
       "zonashop_carrito",
       JSON.stringify([
@@ -122,16 +132,89 @@ describe("carrito", () => {
         },
       ]),
     );
+    dependencias.obtenerProducto.mockResolvedValue({
+      id: 11,
+      nombre: "Bolso actualizado",
+      precio: "90000.00",
+      existencias: 1,
+      agotado: false,
+    });
     const { iniciarCarrito } = await cargarModulo();
 
-    iniciarCarrito();
+    await iniciarCarrito();
 
     expect(document.querySelector("#cantidad-carrito").textContent)
-      .toBe("2");
+      .toBe("1");
     expect(document.querySelector("#lista-carrito h3").textContent)
-      .toBe("Bolso");
+      .toBe("Bolso actualizado");
     expect(document.querySelector("#total-carrito").textContent)
-      .toContain("160.000");
+      .toContain("90.000");
+    expect(document.querySelector("#aviso-carrito").textContent)
+      .toContain("precios y existencias actuales");
+
+    const guardado = JSON.parse(
+      localStorage.getItem("zonashop_carrito"),
+    );
+    expect(guardado[0]).toEqual(
+      expect.objectContaining({
+        nombre: "Bolso actualizado",
+        precioCentavos: 9000000,
+        cantidad: 1,
+        existencias: 1,
+      }),
+    );
+  });
+
+  it("retira productos que ya no existen", async () => {
+    localStorage.setItem(
+      "zonashop_carrito",
+      JSON.stringify([
+        {
+          id: 21,
+          nombre: "Producto eliminado",
+          precio: 10000,
+          cantidad: 1,
+          existencias: 2,
+        },
+      ]),
+    );
+    dependencias.obtenerProducto.mockRejectedValue(
+      Object.assign(new Error("No encontrado"), { status: 404 }),
+    );
+    const { iniciarCarrito } = await cargarModulo();
+
+    await iniciarCarrito();
+
+    expect(document.querySelector("#cantidad-carrito").textContent)
+      .toBe("0");
+    expect(JSON.parse(localStorage.getItem("zonashop_carrito")))
+      .toEqual([]);
+  });
+
+  it("conserva datos guardados cuando la API no responde", async () => {
+    localStorage.setItem(
+      "zonashop_carrito",
+      JSON.stringify([
+        {
+          id: 31,
+          nombre: "Producto guardado",
+          precio: 25000,
+          cantidad: 1,
+          existencias: 2,
+        },
+      ]),
+    );
+    dependencias.obtenerProducto.mockRejectedValue(
+      Object.assign(new Error("Sin conexión"), { status: 503 }),
+    );
+    const { iniciarCarrito } = await cargarModulo();
+
+    await iniciarCarrito();
+
+    expect(document.querySelector("#cantidad-carrito").textContent)
+      .toBe("1");
+    expect(document.querySelector("#aviso-carrito").textContent)
+      .toContain("Se conservaron temporalmente");
   });
 
   it("descarta almacenamiento corrupto", async () => {
@@ -139,7 +222,7 @@ describe("carrito", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const { iniciarCarrito } = await cargarModulo();
 
-    iniciarCarrito();
+    await iniciarCarrito();
 
     expect(localStorage.getItem("zonashop_carrito")).toBeNull();
     expect(document.querySelector("#cantidad-carrito").textContent)

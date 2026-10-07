@@ -25,6 +25,8 @@ La interfaz estará disponible en `http://localhost:5173`.
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
+La dirección puede incluir opcionalmente el sufijo `/api`; el cliente evita duplicarlo al construir las rutas.
+
 Las variables que comienzan por `VITE_` se incorporan al código compilado y, por tanto, son públicas. No deben contener contraseñas, secretos ni cadenas de conexión a PostgreSQL.
 
 ## Comandos
