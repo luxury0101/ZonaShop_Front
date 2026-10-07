@@ -51,3 +51,5 @@ npm run preview
 - `src/carrito/`: carrito y persistencia local.
 - `src/catalogo/`: detalle de productos.
 - `src/styles/`: estilos SCSS adaptables.
+
+La arquitectura general, el modelo de datos y la matriz de aceptación se mantienen en el repositorio del backend.
