@@ -75,7 +75,5 @@ debe redirigir las rutas de la SPA hacia `index.html`.
 ## Panel administrativo modular
 
 El panel usa vistas separadas por ruta: `/admin`, `/admin/categorias`,
-`/admin/productos`, `/admin/pedidos`, `/admin/usuarios`, `/admin/inventario`,
-`/admin/reportes` y `/admin/configuracion`. Categorías, productos y pedidos
-conservan su gestión completa; los demás módulos incluyen una vista base para su
-desarrollo posterior. Todas las rutas comparten navegación, cuenta y migas de pan.
+`/admin/productos` y `/admin/pedidos`. Categorías, productos y pedidos conservan
+su gestión completa. Todas las rutas comparten navegación, cuenta y migas de pan.

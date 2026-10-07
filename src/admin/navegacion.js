@@ -3,10 +3,6 @@ const MODULOS = {
   "/admin/categorias": { clave: "categorias", titulo: "Categorías" },
   "/admin/productos": { clave: "productos", titulo: "Productos" },
   "/admin/pedidos": { clave: "pedidos", titulo: "Pedidos" },
-  "/admin/usuarios": { clave: "usuarios", titulo: "Usuarios" },
-  "/admin/inventario": { clave: "inventario", titulo: "Inventario" },
-  "/admin/reportes": { clave: "reportes", titulo: "Reportes" },
-  "/admin/configuracion": { clave: "configuracion", titulo: "Configuración" },
 };
 
 

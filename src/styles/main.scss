@@ -1970,24 +1970,6 @@ html {
 .vista-admin .tabla-categorias-contenedor,
 .vista-admin .tabla-productos-contenedor { background: #fff; }
 
-.modulo-construccion {
-  display: grid;
-  min-height: 420px;
-  place-items: center;
-  align-content: center;
-  padding: 2rem;
-  color: #607086;
-  background: #fff;
-  border: 1px dashed #b8c4d1;
-  border-radius: 1rem;
-  text-align: center;
-
-  > span { display: grid; width: 72px; height: 72px; place-items: center; color: #fff; background: $color-principal; border-radius: 1rem; font-size: 2rem; }
-  h1 { margin: 1.2rem 0 0.35rem; color: $color-principal; }
-  p { margin: 0; color: $color-acento; font-size: 1.15rem; font-weight: 800; }
-  small { margin-top: 0.5rem; }
-}
-
 @media (max-width: 1120px) {
   .barra-admin { grid-template-columns: auto auto 1fr; }
   .barra-admin__hamburguesa { display: block; padding: 0.5rem 0.7rem; color: #fff; background: transparent; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 0.5rem; cursor: pointer; }
