@@ -9,6 +9,12 @@ import {
 import { clienteApi, solicitar } from "./cliente.js";
 
 
+const API_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:8000"
+).replace(/\/+$/, "");
+
+
 function respuestaJson(datos, opciones = {}) {
   return {
     ok: opciones.ok ?? true,
@@ -37,7 +43,7 @@ describe("cliente de la API", () => {
     expect(datos).toEqual([{ id: 1 }]);
     expect(fetchSimulado).toHaveBeenCalledOnce();
     expect(fetchSimulado).toHaveBeenCalledWith(
-      "http://localhost:8000/api/productos",
+      `${API_URL}/api/productos`,
       expect.objectContaining({
         method: "GET",
         credentials: "include",
@@ -63,7 +69,7 @@ describe("cliente de la API", () => {
     expect(fetchSimulado).toHaveBeenCalledTimes(2);
     expect(fetchSimulado).toHaveBeenNthCalledWith(
       2,
-      "http://localhost:8000/api/productos/",
+      `${API_URL}/api/productos/`,
       expect.objectContaining({
         method: "POST",
         credentials: "include",
