@@ -305,6 +305,9 @@ async function manejarFormulario(evento) {
 
 
 export async function iniciarAdministracionCategorias() {
+  if (window.location.pathname.replace(/\/+$/, "") !== "/admin/categorias") {
+    return;
+  }
   elementos.formulario?.addEventListener(
     "submit",
     manejarFormulario,
@@ -385,4 +388,4 @@ async function ejecutarEliminacion() {
     elementos.botonConfirmarEliminacion.textContent =
       "Sí, eliminar";
   }
-} 
+}

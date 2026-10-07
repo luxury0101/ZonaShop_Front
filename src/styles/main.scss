@@ -1842,6 +1842,177 @@ html {
 }
 
 
+/* Panel administrativo modular */
+.ruta-admin {
+  background: #f1f4f8;
+
+  > .encabezado { display: none; }
+  main { min-height: 100vh; }
+}
+
+.panel-admin {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.barra-admin {
+  position: fixed;
+  z-index: 1200;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.2rem;
+  min-height: 70px;
+  padding: 0.7rem max(2vw, 1rem);
+  color: #fff;
+  background: $color-principal;
+  box-shadow: 0 4px 18px rgba(13, 38, 64, 0.18);
+}
+
+.barra-admin__marca {
+  color: #fff;
+  font-size: 1.18rem;
+  font-weight: 850;
+  text-decoration: none;
+  white-space: nowrap;
+
+  span { color: #ffb397; }
+}
+
+.navegacion-admin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+
+  a {
+    padding: 0.65rem 0.55rem;
+    color: #dce8f2;
+    border-bottom: 3px solid transparent;
+    font-size: 0.84rem;
+    font-weight: 650;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  a:hover,
+  &__activo { color: #fff !important; border-bottom-color: $color-acento !important; }
+}
+
+.barra-admin__hamburguesa { display: none; }
+
+.cuenta-admin {
+  position: relative;
+
+  summary { padding: 0.6rem 0.75rem; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 0.55rem; cursor: pointer; white-space: nowrap; }
+  > div { position: absolute; top: calc(100% + 0.55rem); right: 0; display: grid; min-width: 170px; padding: 0.45rem; background: #fff; border-radius: 0.65rem; box-shadow: 0 12px 30px rgba(15, 42, 70, 0.2); }
+  a,
+  button { padding: 0.65rem; color: $color-texto; background: transparent; border: 0; border-radius: 0.4rem; text-align: left; text-decoration: none; cursor: pointer; }
+  a:hover,
+  button:hover { background: #eef3f7; }
+}
+
+.admin-contenido {
+  width: min(calc(100% - 2rem), 1250px);
+  margin: 0 auto;
+  padding: 94px 0 4rem;
+}
+
+.migas {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1.5rem;
+  color: #718096;
+  font-size: 0.9rem;
+
+  a { color: $color-secundario; text-decoration: none; }
+}
+
+.vista-admin[hidden] { display: none; }
+
+.bienvenida-admin,
+.cabecera-modulo {
+  margin-bottom: 1.5rem;
+
+  h1 { margin: 0.3rem 0; color: $color-principal; font-size: clamp(1.75rem, 4vw, 2.45rem); }
+  > p:last-child { margin: 0; color: #607086; }
+}
+
+.modulos-admin {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+
+  a {
+    min-height: 190px;
+    padding: 1.5rem;
+    color: $color-texto;
+    background: #fff;
+    border: 1px solid $color-borde;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(23, 59, 99, 0.07);
+    text-decoration: none;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  }
+
+  a:hover { transform: translateY(-3px); border-color: $color-acento; box-shadow: 0 14px 30px rgba(23, 59, 99, 0.12); }
+  span { display: grid; width: 48px; height: 48px; place-items: center; color: #fff; background: linear-gradient(135deg, $color-principal, $color-secundario); border-radius: 0.75rem; font-size: 1.35rem; }
+  h2 { margin: 1.1rem 0 0.35rem; color: $color-principal; font-size: 1.2rem; }
+  p { margin: 0; color: #607086; }
+}
+
+.vista-admin .formulario-categoria,
+.vista-admin .formulario-producto,
+.vista-admin .tabla-categorias-contenedor,
+.vista-admin .tabla-productos-contenedor { background: #fff; }
+
+.modulo-construccion {
+  display: grid;
+  min-height: 420px;
+  place-items: center;
+  align-content: center;
+  padding: 2rem;
+  color: #607086;
+  background: #fff;
+  border: 1px dashed #b8c4d1;
+  border-radius: 1rem;
+  text-align: center;
+
+  > span { display: grid; width: 72px; height: 72px; place-items: center; color: #fff; background: $color-principal; border-radius: 1rem; font-size: 2rem; }
+  h1 { margin: 1.2rem 0 0.35rem; color: $color-principal; }
+  p { margin: 0; color: $color-acento; font-size: 1.15rem; font-weight: 800; }
+  small { margin-top: 0.5rem; }
+}
+
+@media (max-width: 1120px) {
+  .barra-admin { grid-template-columns: auto auto 1fr; }
+  .barra-admin__hamburguesa { display: block; padding: 0.5rem 0.7rem; color: #fff; background: transparent; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 0.5rem; cursor: pointer; }
+  .navegacion-admin { position: absolute; top: 100%; right: 0; left: 0; display: none; align-items: stretch; flex-direction: column; padding: 0.7rem 1rem; background: $color-principal; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+  .navegacion-admin--abierta { display: flex; }
+  .navegacion-admin a { padding: 0.7rem; border-bottom-width: 1px; }
+  .cuenta-admin { justify-self: end; }
+}
+
+@media (max-width: 760px) {
+  .barra-admin { grid-template-columns: 1fr auto; }
+  .barra-admin__hamburguesa { grid-column: 2; grid-row: 1; }
+  .cuenta-admin { grid-column: 1 / -1; width: 100%; }
+  .cuenta-admin summary { text-align: center; }
+  .admin-contenido { padding-top: 142px; }
+  .modulos-admin { grid-template-columns: 1fr; }
+  .modulos-admin a { min-height: auto; }
+  .panel-administracion__encabezado { align-items: stretch; flex-direction: column; }
+  .tabla-categorias-contenedor,
+  .tabla-productos-contenedor { overflow-x: auto; }
+  .tabla-categorias,
+  .tabla-productos { min-width: 720px; }
+}
+
+
 /* Estados de interacción y notificaciones */
 .notificaciones {
   position: fixed;

@@ -22,7 +22,7 @@ describe("administración de pedidos", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
-    window.history.replaceState({}, "", "/admin");
+    window.history.replaceState({}, "", "/admin/pedidos");
     document.body.innerHTML = `
       <select id="filtro-estado-pedidos"><option value="">Todos</option></select>
       <p id="estado-pedidos-admin"></p>

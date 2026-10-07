@@ -125,9 +125,12 @@ async function cargarPedidos() {
 
 
 export function iniciarAdministracionPedidos() {
+  if (window.location.pathname.replace(/\/+$/, "") !== "/admin/pedidos") {
+    return;
+  }
   elementos.filtro?.addEventListener("change", cargarPedidos);
   window.addEventListener("sesion:cambiada", (evento) => {
-    if (evento.detail?.usuario?.rol === "administrador" && window.location.pathname.startsWith("/admin")) {
+    if (evento.detail?.usuario?.rol === "administrador") {
       cargarPedidos();
     }
   });

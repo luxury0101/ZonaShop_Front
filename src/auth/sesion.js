@@ -19,6 +19,7 @@ function elementos() {
     botonCancelarLogin: document.querySelector("#boton-cancelar-login"),
     botonCancelarRegistro: document.querySelector("#boton-cancelar-registro"),
     botonCerrarSesion: document.querySelector("#boton-cerrar-sesion"),
+    botonCerrarSesionAdmin: document.querySelector("#boton-cerrar-sesion-admin"),
     botonLogin: document.querySelector("#boton-login"),
     botonRegistro: document.querySelector("#boton-registro"),
     formularioLogin: document.querySelector("#formulario-login"),
@@ -99,9 +100,12 @@ function actualizarInterfaz(usuario) {
   document.body.classList.toggle("ruta-admin", rutaAdmin && esAdministrador);
 
   if (rutaAdmin && autenticado && !esAdministrador) {
-    window.history.replaceState({}, "", "/");
-    document.body.classList.remove("ruta-admin");
-    ui.panelAdministracion.hidden = true;
+    sessionStorage.setItem(
+      "zonashop_notificacion",
+      "No tienes permisos para acceder al panel de administración.",
+    );
+    window.location.assign("/");
+    return;
   }
 
   emitirCambioSesion(usuario);
@@ -211,6 +215,7 @@ function registrarEventos() {
     });
   });
   ui.botonCerrarSesion?.addEventListener("click", manejarLogout);
+  ui.botonCerrarSesionAdmin?.addEventListener("click", manejarLogout);
   window.addEventListener("perfil:actualizado", (evento) => {
     if (!usuarioActual) return;
     actualizarInterfaz({

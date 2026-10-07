@@ -72,211 +72,80 @@
           </div>
         </div>
       </section>
-      <section
-        id="panel-administracion"
-        class="panel-administracion"
-        aria-labelledby="titulo-administracion"
-        hidden
-      >
-        <div class="panel-administracion__encabezado">
-          <div>
-            <p class="seccion-etiqueta">Administración</p>
+      <section id="panel-administracion" class="panel-admin" hidden>
+        <header class="barra-admin">
+          <a class="barra-admin__marca" href="/admin">ZonaShop <span>Admin</span></a>
+          <button id="boton-menu-admin" class="barra-admin__hamburguesa" type="button" aria-expanded="false" aria-controls="navegacion-admin">☰</button>
+          <nav id="navegacion-admin" class="navegacion-admin" aria-label="Módulos administrativos">
+            <a href="/admin" data-ruta-admin="inicio">Inicio</a>
+            <a href="/admin/categorias" data-ruta-admin="categorias">Categorías</a>
+            <a href="/admin/productos" data-ruta-admin="productos">Productos</a>
+            <a href="/admin/pedidos" data-ruta-admin="pedidos">Pedidos</a>
+            <a href="/admin/usuarios" data-ruta-admin="usuarios">Usuarios</a>
+            <a href="/admin/inventario" data-ruta-admin="inventario">Inventario</a>
+            <a href="/admin/reportes" data-ruta-admin="reportes">Reportes</a>
+            <a href="/admin/configuracion" data-ruta-admin="configuracion">Configuración</a>
+          </nav>
+          <details class="cuenta-admin">
+            <summary id="nombre-admin">Administrador</summary>
+            <div><a href="/">Ver tienda</a><button id="boton-cerrar-sesion-admin" type="button">Cerrar sesión</button></div>
+          </details>
+        </header>
 
-            <h2 id="titulo-administracion">Gestión de categorías</h2>
+        <div class="admin-contenido">
+          <nav class="migas" aria-label="Migas de pan"><a href="/admin">Inicio</a><span aria-hidden="true">›</span><span id="miga-actual">Inicio</span></nav>
 
-            <p>
-              Crea, actualiza y elimina las categorías disponibles en ZonaShop.
-            </p>
-          </div>
+          <section id="vista-admin-inicio" class="vista-admin" data-vista-admin="inicio" hidden>
+            <div class="bienvenida-admin"><p class="seccion-etiqueta">Panel de administración</p><h1>Bienvenido al panel de administración</h1><p id="saludo-admin">¿Qué quieres gestionar hoy?</p></div>
+            <div class="modulos-admin">
+              <a href="/admin/categorias"><span>▦</span><h2>Categorías</h2><p>Organiza el catálogo por categorías</p></a>
+              <a href="/admin/productos"><span>◆</span><h2>Productos</h2><p>Crea, edita y elimina productos</p></a>
+              <a href="/admin/pedidos"><span>▣</span><h2>Pedidos</h2><p>Revisa y actualiza el estado de las compras</p></a>
+              <a href="/admin/usuarios"><span>●</span><h2>Usuarios</h2><p>Administra clientes y roles</p></a>
+              <a href="/admin/inventario"><span>▤</span><h2>Inventario</h2><p>Controla el stock disponible</p></a>
+              <a href="/admin/reportes"><span>↗</span><h2>Reportes</h2><p>Consulta ventas y estadísticas</p></a>
+              <a href="/admin/configuracion"><span>⚙</span><h2>Configuración</h2><p>Ajustes generales de la tienda</p></a>
+            </div>
+          </section>
+
+          <section id="vista-admin-categorias" class="vista-admin" data-vista-admin="categorias" hidden>
+            <div class="cabecera-modulo"><p class="seccion-etiqueta">Catálogo</p><h1>Gestión de categorías</h1><p>Crea, actualiza y elimina las categorías disponibles en ZonaShop.</p></div>
+            <form id="formulario-categoria" class="formulario-categoria">
+              <input id="categoria-id" name="categoriaId" type="hidden" />
+              <label for="categoria-nombre">Nombre</label><input id="categoria-nombre" name="nombre" type="text" maxlength="100" required />
+              <label for="categoria-descripcion">Descripción</label><textarea id="categoria-descripcion" name="descripcion" rows="3"></textarea>
+              <div class="formulario-categoria__acciones"><button id="boton-guardar-categoria" type="submit">Crear categoría</button><button id="boton-cancelar-edicion" type="button" hidden>Cancelar edición</button></div>
+              <p id="mensaje-categoria" class="mensaje-categoria" role="status" aria-live="polite"></p>
+            </form>
+            <div class="tabla-categorias-contenedor"><table class="tabla-categorias"><thead><tr><th>Nombre</th><th>Descripción</th><th>Productos</th><th>Acciones</th></tr></thead><tbody id="lista-categorias"><tr><td colspan="4">Cargando categorías...</td></tr></tbody></table></div>
+          </section>
+
+          <section id="vista-admin-productos" class="vista-admin" data-vista-admin="productos" hidden>
+            <div class="cabecera-modulo"><p class="seccion-etiqueta">Catálogo</p><h1>Gestión de productos</h1><p>Crea, actualiza y elimina los productos disponibles en ZonaShop.</p></div>
+            <form id="formulario-producto" class="formulario-producto">
+              <input id="producto-id" type="hidden" />
+              <label for="producto-categoria">Categoría</label><select id="producto-categoria" required><option value="">Selecciona una categoría</option></select>
+              <label for="producto-nombre">Nombre</label><input id="producto-nombre" type="text" maxlength="150" required />
+              <label for="producto-descripcion">Descripción</label><textarea id="producto-descripcion" rows="3"></textarea>
+              <label for="producto-precio">Precio</label><input id="producto-precio" type="number" min="0.01" step="0.01" required />
+              <label for="producto-existencias">Existencias</label><input id="producto-existencias" type="number" min="0" step="1" required />
+              <label for="producto-imagen">Imagen</label><div class="campo-imagen-producto"><input id="producto-imagen" type="file" accept="image/jpeg,image/png,image/webp" /><img id="vista-previa-producto" class="vista-previa-producto" alt="Vista previa del producto" hidden /><small>Formatos JPG, PNG o WEBP. Máximo 5 MB.</small></div>
+              <div class="formulario-producto__acciones"><button id="boton-guardar-producto" type="submit">Crear producto</button><button id="boton-cancelar-producto" type="button" hidden>Cancelar edición</button></div>
+              <p id="mensaje-producto" class="mensaje-producto" role="status" aria-live="polite"></p>
+            </form>
+            <div class="tabla-productos-contenedor"><table class="tabla-productos"><thead><tr><th>Imagen</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Existencias</th><th>Acciones</th></tr></thead><tbody id="lista-productos-admin"><tr><td colspan="6">Cargando productos...</td></tr></tbody></table></div>
+          </section>
+
+          <section id="vista-admin-pedidos" class="vista-admin" data-vista-admin="pedidos" hidden>
+            <div class="panel-administracion__encabezado"><div class="cabecera-modulo"><p class="seccion-etiqueta">Ventas</p><h1>Gestión de pedidos</h1><p>Consulta la entrega y actualiza el estado de cada pedido.</p></div><label class="filtro-pedidos-admin" for="filtro-estado-pedidos">Estado<select id="filtro-estado-pedidos"><option value="">Todos</option><option value="pagado">Pagado</option><option value="preparando">Preparando</option><option value="enviado">Enviado</option><option value="entregado">Entregado</option><option value="cancelado">Cancelado</option></select></label></div>
+            <p id="estado-pedidos-admin" role="status">Cargando pedidos...</p><div id="lista-pedidos-admin" class="lista-pedidos-admin"></div>
+          </section>
+
+          <section id="vista-admin-usuarios" class="vista-admin modulo-construccion" data-vista-admin="usuarios" hidden><span>●</span><h1>Gestión de usuarios</h1><p>Módulo en construcción</p><small>Aquí podrás administrar clientes y roles.</small></section>
+          <section id="vista-admin-inventario" class="vista-admin modulo-construccion" data-vista-admin="inventario" hidden><span>▤</span><h1>Control de inventario</h1><p>Módulo en construcción</p><small>Aquí podrás supervisar y ajustar el stock.</small></section>
+          <section id="vista-admin-reportes" class="vista-admin modulo-construccion" data-vista-admin="reportes" hidden><span>↗</span><h1>Reportes y estadísticas</h1><p>Módulo en construcción</p><small>Aquí podrás consultar ventas e indicadores.</small></section>
+          <section id="vista-admin-configuracion" class="vista-admin modulo-construccion" data-vista-admin="configuracion" hidden><span>⚙</span><h1>Configuración de la tienda</h1><p>Módulo en construcción</p><small>Aquí podrás definir los ajustes generales.</small></section>
         </div>
-
-        <form id="formulario-categoria" class="formulario-categoria">
-          <input id="categoria-id" name="categoriaId" type="hidden" />
-
-          <label for="categoria-nombre"> Nombre </label>
-
-          <input
-            id="categoria-nombre"
-            name="nombre"
-            type="text"
-            maxlength="100"
-            required
-          />
-
-          <label for="categoria-descripcion"> Descripción </label>
-
-          <textarea
-            id="categoria-descripcion"
-            name="descripcion"
-            rows="3"
-          ></textarea>
-
-          <div class="formulario-categoria__acciones">
-            <button id="boton-guardar-categoria" type="submit">
-              Crear categoría
-            </button>
-
-            <button id="boton-cancelar-edicion" type="button" hidden>
-              Cancelar edición
-            </button>
-          </div>
-
-          <p
-            id="mensaje-categoria"
-            class="mensaje-categoria"
-            role="status"
-            aria-live="polite"
-          ></p>
-        </form>
-
-        <div class="tabla-categorias-contenedor">
-          <table class="tabla-categorias">
-            <thead>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Productos</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-
-            <tbody id="lista-categorias">
-              <tr>
-                <td colspan="4">Cargando categorías...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="separador-administracion"></div>
-
-        <div class="panel-administracion__encabezado">
-          <div>
-            <p class="seccion-etiqueta">Administración</p>
-            <h2>Gestión de productos</h2>
-            <p>
-              Crea, actualiza y elimina los productos disponibles en ZonaShop.
-            </p>
-          </div>
-        </div>
-
-        <form id="formulario-producto" class="formulario-producto">
-          <input id="producto-id" type="hidden" />
-
-          <label for="producto-categoria">Categoría</label>
-          <select id="producto-categoria" required>
-            <option value="">Selecciona una categoría</option>
-          </select>
-
-          <label for="producto-nombre">Nombre</label>
-          <input
-            id="producto-nombre"
-            type="text"
-            maxlength="150"
-            required
-          />
-
-          <label for="producto-descripcion">Descripción</label>
-          <textarea
-            id="producto-descripcion"
-            rows="3"
-          ></textarea>
-
-          <label for="producto-precio">Precio</label>
-          <input
-            id="producto-precio"
-            type="number"
-            min="0.01"
-            step="0.01"
-            required
-          />
-
-          <label for="producto-existencias">Existencias</label>
-          <input
-            id="producto-existencias"
-            type="number"
-            min="0"
-            step="1"
-            required
-          />
-
-          <label for="producto-imagen">Imagen</label>
-          <div class="campo-imagen-producto">
-            <input
-              id="producto-imagen"
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-            />
-            <img
-              id="vista-previa-producto"
-              class="vista-previa-producto"
-              alt="Vista previa del producto"
-              hidden
-            />
-            <small>Formatos JPG, PNG o WEBP. Máximo 5 MB.</small>
-          </div>
-
-          <div class="formulario-producto__acciones">
-            <button id="boton-guardar-producto" type="submit">
-              Crear producto
-            </button>
-
-            <button
-              id="boton-cancelar-producto"
-              type="button"
-              hidden
-            >
-              Cancelar edición
-            </button>
-          </div>
-
-          <p
-            id="mensaje-producto"
-            class="mensaje-producto"
-            role="status"
-            aria-live="polite"
-          ></p>
-        </form>
-
-        <div class="tabla-productos-contenedor">
-          <table class="tabla-productos">
-            <thead>
-              <tr>
-                <th scope="col">Imagen</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Categoría</th>
-                <th scope="col">Precio</th>
-                <th scope="col">Existencias</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="lista-productos-admin">
-              <tr>
-                <td colspan="6">Cargando productos...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="separador-administracion"></div>
-        <div class="panel-administracion__encabezado">
-          <div>
-            <p class="seccion-etiqueta">Administración</p>
-            <h2>Gestión de pedidos</h2>
-            <p>Consulta la información de entrega y actualiza el estado de cada pedido.</p>
-          </div>
-          <label class="filtro-pedidos-admin" for="filtro-estado-pedidos">
-            Estado
-            <select id="filtro-estado-pedidos">
-              <option value="">Todos</option>
-              <option value="pagado">Pagado</option>
-              <option value="preparando">Preparando</option>
-              <option value="enviado">Enviado</option>
-              <option value="entregado">Entregado</option>
-              <option value="cancelado">Cancelado</option>
-            </select>
-          </label>
-        </div>
-        <p id="estado-pedidos-admin" role="status">Cargando pedidos...</p>
-        <div id="lista-pedidos-admin" class="lista-pedidos-admin"></div>
       </section>
       <section id="productos-catalogo" class="catalogo contenedor" aria-labelledby="titulo-catalogo">
         <div class="catalogo__encabezado">

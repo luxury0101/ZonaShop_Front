@@ -445,6 +445,9 @@ async function ejecutarEliminacion() {
 
 
 export async function iniciarAdministracionProductos() {
+  if (window.location.pathname.replace(/\/+$/, "") !== "/admin/productos") {
+    return;
+  }
   elementos.formulario?.addEventListener(
     "submit",
     manejarFormulario,

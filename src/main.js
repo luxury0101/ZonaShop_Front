@@ -30,6 +30,7 @@ import { mensajeDeError, notificar } from "./ui/notificaciones.js";
 import { iniciarPedidos } from "./pedidos/pedidos.js";
 import { iniciarPerfil } from "./perfil/perfil.js";
 import { iniciarAdministracionPedidos } from "./admin/pedidos.js";
+import { iniciarNavegacionAdmin } from "./admin/navegacion.js";
 
 
 const formulario = document.querySelector(
@@ -321,18 +322,30 @@ botonLimpiarFiltros.addEventListener("click", limpiarFiltros);
 
 
 async function iniciarAplicacion() {
+  const esRutaAdmin = window.location.pathname.startsWith("/admin");
+
+  if (esRutaAdmin) {
+    iniciarNavegacionAdmin();
+    iniciarAdministracionPedidos();
+    const usuario = await restaurarSesion();
+    if (usuario?.rol === "administrador") {
+      await Promise.all([
+        iniciarAdministracionCategorias(),
+        iniciarAdministracionProductos(),
+      ]);
+    }
+    return;
+  }
+
   iniciarDetalleProducto();
   iniciarPedidos();
   iniciarPerfil();
-  iniciarAdministracionPedidos();
 
   try {
     await Promise.all([
       iniciarCarrito(),
       restaurarSesion(),
       cargarCategorias(),
-      iniciarAdministracionCategorias(),
-      iniciarAdministracionProductos(),
     ]);
 
     await cargarProductos();
@@ -350,6 +363,7 @@ async function iniciarAplicacion() {
 window.addEventListener(
   "categorias:actualizadas",
   async () => {
+    if (window.location.pathname.startsWith("/admin")) return;
     try {
       await cargarCategorias();
       await cargarProductos();
@@ -366,6 +380,7 @@ window.addEventListener(
 window.addEventListener(
   "productos:actualizados",
   async () => {
+    if (window.location.pathname.startsWith("/admin")) return;
     await cargarProductos();
   },
 );
