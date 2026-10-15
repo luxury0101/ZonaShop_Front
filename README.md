@@ -1,79 +1,176 @@
 # ZonaShop Frontend
 
-Interfaz web de ZonaShop construida con HTML, JavaScript, SCSS y Vite. Consume exclusivamente la API REST del backend.
+Interfaz de ZonaShop construida con HTML, JavaScript, SCSS y Vite. Incluye la
+tienda pública, autenticación, carrito, pago simulado y panel administrativo.
 
-## Requisitos
+## Guía rápida para trabajar en Windows
 
-- Node.js 20.19 o superior.
-- Backend de ZonaShop configurado y en ejecución.
+Configura primero el backend siguiendo el README de
+[`ZonaShop_Backend`](https://github.com/luxury0101/ZonaShop_Backend).
 
-## Instalación
+### 1. Instalar los programas necesarios
+
+- [Git](https://git-scm.com/download/win).
+- [Node.js 22 LTS](https://nodejs.org/).
+
+Comprueba las instalaciones desde PowerShell:
 
 ```powershell
+git --version
+node --version
+npm --version
+```
+
+El proyecto requiere Node.js 20.19 o superior. Node.js 22 LTS es la opción
+recomendada para desarrollo.
+
+### 2. Clonar los dos repositorios
+
+Si todavía no los tienes, ejecuta:
+
+```powershell
+New-Item -ItemType Directory -Path ZonaShop -Force
+Set-Location ZonaShop
+git clone https://github.com/luxury0101/ZonaShop_Backend.git
+git clone https://github.com/luxury0101/ZonaShop_Front.git
+```
+
+La estructura debe quedar así:
+
+```text
+ZonaShop/
+├── ZonaShop_Backend/
+└── ZonaShop_Front/
+```
+
+### 3. Instalar las dependencias del frontend
+
+```powershell
+Set-Location ZonaShop_Front
 npm install
-Copy-Item .env.example .env
+```
+
+### 4. Crear el archivo `.env`
+
+Desde la carpeta `ZonaShop_Front`, ejecuta:
+
+```powershell
+"VITE_API_BASE_URL=http://localhost:8000" | Set-Content -Encoding utf8 .env
+```
+
+No guardes contraseñas ni claves privadas en variables `VITE_`: Vite incorpora
+esas variables al código que recibe el navegador.
+
+### 5. Comprobar que el backend esté funcionando
+
+En la terminal del backend debe estar ejecutándose:
+
+```powershell
+python manage.py runserver
+```
+
+Comprueba en el navegador que abre `http://localhost:8000/api/docs/`.
+
+### 6. Iniciar el frontend
+
+```powershell
 npm run dev
 ```
 
-La interfaz estará disponible en `http://localhost:5173`.
+Abre la dirección que muestra Vite, normalmente:
+
+```text
+http://localhost:5173
+```
+
+Mantén abiertas dos terminales: una con Django en el puerto 8000 y otra con Vite
+en el puerto 5173.
+
+### 7. Probar el proyecto
+
+1. Abre `http://localhost:5173`.
+2. Crea una cuenta de cliente o inicia sesión.
+3. Agrega un producto al carrito.
+4. Completa el pago simulado.
+5. Revisa el pedido desde **Mis pedidos**.
+6. Inicia sesión con el superusuario creado en el backend.
+7. Abre `/admin` para gestionar categorías, productos y pedidos.
+
+Si el catálogo está vacío, entra como administrador y crea primero una categoría
+y después un producto con existencias.
+
+## Comandos de uso diario
+
+```powershell
+Set-Location ZonaShop_Front
+npm install
+npm run dev
+```
+
+Antes de subir cambios ejecuta:
+
+```powershell
+npm test
+npm run build
+```
+
+Otros comandos disponibles:
+
+```powershell
+npm run preview
+```
+
+- `npm test`: ejecuta las pruebas automatizadas.
+- `npm run build`: genera la compilación optimizada en `dist/`.
+- `npm run preview`: sirve localmente la última compilación.
 
 ## Configuración
 
-`VITE_API_BASE_URL` define la dirección del backend:
+`VITE_API_BASE_URL` indica dónde está la API:
 
 ```dotenv
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-La dirección puede incluir opcionalmente el sufijo `/api`; el cliente evita duplicarlo al construir las rutas.
-
-Las variables que comienzan por `VITE_` se incorporan al código compilado y, por tanto, son públicas. No deben contener contraseñas, secretos ni cadenas de conexión a PostgreSQL.
-
-## Comandos
-
-```powershell
-npm run dev
-npm test
-npm run build
-npm run preview
-```
-
-- `npm run dev`: inicia el servidor local de Vite.
-- `npm test`: ejecuta las pruebas automatizadas.
-- `npm run build`: genera la versión optimizada en `dist/`.
-- `npm run preview`: permite revisar localmente la compilación.
+Si ejecutas Django en otro puerto, actualiza esa dirección y reinicia Vite.
 
 ## Estructura principal
 
 - `src/api/`: cliente HTTP y operaciones de la API.
-- `src/admin/`: gestión administrativa de categorías y productos.
-- `src/auth/`: registro, login unificado, roles y rutas protegidas.
-- `src/carrito/`: carrito local para invitados y sincronizado para usuarios.
-- `src/catalogo/`: detalle de productos.
-- `src/pedidos/`: historial y detalle de compras del usuario.
-- `src/perfil/`: datos personales, dirección principal y cambio de contraseña.
-- `src/ui/`: notificaciones accesibles y componentes compartidos.
-- `src/styles/`: estilos SCSS adaptables.
+- `src/admin/`: categorías, productos, pedidos y navegación administrativa.
+- `src/auth/`: registro, login, sesión y roles.
+- `src/carrito/`: carrito local y carrito asociado a la cuenta.
+- `src/catalogo/`: catálogo y detalle de productos.
+- `src/pedidos/`: historial de compras.
+- `src/perfil/`: datos personales, dirección y cambio de contraseña.
+- `src/ui/`: notificaciones compartidas.
+- `src/styles/`: estilos SCSS responsive.
 
-La arquitectura general, el modelo de datos y la matriz de aceptación se mantienen en el repositorio del backend.
+## Rutas principales
 
-## Flujo de autenticación
+- `/`: tienda pública.
+- `/admin`: inicio del panel administrativo.
+- `/admin/categorias`: gestión de categorías.
+- `/admin/productos`: gestión de productos.
+- `/admin/pedidos`: gestión de pedidos.
 
-- Los invitados pueden registrarse o iniciar sesión desde el header.
-- Los clientes ven su nombre, perfil, pedidos y cierre de sesión.
-- Los administradores usan el mismo formulario y son enviados a `/admin`.
-- El carrito local se fusiona con el carrito guardado al iniciar sesión.
-- El pago es una simulación local: los datos de tarjeta se validan en el navegador,
-  pero nunca se envían al backend ni se conservan en almacenamiento.
-- Al completar la compra, el pedido queda disponible en **Mis pedidos**.
-- El checkout permite reutilizar o guardar la dirección principal de entrega.
-- El panel administrativo permite filtrar pedidos y actualizar su estado.
+En producción, el hosting debe redirigir estas rutas hacia `index.html` para que
+Vite pueda servir la aplicación correctamente.
 
-Vite atiende `/admin` durante desarrollo. En producción, el hosting del frontend
-debe redirigir las rutas de la SPA hacia `index.html`.
+## Solución de problemas
 
-## Panel administrativo modular
+- **`npm` no se reconoce:** instala Node.js 22 LTS y vuelve a abrir PowerShell.
+- **No aparecen productos:** confirma que Django esté activo y que existan
+  productos creados desde el panel administrativo.
+- **Error de red o CORS:** usa exactamente `http://localhost:5173` para el
+  frontend y `http://localhost:8000` para el backend.
+- **Puerto 5173 ocupado:** Vite puede elegir otro puerto. Añade esa nueva URL a
+  `CORS_ALLOWED_ORIGINS` y `CSRF_TRUSTED_ORIGINS` del `.env` del backend.
+- **No abre una ruta `/admin/...` directamente:** el servidor de producción debe
+  tener configurado el fallback hacia `index.html`.
 
-El panel usa vistas separadas por ruta: `/admin`, `/admin/categorias`,
-`/admin/productos` y `/admin/pedidos`. Categorías, productos y pedidos conservan
-su gestión completa. Todas las rutas comparten navegación, cuenta y migas de pan.
+## Información que GitHub no incluye
+
+El repositorio no contiene el `.env`, la base PostgreSQL ni las imágenes locales
+del backend. Cada desarrollador debe preparar esos elementos siguiendo las guías
+de ambos repositorios.
