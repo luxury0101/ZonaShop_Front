@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://zona-shop-backend.vercel.app/api/:path*"
+      "source": "/backend-api/:path*",
+      "destination": "https://zona-shop-backend.vercel.app/:path*"
     },
     {
       "source": "/(.*)",

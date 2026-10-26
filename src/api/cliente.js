@@ -2,7 +2,7 @@
 // CORS, esto evita que Safari trate las cookies de sesión y CSRF como cookies
 // de terceros entre dos proyectos diferentes de Vercel.
 const API_URL = import.meta.env.PROD
-  ? ""
+  ? "/backend-api"
   : (
     import.meta.env.VITE_API_BASE_URL ||
     "http://localhost:8000"
