@@ -1,9 +1,14 @@
-const API_URL = (
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://localhost:8000"
-)
-  .replace(/\/+$/, "")
-  .replace(/\/api$/, "");
+// En producción usamos el proxy /api del mismo dominio. Además de simplificar
+// CORS, esto evita que Safari trate las cookies de sesión y CSRF como cookies
+// de terceros entre dos proyectos diferentes de Vercel.
+const API_URL = import.meta.env.PROD
+  ? ""
+  : (
+    import.meta.env.VITE_API_BASE_URL ||
+    "http://localhost:8000"
+  )
+    .replace(/\/+$/, "")
+    .replace(/\/api$/, "");
 
 const METODOS_SEGUROS = [
   "GET",
@@ -48,6 +53,12 @@ async function leerRespuesta(respuesta) {
   }
 
   const texto = await respuesta.text();
+
+  if (tipoContenido.includes("text/html")) {
+    return {
+      detail: "No fue posible completar la solicitud. Actualiza la página e inténtalo nuevamente.",
+    };
+  }
 
   return texto ? { detail: texto } : null;
 }
