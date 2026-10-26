@@ -180,9 +180,9 @@
       </section>
     </main>
 
-    <dialog id="modal-login" class="dialogo-autenticacion">
+    <dialog id="modal-login" class="dialogo-autenticacion" aria-labelledby="titulo-login">
       <form id="formulario-login" class="formulario-autenticacion">
-        <h2>Iniciar sesión</h2>
+        <h2 id="titulo-login">Iniciar sesión</h2>
         <p>Accede con la misma cuenta como cliente o administrador.</p>
         <label for="login-email">Correo electrónico</label>
         <input id="login-email" name="email" type="email" autocomplete="username" required aria-describedby="error-login-email" />
@@ -350,12 +350,12 @@
       </div>
     </dialog>
 
-    <dialog id="modal-carrito" class="modal-carrito">
+    <dialog id="modal-carrito" class="modal-carrito" aria-labelledby="titulo-carrito">
       <div class="modal-carrito__contenido">
         <div class="modal-carrito__encabezado">
           <div>
             <p class="seccion-etiqueta">Tu selección</p>
-            <h2>Carrito de compras</h2>
+            <h2 id="titulo-carrito">Carrito de compras</h2>
           </div>
 
           <button

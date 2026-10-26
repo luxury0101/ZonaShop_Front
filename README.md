@@ -118,10 +118,14 @@ Otros comandos disponibles:
 
 ```powershell
 npm run preview
+npm run test:e2e
+npm run check
 ```
 
 - `npm test`: ejecuta las pruebas automatizadas.
 - `npm run build`: genera la compilación optimizada en `dist/`.
+- `npm run test:e2e`: prueba catálogo, carrito y rutas administrativas en Chromium.
+- `npm run check`: ejecuta todas las comprobaciones locales.
 - `npm run preview`: sirve localmente la última compilación.
 
 ## Configuración
@@ -133,6 +137,26 @@ VITE_API_BASE_URL=http://localhost:8000
 ```
 
 Si ejecutas Django en otro puerto, actualiza esa dirección y reinicia Vite.
+
+## Despliegue en Vercel
+
+Despliega primero el backend para conocer su URL pública y luego importa este
+repositorio como un segundo proyecto de Vercel. Vercel detecta Vite y usa los
+comandos y la carpeta de salida del proyecto automáticamente.
+
+Configura esta variable en **Production**, y también en **Preview** si vas a
+probar ramas:
+
+```dotenv
+VITE_API_BASE_URL=https://tu-backend.vercel.app
+```
+
+Después vuelve a desplegar el frontend. El archivo `vercel.json` incluido hace
+que las rutas `/admin`, `/admin/productos` y las demás rutas internas carguen
+`index.html` al abrirlas directamente.
+
+No guardes secretos en variables `VITE_`: su contenido queda visible en el
+JavaScript enviado al navegador.
 
 ## Estructura principal
 
