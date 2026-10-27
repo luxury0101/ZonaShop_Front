@@ -105,6 +105,7 @@ function construirDatosProducto({
   existencias,
   tallas = [],
   imagen,
+  imagenSecundaria,
 }) {
   const datos = new FormData();
 
@@ -112,11 +113,18 @@ function construirDatosProducto({
   datos.append("nombre", nombre);
   datos.append("descripcion", descripcion);
   datos.append("precio", String(precio));
-  datos.append("existencias", String(existencias));
   datos.append("tallas", JSON.stringify(tallas));
+
+  if (tallas.length === 0) {
+    datos.append("existencias", String(existencias));
+  }
 
   if (imagen instanceof File) {
     datos.append("imagen", imagen);
+  }
+
+  if (imagenSecundaria instanceof File) {
+    datos.append("imagen_secundaria", imagenSecundaria);
   }
 
   return datos;

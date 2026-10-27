@@ -16,7 +16,8 @@ const productos = [
     categoria_nombre: "Ropa",
     nombre: "Chaqueta Noir",
     descripcion: "Edición esencial de ZonaShop.",
-    imagen: null,
+    imagen: "/images/lookbook-1.webp",
+    imagen_secundaria: "/images/lookbook-2.webp",
     precio: "189900.00",
     existencias: 4,
     creado_en: "2026-10-21T12:00:00Z",
@@ -167,17 +168,32 @@ test("carga el catálogo y permite agregar un producto al carrito", async ({ pag
   await expect(
     page.getByRole("heading", { name: "Encuentra tu próximo favorito" }),
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
+  await expect(page.locator("#productos").getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
 
   await expect(page.getByRole("button", { name: "Agregar Chaqueta Noir" })).toHaveCount(0);
-  await page.getByRole("button", { name: "Ver detalles de Chaqueta Noir" }).click();
+  await expect(page.locator("#productos .producto__imagen--secundaria")).toHaveCount(1);
+  await page.locator("#productos").getByRole("button", { name: "Ver detalles de Chaqueta Noir" }).click();
   await expect(page.locator("#modal-detalle-producto")).toBeVisible();
   await page.locator("#detalle-producto-agregar").click();
   await expect(page.locator("#cantidad-carrito")).toHaveText("1");
 
-  await page.getByRole("button", { name: /abrir carrito/i }).click();
   await expect(page.getByRole("dialog", { name: "Carrito de compras" })).toBeVisible();
   await expect(page.locator("#total-carrito")).toContainText("189.900");
+});
+
+test("las secciones editoriales se adaptan sin desbordes", async ({ page }) => {
+  for (const [ancho, alto] of [[375, 812], [768, 900], [1280, 800]]) {
+    await page.setViewportSize({ width: ancho, height: alto });
+    await page.goto("/");
+    await expect(page.locator(".confianza")).toBeVisible();
+    await expect(page.locator("#categorias-mosaico .categoria-editorial")).toHaveCount(1);
+    await expect(page.locator("#productos-nuevos .producto")).toHaveCount(1);
+    await expect(page.locator(".banner-editorial")).toBeVisible();
+    await expect(page.locator(".lookbook__pieza")).toHaveCount(4);
+    expect(await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    )).toBe(false);
+  }
 });
 
 test("una ruta administrativa directa conserva el fallback y solicita login", async ({ page }) => {

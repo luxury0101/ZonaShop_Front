@@ -1,0 +1,47 @@
+{
+  "status": "provisional",
+  "todo": "Reemplazar estas fotografías por material propio de ZonaShop antes de una campaña comercial definitiva.",
+  "format": "WebP optimizado",
+  "assets": [
+    {
+      "file": "categoria-mujer.webp",
+      "source": "https://www.pexels.com/photo/elegant-fashion-model-in-studio-portrait-34906012/",
+      "recommended_replacement": "Fotografía vertical 4:5, mínimo 1200 x 1500 px"
+    },
+    {
+      "file": "categoria-hombre.webp",
+      "source": "https://www.pexels.com/photo/man-posing-in-black-suit-26903318/",
+      "recommended_replacement": "Fotografía vertical 4:5, mínimo 1200 x 1500 px"
+    },
+    {
+      "file": "categoria-ninos.webp",
+      "source": "https://www.pexels.com/photo/elegant-children-in-formal-attire-studio-portrait-29668580/",
+      "recommended_replacement": "Fotografía vertical 4:5, mínimo 1200 x 1500 px"
+    },
+    {
+      "file": "editorial-banner.webp",
+      "source": "https://www.pexels.com/photo/fashion-model-during-a-photo-shoot-in-a-dark-studio-13808617/",
+      "recommended_replacement": "Fotografía vertical o panorámica adaptable, mínimo 1800 px en su lado mayor"
+    },
+    {
+      "file": "lookbook-1.webp",
+      "source": "https://www.pexels.com/photo/black-and-white-studio-shot-of-a-fashionable-woman-20446138/",
+      "recommended_replacement": "Fotografía vertical 4:5, mínimo 1200 x 1500 px"
+    },
+    {
+      "file": "lookbook-2.webp",
+      "source": "https://www.pexels.com/photo/elegant-male-model-in-dimly-lit-fashion-studio-33875525/",
+      "recommended_replacement": "Fotografía vertical 4:5, mínimo 1200 x 1500 px"
+    },
+    {
+      "file": "lookbook-3.webp",
+      "source": "https://www.pexels.com/photo/woman-posing-in-a-dark-studio-20439800/",
+      "recommended_replacement": "Fotografía horizontal 3:2, mínimo 1600 x 1067 px"
+    },
+    {
+      "file": "lookbook-4.webp",
+      "source": "https://www.pexels.com/photo/urban-fashion-portrait-in-studio-setting-30156396/",
+      "recommended_replacement": "Fotografía vertical 4:5, mínimo 1200 x 1500 px"
+    }
+  ]
+}

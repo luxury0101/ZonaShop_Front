@@ -125,6 +125,31 @@ describe("carrito", () => {
     ]);
   });
 
+  it("abre el carrito al agregar y lo cierra a los cuatro segundos si no hay interacción", async () => {
+    vi.useFakeTimers();
+    const modal = document.querySelector("#modal-carrito");
+    modal.showModal.mockImplementation(() => modal.setAttribute("open", ""));
+    modal.close.mockImplementation(() => modal.removeAttribute("open"));
+    const { agregarAlCarrito, iniciarCarrito } = await cargarModulo();
+
+    await iniciarCarrito();
+    agregarAlCarrito({
+      id: 18,
+      nombre: "Camiseta editorial",
+      precio: "89900.00",
+      existencias: 2,
+      agotado: false,
+    });
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(modal.showModal).toHaveBeenCalledOnce();
+    expect(modal.open).toBe(true);
+
+    await vi.advanceTimersByTimeAsync(4000);
+    expect(modal.close).toHaveBeenCalledOnce();
+    vi.useRealTimers();
+  });
+
   it("no permite superar las existencias", async () => {
     const {
       agregarAlCarrito,

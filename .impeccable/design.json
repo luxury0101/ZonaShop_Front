@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-27T09:29:19.7540787-05:00",
+  "generatedAt": "2026-10-27T14:42:00-05:00",
   "title": "Design System: ZonaShop — Atelier Nocturno",
   "extensions": {
     "colorMeta": {
@@ -144,8 +144,8 @@
       },
       {
         "name": "hero-copy-reveal",
-        "value": "700ms 1.8s cubic-bezier(0.22, 1, 0.36, 1)",
-        "purpose": "Revelar el copy después del monograma; se elimina con prefers-reduced-motion."
+        "value": "700ms 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Revelar el copy temprano mientras el monograma termina su trazo; se elimina con prefers-reduced-motion."
       }
     ],
     "breakpoints": [
@@ -212,9 +212,9 @@
       "name": "Tarjeta de producto",
       "kind": "card",
       "refersTo": "product-card",
-      "description": "Tarjeta compacta 4:5 que deja a la fotografía, el nombre y el precio llevar la jerarquía.",
+      "description": "Tarjeta compacta 4:5 y completamente plana; una segunda foto usa crossfade en escritorio e indicadores táctiles en móvil.",
       "html": "<article class=\"ds-product\"><button class=\"ds-product-visual\" type=\"button\" aria-label=\"Ver detalles de producto\">ZS</button><div class=\"ds-product-info\"><h3>CHAQUETA NOCTURNA</h3><p>$ 189.900</p></div></article>",
-      "css": ".ds-product { overflow: hidden; width: min(100%, 280px); padding: 0 0 1.4rem; color: var(--zs-white); background: var(--zs-ink-soft); border: 1px solid var(--zs-line); border-radius: 0; transition: background 320ms ease, transform 400ms var(--zs-ease); } .ds-product:hover { background: var(--zs-panel); transform: translateY(-6px); } .ds-product-visual { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 5; margin: 0 0 1.05rem; color: var(--zs-silver); background: linear-gradient(45deg, transparent 49.5%, var(--zs-line) 50%, transparent 50.5%), var(--zs-panel-raised); border: 0; border-bottom: 1px solid var(--zs-line); border-radius: 0; font-family: var(--zs-display); font-size: 4rem; cursor: pointer; } .ds-product-visual:hover { color: var(--zs-white); } .ds-product-visual:focus-visible { outline: 2px solid var(--zs-white); outline-offset: -5px; } .ds-product-info { display: grid; gap: .3rem; padding-inline: 1rem; } .ds-product-info h3 { margin: 0; font-family: var(--zs-ui); font-size: .76rem; font-weight: 700; letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; } .ds-product-info p { margin: 0; color: var(--zs-silver); font-family: var(--zs-ui); font-size: .78rem; font-variant-numeric: tabular-nums; }"
+      "css": ".ds-product { overflow: hidden; width: min(100%, 280px); padding: 0 0 1.4rem; color: var(--zs-white); background: var(--zs-ink-soft); border: 1px solid var(--zs-line); border-radius: 0; } .ds-product:hover { background: var(--zs-panel); transform: none; } .ds-product-visual { position: relative; display: grid; overflow: hidden; place-items: center; width: 100%; aspect-ratio: 4 / 5; margin: 0 0 1.05rem; color: var(--zs-silver); background: var(--zs-panel-raised); border: 0; border-bottom: 1px solid var(--zs-line); border-radius: 0; font-family: var(--zs-display); font-size: 4rem; cursor: pointer; } .ds-product-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 280ms ease; } .ds-product-visual:focus-visible { outline: 2px solid var(--zs-white); outline-offset: -5px; } .ds-product-info { display: grid; gap: .3rem; padding-inline: 1rem; } .ds-product-info h3 { margin: 0; font-family: var(--zs-ui); font-size: .76rem; font-weight: 700; letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; } .ds-product-info p { margin: 0; color: var(--zs-silver); font-family: var(--zs-ui); font-size: .78rem; font-variant-numeric: tabular-nums; }"
     },
     {
       "name": "Monograma hero",

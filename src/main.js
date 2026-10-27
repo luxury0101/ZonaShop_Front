@@ -60,6 +60,17 @@ const contenedorProductos = document.querySelector(
 const estado = document.querySelector("#estado");
 const botonBuscar = formulario.querySelector('button[type="submit"]');
 const hero = document.querySelector(".presentacion");
+const categoriasMosaico = document.querySelector("#categorias-mosaico");
+const productosNuevos = document.querySelector("#productos-nuevos");
+const formularioSuscripcion = document.querySelector("#formulario-suscripcion");
+const mensajeSuscripcion = document.querySelector("#mensaje-suscripcion");
+
+// TODO: reemplazar estas fotografías provisionales por fotos propias por categoría.
+const IMAGENES_CATEGORIA = [
+  "/images/categoria-mujer.webp",
+  "/images/categoria-hombre.webp",
+  "/images/categoria-ninos.webp",
+];
 
 
 function iniciarHero() {
@@ -115,17 +126,37 @@ function crearTarjetaProducto(producto) {
     () => abrirDetalleProducto(producto, agregarAlCarrito),
   );
 
-  if (producto.imagen) {
+  const imagenes = [producto.imagen, producto.imagen_secundaria].filter(Boolean);
+  const placeholder = document.createElement("span");
+  placeholder.className = "producto__placeholder";
+  placeholder.textContent = "ZS";
+  placeholder.hidden = imagenes.length > 0;
+  visual.append(placeholder);
+
+  imagenes.forEach((ruta, indice) => {
     const imagen = document.createElement("img");
-    imagen.src = producto.imagen;
-    imagen.alt = producto.nombre;
+    imagen.src = ruta;
+    imagen.alt = indice === 0
+      ? producto.nombre
+      : `${producto.nombre}, vista alternativa`;
     imagen.loading = "lazy";
     imagen.decoding = "async";
     imagen.width = 440;
     imagen.height = 550;
+    imagen.className = indice === 0
+      ? "producto__imagen producto__imagen--principal"
+      : "producto__imagen producto__imagen--secundaria";
+    imagen.addEventListener("error", () => {
+      imagen.hidden = true;
+      const hayImagenVisible = Array.from(
+        visual.querySelectorAll(".producto__imagen"),
+      ).some((elemento) => !elemento.hidden);
+      placeholder.hidden = hayImagenVisible;
+    });
     visual.append(imagen);
-  } else {
-    visual.textContent = "ZS";
+  });
+
+  if (imagenes.length === 0) {
     visual.classList.add("producto__visual--vacio");
   }
 
@@ -144,10 +175,31 @@ function crearTarjetaProducto(producto) {
   informacion.className = "producto__informacion";
   informacion.append(nombre, precio);
 
-  tarjeta.append(
-    visual,
-    informacion,
-  );
+  tarjeta.append(visual);
+
+  if (imagenes.length > 1) {
+    visual.classList.add("producto__visual--doble");
+    const indicadores = document.createElement("div");
+    indicadores.className = "producto__indicadores";
+    ["principal", "alternativa"].forEach((nombreVista, indice) => {
+      const indicador = document.createElement("button");
+      indicador.type = "button";
+      indicador.className = "producto__indicador";
+      indicador.setAttribute("aria-label", `Mostrar vista ${nombreVista} de ${producto.nombre}`);
+      indicador.setAttribute("aria-pressed", String(indice === 0));
+      indicador.addEventListener("click", () => {
+        const mostrarSecundaria = indice === 1;
+        visual.classList.toggle("producto__visual--mostrar-secundaria", mostrarSecundaria);
+        indicadores.querySelectorAll("button").forEach((boton, posicion) => {
+          boton.setAttribute("aria-pressed", String(posicion === indice));
+        });
+      });
+      indicadores.append(indicador);
+    });
+    tarjeta.append(indicadores);
+  }
+
+  tarjeta.append(informacion);
 
   return tarjeta;
 }
@@ -251,6 +303,68 @@ async function cargarCategorias() {
     seleccionTodaviaExiste
       ? categoriaSeleccionada
       : "";
+
+  return categorias;
+}
+
+
+function imagenParaCategoria(categoria, indice) {
+  const nombre = categoria.nombre.toLocaleLowerCase("es");
+  if (nombre.includes("mujer")) return IMAGENES_CATEGORIA[0];
+  if (nombre.includes("hombre")) return IMAGENES_CATEGORIA[1];
+  if (nombre.includes("niñ") || nombre.includes("infantil")) return IMAGENES_CATEGORIA[2];
+  return IMAGENES_CATEGORIA[indice % IMAGENES_CATEGORIA.length];
+}
+
+
+function renderizarCategorias(categorias) {
+  if (!categoriasMosaico) return;
+  categoriasMosaico.replaceChildren();
+
+  if (categorias.length === 0) {
+    categoriasMosaico.hidden = true;
+    return;
+  }
+
+  categoriasMosaico.hidden = false;
+
+  categorias.forEach((categoria, indice) => {
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "categoria-editorial";
+    boton.setAttribute("aria-label", `Ver productos de ${categoria.nombre}`);
+
+    const imagen = document.createElement("img");
+    imagen.src = imagenParaCategoria(categoria, indice);
+    imagen.alt = `Selección editorial de ${categoria.nombre}`;
+    imagen.width = 1067;
+    imagen.height = 1600;
+    imagen.loading = "eager";
+    imagen.decoding = "async";
+
+    const nombre = crearTexto("span", categoria.nombre, "categoria-editorial__nombre");
+    const cantidad = crearTexto(
+      "small",
+      `${categoria.cantidad_productos ?? 0} producto(s)`,
+      "categoria-editorial__cantidad",
+    );
+    boton.append(imagen, nombre, cantidad);
+    boton.addEventListener("click", async () => {
+      selectorCategoria.value = String(categoria.id);
+      await cargarProductos();
+      document.querySelector("#productos-catalogo")?.scrollIntoView({ block: "start" });
+    });
+    categoriasMosaico.append(boton);
+  });
+}
+
+
+function renderizarNuevos(productos) {
+  if (!productosNuevos) return;
+  productosNuevos.replaceChildren();
+  productos.slice(0, 4).forEach((producto) => {
+    productosNuevos.append(crearTarjetaProducto(producto));
+  });
 }
 
 
@@ -273,6 +387,7 @@ async function cargarProductos() {
     });
 
     mostrarProductos(productos);
+    return productos;
   } catch (error) {
     console.error(error);
     estado.textContent = "No fue posible cargar el catálogo.";
@@ -285,10 +400,30 @@ async function cargarProductos() {
       cargarProductos,
     ));
     notificar(mensajeDeError(error), "error");
+    return [];
   } finally {
     botonBuscar.disabled = false;
     botonBuscar.classList.remove("boton--cargando");
   }
+}
+
+
+function iniciarSuscripcion() {
+  formularioSuscripcion?.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+    const correo = String(new FormData(formularioSuscripcion).get("email") || "").trim();
+    if (!correo || !formularioSuscripcion.checkValidity()) {
+      formularioSuscripcion.reportValidity();
+      return;
+    }
+    try {
+      localStorage.setItem("zonashop:newsletter", correo);
+    } catch {
+      // La preferencia sigue confirmada durante esta visita si el navegador bloquea el almacenamiento.
+    }
+    mensajeSuscripcion.textContent = "Preferencia guardada en este dispositivo. Te avisaremos cuando el canal de novedades esté activo.";
+    formularioSuscripcion.reset();
+  });
 }
 
 
@@ -346,6 +481,7 @@ async function iniciarAplicacion() {
   iniciarDetalleProducto();
   iniciarPedidos();
   iniciarPerfil();
+  iniciarSuscripcion();
 
   const esPaginaInformativa = iniciarPaginasInformativas();
 
@@ -358,13 +494,15 @@ async function iniciarAplicacion() {
   }
 
   try {
-    await Promise.all([
+    const [, , categorias] = await Promise.all([
       iniciarCarrito(),
       restaurarSesion(),
       cargarCategorias(),
     ]);
 
-    await cargarProductos();
+    const productos = await cargarProductos();
+    renderizarCategorias(categorias);
+    renderizarNuevos(productos);
   } catch (error) {
     console.error(
       "No fue posible iniciar la aplicación:",
@@ -381,8 +519,10 @@ window.addEventListener(
   async () => {
     if (window.location.pathname.startsWith("/admin")) return;
     try {
-      await cargarCategorias();
-      await cargarProductos();
+      const categorias = await cargarCategorias();
+      const productos = await cargarProductos();
+      renderizarCategorias(categorias);
+      renderizarNuevos(productos);
     } catch (error) {
       console.error(
         "No fue posible actualizar el catálogo:",
@@ -397,8 +537,20 @@ window.addEventListener(
   "productos:actualizados",
   async () => {
     if (window.location.pathname.startsWith("/admin")) return;
-    await cargarProductos();
+    const productos = await cargarProductos();
+    if (
+      !selectorCategoria.value &&
+      !campoBusqueda.value.trim() &&
+      !selectorOrden.value &&
+      !selectorTalla.value
+    ) {
+      renderizarNuevos(productos);
+    }
   },
+);
+
+productosNuevos?.replaceChildren(
+  ...Array.from({ length: 4 }, crearEsqueletoProducto),
 );
 
 iniciarAplicacion();

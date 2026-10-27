@@ -36,8 +36,14 @@ const elementos = {
   imagen: document.querySelector(
     "#producto-imagen",
   ),
+  imagenSecundaria: document.querySelector(
+    "#producto-imagen-secundaria",
+  ),
   vistaPrevia: document.querySelector(
     "#vista-previa-producto",
+  ),
+  vistaPreviaSecundaria: document.querySelector(
+    "#vista-previa-producto-secundaria",
   ),
   botonGuardar: document.querySelector(
     "#boton-guardar-producto",
@@ -130,6 +136,8 @@ function limpiarFormulario() {
 
   elementos.vistaPrevia.hidden = true;
   elementos.vistaPrevia.removeAttribute("src");
+  elementos.vistaPreviaSecundaria.hidden = true;
+  elementos.vistaPreviaSecundaria.removeAttribute("src");
 
   elementos.botonCancelar.hidden = true;
   elementos.camposTallas.forEach((campo) => {
@@ -178,6 +186,14 @@ function seleccionarProducto(producto) {
   } else {
     elementos.vistaPrevia.hidden = true;
     elementos.vistaPrevia.removeAttribute("src");
+  }
+
+  if (producto.imagen_secundaria) {
+    elementos.vistaPreviaSecundaria.src = producto.imagen_secundaria;
+    elementos.vistaPreviaSecundaria.hidden = false;
+  } else {
+    elementos.vistaPreviaSecundaria.hidden = true;
+    elementos.vistaPreviaSecundaria.removeAttribute("src");
   }
 
   elementos.botonGuardar.textContent =
@@ -386,6 +402,7 @@ async function manejarFormulario(evento) {
   elementos.botonGuardar.classList.add("boton--cargando");
 
   const imagen = elementos.imagen.files[0];
+  const imagenSecundaria = elementos.imagenSecundaria.files[0];
 
   if (imagen && imagen.size > 5 * 1024 * 1024) {
     mostrarMensaje(
@@ -393,6 +410,18 @@ async function manejarFormulario(evento) {
       true,
     );
     elementos.botonGuardar.disabled = false;
+    elementos.botonGuardar.classList.remove("boton--cargando");
+    return;
+  }
+
+
+  if (imagenSecundaria && imagenSecundaria.size > 5 * 1024 * 1024) {
+    mostrarMensaje(
+      "La segunda imagen no puede superar los 5 MB.",
+      true,
+    );
+    elementos.botonGuardar.disabled = false;
+    elementos.botonGuardar.classList.remove("boton--cargando");
     return;
   }
 
@@ -404,6 +433,7 @@ async function manejarFormulario(evento) {
     existencias,
     tallas,
     imagen,
+    imagenSecundaria,
   };
 
   try {
@@ -516,6 +546,21 @@ export async function iniciarAdministracionProductos() {
       elementos.vistaPrevia.src =
         URL.createObjectURL(archivo);
       elementos.vistaPrevia.hidden = false;
+    },
+  );
+
+  elementos.imagenSecundaria?.addEventListener(
+    "change",
+    () => {
+      const archivo = elementos.imagenSecundaria.files[0];
+
+      if (!archivo) {
+        return;
+      }
+
+      elementos.vistaPreviaSecundaria.src =
+        URL.createObjectURL(archivo);
+      elementos.vistaPreviaSecundaria.hidden = false;
     },
   );
 

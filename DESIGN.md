@@ -41,7 +41,7 @@ typography:
     letterSpacing: "normal"
   label:
     fontFamily: "Segoe UI, Helvetica, Arial, sans-serif"
-    fontSize: "0.7rem"
+    fontSize: "0.75rem"
     fontWeight: 650
     lineHeight: 1.2
     letterSpacing: "0.13em"
@@ -54,7 +54,7 @@ spacing:
   md: "1rem"
   lg: "1.5rem"
   xl: "2rem"
-  section: "clamp(5rem, 8vw, 8rem)"
+  section: "clamp(3.5rem, 7vw, 6rem)"
 components:
   button-primary:
     backgroundColor: "{colors.ivory}"
@@ -181,7 +181,7 @@ La paleta es casi monocromática: el marfil da la voz, la plata organiza la jera
 
 ## Layout
 
-El sistema usa un contenedor fluido de hasta 1440px con 1.5rem de margen lateral por defecto y secciones verticales amplias (`spacing.section`). La tienda pública reserva 60px para el encabezado fijo; en el hero, la fotografía continúa por debajo de una barra translúcida con desenfoque contextual. Las composiciones editoriales pueden ser asimétricas en pantallas grandes, pero se convierten en una sola columna antes de que fotografía, copy o acciones pierdan legibilidad.
+El sistema usa un contenedor fluido de hasta 1440px con 1.5rem de margen lateral por defecto y secciones verticales amplias (`spacing.section`). La tienda pública reserva 60px para el encabezado fijo; en el hero, la fotografía continúa por debajo de una barra translúcida con desenfoque contextual. La portada continúa con una franja de confianza, categorías fotográficas, novedades, banner, lookbook, catálogo y footer. Las composiciones editoriales pueden ser asimétricas en pantallas grandes, pero se convierten antes de que fotografía, copy o acciones pierdan legibilidad.
 
 El catálogo parte de una retícula flexible de hasta cuatro columnas, conserva un gap de un píxel para que los filetes formen la estructura y pasa a dos columnas en móvil. Los controles nunca deben crear desplazamiento horizontal desde 375px; las imágenes de producto mantienen proporción 4:5 y recorte `cover`.
 
@@ -214,7 +214,7 @@ La forma dominante es ortogonal: botones, campos, tarjetas, diálogos y menús u
 - **Shape:** recta, con un mínimo interactivo de 44–48px según el contexto.
 - **Primary:** fondo marfil, texto tinta y etiqueta en mayúsculas; puede invertir a transparente en hover sin perder el borde.
 - **Secondary:** transparente con borde plata; en hover toma plata y texto tinta.
-- **Hover / Focus:** transiciones de 220–260ms, desplazamiento vertical máximo de 2px cuando no está sobre fotografía y foco visible marfil separado 4px.
+- **Hover / Focus:** transiciones de 220–280ms, sin desplazamiento en tarjetas ni controles sobre fotografía, y foco visible marfil separado 4px.
 - **Disabled:** panel elevado, plata velada y ausencia de desplazamiento.
 
 ### Cards / Containers
@@ -237,11 +237,19 @@ El encabezado público es fijo, compacto y traslúcido, con marca Bodoni centrad
 
 ### Product Card
 
-La tarjeta prioriza una imagen 4:5, seguida por nombre compacto en mayúsculas y precio tabular. El borde permanece plano; en hover la imagen recupera color, escala con suavidad y la superficie asciende como máximo 6px. La ausencia de foto se resuelve con el monograma, no con una ilustración genérica.
+La tarjeta prioriza una imagen 4:5, seguida por nombre compacto en mayúsculas y precio tabular. La superficie permanece completamente plana. Cuando existe una segunda foto, escritorio hace un crossfade de 280ms y móvil ofrece indicadores táctiles; nunca hay escala ni elevación. La ausencia de foto se resuelve con el monograma, no con una ilustración genérica.
+
+### Editorial Home
+
+La portada alterna densidad y pausa: beneficios en tres columnas, mosaico de categorías reales, cuatro novedades, un banner fotográfico y un lookbook asimétrico. Todas las imágenes son WebP estáticas, con dimensiones declaradas y procedencia documentada; el contenido funcional sigue culminando en el catálogo existente.
+
+### Mini Cart Drawer
+
+El carrito es un panel modal desde la derecha, de hasta 470px en escritorio y ancho completo en móvil. Se abre al agregar un producto, pulsa brevemente el icono y se cierra tras cuatro segundos solo si el usuario no interactúa. Overlay, botón cerrar y Escape conservan rutas equivalentes; el flujo de pago no cambia.
 
 ### Editorial Hero
 
-La firma del hero combina fotografía estática, titular Bodoni, CTA recto y monograma ZS outline. El monograma se dibuja una sola vez por sesión y después revela el contenido; `prefers-reduced-motion` muestra ambos desde el primer frame. Esta secuencia nunca bloquea la lectura, la navegación ni el acceso al catálogo.
+La firma del hero combina fotografía estática, titular Bodoni, CTA recto y monograma ZS outline. El monograma se dibuja una sola vez por sesión; el contenido empieza a revelarse tras 300ms para no demorar la lectura. `prefers-reduced-motion` muestra ambos desde el primer frame. Esta secuencia nunca bloquea la navegación ni el acceso al catálogo.
 
 **The Motion Has Memory Rule.** Una entrada expresiva sucede una vez por sesión; el sistema no repite movimiento ceremonial en cada visita de página.
 

@@ -8,6 +8,7 @@ const productos = [{
   nombre: "Chaqueta Noir",
   descripcion: "Edición esencial de ZonaShop.",
   imagen: "/favicon.svg",
+  imagen_secundaria: "/images/lookbook-2.webp",
   precio: "189900.00",
   existencias: 4,
   agotado: false,
@@ -67,7 +68,7 @@ test("el header móvil, menú y filtros funcionan a 375px", async ({ page }) => 
   );
   expect(columnasProductos).toBe(2);
 
-  const imagenProducto = page.locator(".producto__visual img");
+  const imagenProducto = page.locator("#productos .producto__visual img").first();
   await expect(imagenProducto).toHaveAttribute("loading", "lazy");
   await expect(imagenProducto).toHaveAttribute("width", "440");
   await expect(imagenProducto).toHaveAttribute("height", "550");
@@ -118,19 +119,19 @@ test("el catálogo ofrece recuperación para estados vacío y de error", async (
   await page.getByRole("button", { name: "Buscar", exact: true }).click();
   await expect(page.getByText("No encontramos productos con esos filtros", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Limpiar filtros" }).last().click();
-  await expect(page.getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
+  await expect(page.locator("#productos").getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
 
   await page.locator("#boton-filtros-header").click();
   await page.locator("#busqueda").fill("fallar");
   await page.getByRole("button", { name: "Buscar", exact: true }).click();
   await expect(page.getByText("No pudimos cargar los productos", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Reintentar" }).click();
-  await expect(page.getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
+  await expect(page.locator("#productos").getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
 
   await page.locator("#boton-filtros-header").click();
   await page.locator("#busqueda").fill("contallas");
   await page.getByRole("button", { name: "Buscar", exact: true }).click();
-  await page.getByRole("button", { name: "Ver detalles de Chaqueta Noir" }).click();
+  await page.locator("#productos").getByRole("button", { name: "Ver detalles de Chaqueta Noir" }).click();
   await expect(page.locator("#modal-detalle-producto")).toBeVisible();
   await expect(page.locator("#cantidad-carrito")).toHaveText("0");
   await page.locator("#detalle-producto-agregar").click();

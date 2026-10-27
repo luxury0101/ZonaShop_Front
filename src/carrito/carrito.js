@@ -11,6 +11,7 @@ const CLAVE_ALMACENAMIENTO = "zonashop_carrito";
 let carrito = [];
 let usuarioAutenticado = false;
 let pagoPendienteDeLogin = false;
+let temporizadorCierreAutomatico = null;
 
 const elementos = {
   botonAbrir: document.querySelector("#boton-abrir-carrito"),
@@ -157,6 +158,35 @@ function animarContador() {
   elementos.cantidad.classList.remove("cantidad-carrito--cambio");
   void elementos.cantidad.offsetWidth;
   elementos.cantidad.classList.add("cantidad-carrito--cambio");
+}
+
+function cancelarCierreAutomatico() {
+  if (temporizadorCierreAutomatico != null) {
+    window.clearTimeout(temporizadorCierreAutomatico);
+    temporizadorCierreAutomatico = null;
+  }
+}
+
+function animarBotonCarrito() {
+  if (!elementos.botonAbrir) return;
+  elementos.botonAbrir.classList.remove("boton-carrito--pulso");
+  void elementos.botonAbrir.offsetWidth;
+  elementos.botonAbrir.classList.add("boton-carrito--pulso");
+}
+
+function abrirCarrito({ automatico = false } = {}) {
+  cancelarCierreAutomatico();
+  if (!elementos.modal?.open) elementos.modal?.showModal();
+  if (!automatico || !elementos.modal?.open) return;
+  temporizadorCierreAutomatico = window.setTimeout(() => {
+    if (elementos.modal?.open) elementos.modal.close();
+    temporizadorCierreAutomatico = null;
+  }, 4000);
+}
+
+function abrirCarritoDespuesDeAgregar() {
+  animarBotonCarrito();
+  window.setTimeout(() => abrirCarrito({ automatico: true }), 0);
 }
 
 function actualizarResumen() {
@@ -393,6 +423,7 @@ export function agregarAlCarrito(producto) {
   guardarCarrito();
   renderizarCarrito();
   avisar(`Producto agregado al carrito: ${producto.nombre}`, "exito");
+  abrirCarritoDespuesDeAgregar();
 }
 
 function mostrarResumenPago() {
@@ -561,7 +592,7 @@ function configurarFormularioPago() {
 export async function iniciarCarrito() {
   cargarCarrito();
   renderizarCarrito();
-  elementos.botonAbrir?.addEventListener("click", () => elementos.modal?.showModal());
+  elementos.botonAbrir?.addEventListener("click", () => abrirCarrito());
   elementos.botonCerrar?.addEventListener("click", () => elementos.modal?.close());
   elementos.botonSeguir?.addEventListener("click", () => elementos.modal?.close());
   elementos.botonVaciar?.addEventListener("click", () => elementos.modalVaciar?.showModal());
@@ -576,11 +607,15 @@ export async function iniciarCarrito() {
   elementos.modal?.addEventListener("click", (evento) => {
     if (evento.target === elementos.modal) elementos.modal.close();
   });
+  ["pointerdown", "focusin", "keydown", "mouseenter"].forEach((tipo) => {
+    elementos.modal?.addEventListener(tipo, cancelarCierreAutomatico);
+  });
+  elementos.modal?.addEventListener("close", cancelarCierreAutomatico);
   window.addEventListener("sesion:cambiada", async (evento) => {
     await sincronizarCarrito(evento.detail?.usuario);
     if (pagoPendienteDeLogin && evento.detail?.usuario) {
       pagoPendienteDeLogin = false;
-      elementos.modal?.showModal();
+      abrirCarrito();
     }
   });
   if (carrito.length > 0) await revalidarCarrito();

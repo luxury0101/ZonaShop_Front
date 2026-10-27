@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
     <meta name="description" content="Catálogo de productos de ZonaShop" />
 
@@ -148,6 +148,62 @@
           </div>
         </div>
       </section>
+      <section class="confianza inicio-editorial" aria-label="Beneficios de comprar en ZonaShop">
+        <div class="contenedor confianza__rejilla">
+          <article>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7zM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" /></svg>
+            <div><h2>Envíos</h2><p>Consulta tiempos de entrega según tu ciudad</p></div>
+          </article>
+          <article>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h11a5 5 0 0 1 0 10H8M8 3 4 7l4 4" /></svg>
+            <div><h2>Cambios y devoluciones</h2><p>Revisa las condiciones antes de tu compra</p></div>
+          </article>
+          <article>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.7 2.8 8.1 7 10 4.2-1.9 7-5.3 7-10V6zM9 12l2 2 4-4" /></svg>
+            <div><h2>Pago seguro</h2><p>Compra simulada sin almacenar tu tarjeta</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="categorias-destacadas" class="categorias-editoriales inicio-editorial contenedor" aria-labelledby="titulo-categorias">
+        <header class="cabecera-editorial">
+          <h2 id="titulo-categorias">Explora por categoría</h2>
+          <p>Encuentra la selección que acompaña tu forma de vestir.</p>
+        </header>
+        <div id="categorias-mosaico" class="categorias-mosaico" aria-live="polite"></div>
+      </section>
+
+      <section id="productos-nuevos-seccion" class="nuevos inicio-editorial contenedor" aria-labelledby="titulo-nuevos">
+        <header class="cabecera-editorial cabecera-editorial--enlace">
+          <div><h2 id="titulo-nuevos">Nuevos</h2><p>Las piezas más recientes de ZonaShop.</p></div>
+          <a href="#productos-catalogo">Ver todo</a>
+        </header>
+        <div id="productos-nuevos" class="productos productos--nuevos" aria-live="polite"></div>
+      </section>
+
+      <section class="banner-editorial inicio-editorial" aria-labelledby="titulo-banner-editorial">
+        <!-- TODO: reemplazar por fotografía editorial propia de ZonaShop. -->
+        <img src="/images/editorial-banner.webp" alt="Modelo con atuendo negro bajo iluminación editorial roja" width="1350" height="2400" loading="lazy" decoding="async" />
+        <div class="banner-editorial__velo"></div>
+        <div class="contenedor banner-editorial__contenido">
+          <h2 id="titulo-banner-editorial">Una nueva forma de vestir lo cotidiano</h2>
+          <a href="#productos-catalogo">Descubrir la colección</a>
+        </div>
+      </section>
+
+      <section class="lookbook inicio-editorial contenedor" aria-labelledby="titulo-lookbook">
+        <header class="cabecera-editorial">
+          <h2 id="titulo-lookbook">Lookbook ZonaShop</h2>
+          <p>Volúmenes, texturas y actitud para inspirar tu próxima combinación.</p>
+        </header>
+        <div class="lookbook__rejilla">
+          <!-- TODO: reemplazar estas fotografías provisionales por fotos propias. -->
+          <figure class="lookbook__pieza lookbook__pieza--principal"><img src="/images/lookbook-1.webp" alt="Retrato editorial en blanco y negro de una modelo con atuendo contemporáneo" width="1067" height="1600" loading="lazy" decoding="async" /></figure>
+          <figure class="lookbook__pieza"><img src="/images/lookbook-2.webp" alt="Modelo masculino con vestuario oscuro bajo una luz cálida" width="1064" height="1600" loading="lazy" decoding="async" /></figure>
+          <figure class="lookbook__pieza lookbook__pieza--horizontal"><img src="/images/lookbook-3.webp" alt="Modelo sentada en un estudio oscuro con prendas de textura suave" width="1600" height="1067" loading="lazy" decoding="async" /></figure>
+          <figure class="lookbook__pieza"><img src="/images/lookbook-4.webp" alt="Retrato de moda urbana masculina en estudio" width="1067" height="1600" loading="lazy" decoding="async" /></figure>
+        </div>
+      </section>
       <section id="panel-administracion" class="panel-admin" hidden>
         <header class="barra-admin">
           <a class="barra-admin__marca" href="/admin">ZonaShop <span>Admin</span></a>
@@ -211,7 +267,8 @@
                   </div>
                 </fieldset>
               </div>
-              <label for="producto-imagen">Imagen</label><div class="campo-imagen-producto"><input id="producto-imagen" type="file" accept="image/jpeg,image/png,image/webp" /><img id="vista-previa-producto" class="vista-previa-producto" alt="Vista previa del producto" hidden /><small>Formatos JPG, PNG o WEBP. Máximo 5 MB.</small></div>
+              <label for="producto-imagen">Imagen principal</label><div class="campo-imagen-producto"><input id="producto-imagen" type="file" accept="image/jpeg,image/png,image/webp" /><img id="vista-previa-producto" class="vista-previa-producto" alt="Vista previa principal del producto" hidden /><small>Formatos JPG, PNG o WEBP. Máximo 5 MB.</small></div>
+              <label for="producto-imagen-secundaria">Segunda imagen <span>(opcional)</span></label><div class="campo-imagen-producto"><input id="producto-imagen-secundaria" type="file" accept="image/jpeg,image/png,image/webp" /><img id="vista-previa-producto-secundaria" class="vista-previa-producto" alt="Vista previa secundaria del producto" hidden /><small>Se muestra al pasar el cursor o al usar los indicadores en móvil.</small></div>
               <div class="formulario-producto__acciones"><button id="boton-guardar-producto" type="submit">Crear producto</button><button id="boton-cancelar-producto" type="button" hidden>Cancelar edición</button></div>
               <p id="mensaje-producto" class="mensaje-producto" role="status" aria-live="polite"></p>
             </form>
@@ -469,7 +526,7 @@
             Vaciar carrito
           </button>
           <button id="boton-pagar" class="boton-pagar" type="button">
-            Pagar
+            Ver carrito / Pagar
           </button>
         </div>
       </div>
@@ -539,10 +596,11 @@
 
     <footer id="contacto" class="pie-pagina">
       <div class="contenedor pie-pagina__rejilla">
-        <section><h2>ZonaShop</h2><p>Tu catálogo en línea, fácil y seguro.</p><p>Pagos: Visa · Mastercard · PSE</p></section>
+        <section class="pie-pagina__marca"><h2>ZonaShop</h2><p>Moda seleccionada con una mirada editorial.</p><p class="pie-pagina__pagos" aria-label="Métodos de pago">Visa · Mastercard · PSE</p></section>
         <section id="contacto-directo"><h2>Contacto</h2><a href="mailto:juancontre845@gmail.com">juancontre845@gmail.com</a><a href="https://wa.me/573158301333?text=Hola%20ZonaShop%2C%20necesito%20ayuda%20con%20mi%20compra" target="_blank" rel="noopener noreferrer">WhatsApp: +57 315 830 1333</a></section>
         <section><h2>Ayuda</h2><a href="/politicas-de-envio">Políticas de envío</a><a href="/cambios-y-devoluciones">Cambios y devoluciones</a></section>
         <section><h2>Legal</h2><a href="/politica-de-privacidad">Política de privacidad</a><a href="/terminos-y-condiciones">Términos y condiciones</a></section>
+        <section class="pie-pagina__suscripcion"><h2>Novedades</h2><p>Recibe lanzamientos y selecciones de ZonaShop.</p><form id="formulario-suscripcion"><label for="correo-suscripcion">Correo electrónico</label><div><input id="correo-suscripcion" name="email" type="email" autocomplete="email" placeholder="tu@correo.com" required /><button type="submit">Suscribirme</button></div><p id="mensaje-suscripcion" role="status" aria-live="polite"></p></form></section>
       </div>
       <p class="pie-pagina__legal">© 2026 ZonaShop. Todos los derechos reservados.</p>
     </footer>
