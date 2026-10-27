@@ -32,6 +32,7 @@ import { iniciarPerfil } from "./perfil/perfil.js";
 import { iniciarAdministracionPedidos } from "./admin/pedidos.js";
 import { iniciarNavegacionAdmin } from "./admin/navegacion.js";
 import { iniciarEncabezado } from "./ui/encabezado.js";
+import { iniciarPaginasInformativas } from "./paginas/informativas.js";
 
 
 const formulario = document.querySelector(
@@ -362,6 +363,16 @@ async function iniciarAplicacion() {
   iniciarDetalleProducto();
   iniciarPedidos();
   iniciarPerfil();
+
+  const esPaginaInformativa = iniciarPaginasInformativas();
+
+  if (esPaginaInformativa) {
+    await Promise.all([
+      iniciarCarrito(),
+      restaurarSesion(),
+    ]);
+    return;
+  }
 
   try {
     await Promise.all([

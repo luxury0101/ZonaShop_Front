@@ -89,3 +89,32 @@ test("una ruta administrativa directa conserva el fallback y solicita login", as
   await expect(page.getByRole("dialog", { name: "Iniciar sesión" })).toBeVisible();
   await expect(page.locator("#login-email")).toBeFocused();
 });
+
+test("las páginas informativas y los canales de contacto son reales y responsive", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/politicas-de-envio");
+
+  await expect(page.getByRole("heading", { name: "Políticas de envío", exact: true })).toBeVisible();
+  await expect(page.getByText("[tiempo de entrega]", { exact: false })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Volver a la tienda" })).toHaveAttribute("href", "/#productos-catalogo");
+  await expect(page.getByRole("heading", { name: "Encuentra tu próximo favorito" })).toBeHidden();
+  expect(await page.evaluate(
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  )).toBe(false);
+
+  await expect(page.getByRole("link", { name: "juancontre845@gmail.com" }))
+    .toHaveAttribute("href", "mailto:juancontre845@gmail.com");
+  const whatsapp = page.getByRole("link", { name: /WhatsApp/ });
+  await expect(whatsapp).toHaveAttribute("href", /wa\.me\/573158301333/);
+  await expect(whatsapp).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(page.getByRole("link", { name: /Instagram|Facebook|TikTok/ })).toHaveCount(0);
+
+  for (const [ruta, titulo] of [
+    ["/cambios-y-devoluciones", "Cambios y devoluciones"],
+    ["/politica-de-privacidad", "Política de privacidad"],
+    ["/terminos-y-condiciones", "Términos y condiciones"],
+  ]) {
+    await page.goto(ruta);
+    await expect(page.getByRole("heading", { name: titulo, exact: true })).toBeVisible();
+  }
+});

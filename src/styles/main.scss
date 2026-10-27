@@ -4190,6 +4190,181 @@ dialog::backdrop {
   text-transform: uppercase;
 }
 
+/* Páginas informativas ----------------------------------------------------- */
+
+.ruta-informativa {
+  background: var(--zs-ink);
+}
+
+.ruta-informativa .presentacion,
+.ruta-informativa #productos-catalogo {
+  display: none;
+}
+
+.paginas-informativas {
+  min-height: calc(100vh - 60px);
+  color: var(--zs-white);
+  background: var(--zs-ink);
+}
+
+.pagina-informativa {
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.pagina-informativa__cabecera {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: clamp(2rem, 7vw, 7rem);
+  align-items: end;
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+  border-bottom: 1px solid var(--zs-line-bright);
+}
+
+.pagina-informativa__cabecera h1 {
+  max-width: 11ch;
+  margin: 0;
+  color: var(--zs-white);
+  font-family: var(--zs-display);
+  font-size: clamp(3.4rem, 8vw, 6rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.94;
+  text-wrap: balance;
+}
+
+.pagina-informativa__cabecera p {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--zs-silver);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.75;
+}
+
+.pagina-informativa__cuerpo {
+  display: grid;
+  grid-template-columns: minmax(170px, 230px) minmax(0, 720px);
+  gap: clamp(2.5rem, 8vw, 8rem);
+  justify-content: space-between;
+  padding-top: clamp(3rem, 7vw, 6rem);
+}
+
+.pagina-informativa__indice {
+  position: sticky;
+  top: 92px;
+  display: grid;
+  align-self: start;
+  border-top: 1px solid var(--zs-line-bright);
+}
+
+.pagina-informativa__indice strong,
+.pagina-informativa__indice a {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--zs-line);
+}
+
+.pagina-informativa__indice strong {
+  color: var(--zs-white);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pagina-informativa__indice a {
+  color: var(--zs-silver);
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 180ms ease, transform 220ms var(--zs-ease);
+}
+
+.pagina-informativa__indice a:hover {
+  color: var(--zs-white);
+  transform: translateX(0.35rem);
+}
+
+.pagina-informativa__contenido section {
+  padding: 0 0 clamp(2.5rem, 6vw, 4.5rem);
+  scroll-margin-top: 90px;
+}
+
+.pagina-informativa__contenido section + section {
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--zs-line);
+}
+
+.pagina-informativa__contenido h2 {
+  max-width: 18ch;
+  margin: 0 0 1.25rem;
+  color: var(--zs-white);
+  font-family: var(--zs-display);
+  font-size: clamp(2rem, 4vw, 3.15rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.pagina-informativa__contenido p {
+  max-width: 68ch;
+  margin: 0;
+  color: var(--zs-silver);
+  line-height: 1.8;
+}
+
+.pagina-informativa__contenido p + p {
+  margin-top: 1rem;
+}
+
+.pagina-informativa__volver {
+  display: inline-grid;
+  min-height: 50px;
+  padding: 0.9rem 1.4rem;
+  color: var(--zs-ink);
+  background: var(--zs-white);
+  border: 1px solid var(--zs-white);
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.pagina-informativa__volver:hover {
+  color: var(--zs-white);
+  background: transparent;
+}
+
+.pie-pagina a {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .pagina-informativa {
+    padding-block: 3.5rem 5rem;
+  }
+
+  .pagina-informativa__cabecera,
+  .pagina-informativa__cuerpo {
+    grid-template-columns: 1fr;
+  }
+
+  .pagina-informativa__cabecera {
+    gap: 1.5rem;
+  }
+
+  .pagina-informativa__cabecera h1 {
+    font-size: clamp(3rem, 15vw, 4.4rem);
+  }
+
+  .pagina-informativa__cuerpo {
+    gap: 3.5rem;
+  }
+
+  .pagina-informativa__indice {
+    position: static;
+  }
+}
+
 /* Motion ------------------------------------------------------------------- */
 
 @keyframes contenido-revelado {
