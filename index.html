@@ -148,37 +148,30 @@
           </div>
         </div>
       </section>
-      <section class="confianza inicio-editorial" aria-label="Beneficios de comprar en ZonaShop">
-        <div class="contenedor confianza__rejilla">
-          <article>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7zM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" /></svg>
-            <div><h2>Envíos</h2><p>Consulta tiempos de entrega según tu ciudad</p></div>
-          </article>
-          <article>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h11a5 5 0 0 1 0 10H8M8 3 4 7l4 4" /></svg>
-            <div><h2>Cambios y devoluciones</h2><p>Revisa las condiciones antes de tu compra</p></div>
-          </article>
-          <article>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.7 2.8 8.1 7 10 4.2-1.9 7-5.3 7-10V6zM9 12l2 2 4-4" /></svg>
-            <div><h2>Pago seguro</h2><p>Compra simulada sin almacenar tu tarjeta</p></div>
-          </article>
-        </div>
-      </section>
-
-      <section id="categorias-destacadas" class="categorias-editoriales inicio-editorial contenedor" aria-labelledby="titulo-categorias">
-        <header class="cabecera-editorial">
-          <h2 id="titulo-categorias">Explora por categoría</h2>
-          <p>Encuentra la selección que acompaña tu forma de vestir.</p>
-        </header>
-        <div id="categorias-mosaico" class="categorias-mosaico" aria-live="polite"></div>
-      </section>
-
       <section id="productos-nuevos-seccion" class="nuevos inicio-editorial contenedor" aria-labelledby="titulo-nuevos">
         <header class="cabecera-editorial cabecera-editorial--enlace">
           <div><h2 id="titulo-nuevos">Nuevos</h2><p>Las piezas más recientes de ZonaShop.</p></div>
           <a href="#productos-catalogo">Ver todo</a>
         </header>
         <div id="productos-nuevos" class="productos productos--nuevos" aria-live="polite"></div>
+      </section>
+
+      <section id="categorias-destacadas" class="categorias-editoriales inicio-editorial contenedor" aria-labelledby="titulo-categorias">
+        <header class="cabecera-editorial">
+          <h2 id="titulo-categorias">Categorías</h2>
+        </header>
+        <div id="categorias-mosaico" class="categorias-mosaico" aria-live="polite"></div>
+      </section>
+
+      <section id="productos-catalogo" class="catalogo contenedor" aria-labelledby="titulo-catalogo">
+        <div class="catalogo__encabezado">
+          <div>
+            <p class="seccion-etiqueta">Explorar</p>
+            <h2 id="titulo-catalogo">Productos</h2>
+          </div>
+        </div>
+        <p id="estado" class="estado" role="status">Cargando catálogo...</p>
+        <div id="productos" class="productos" aria-live="polite"></div>
       </section>
 
       <section class="banner-editorial inicio-editorial" aria-labelledby="titulo-banner-editorial">
@@ -202,6 +195,22 @@
           <figure class="lookbook__pieza"><img src="/images/lookbook-2.webp" alt="Modelo masculino con vestuario oscuro bajo una luz cálida" width="1064" height="1600" loading="lazy" decoding="async" /></figure>
           <figure class="lookbook__pieza lookbook__pieza--horizontal"><img src="/images/lookbook-3.webp" alt="Modelo sentada en un estudio oscuro con prendas de textura suave" width="1600" height="1067" loading="lazy" decoding="async" /></figure>
           <figure class="lookbook__pieza"><img src="/images/lookbook-4.webp" alt="Retrato de moda urbana masculina en estudio" width="1067" height="1600" loading="lazy" decoding="async" /></figure>
+        </div>
+      </section>
+      <section class="confianza inicio-editorial" aria-label="Beneficios de comprar en ZonaShop">
+        <div class="contenedor confianza__rejilla">
+          <article>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7zM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" /></svg>
+            <div><h2>Envíos</h2><p>Consulta tiempos de entrega según tu ciudad</p></div>
+          </article>
+          <article>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h11a5 5 0 0 1 0 10H8M8 3 4 7l4 4" /></svg>
+            <div><h2>Cambios y devoluciones</h2><p>Revisa las condiciones antes de tu compra</p></div>
+          </article>
+          <article>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.7 2.8 8.1 7 10 4.2-1.9 7-5.3 7-10V6zM9 12l2 2 4-4" /></svg>
+            <div><h2>Pago seguro</h2><p>Compra simulada sin almacenar tu tarjeta</p></div>
+          </article>
         </div>
       </section>
       <section id="panel-administracion" class="panel-admin" hidden>
@@ -294,20 +303,6 @@
           </section>
 
         </div>
-      </section>
-      <section id="productos-catalogo" class="catalogo contenedor" aria-labelledby="titulo-catalogo">
-        <div class="catalogo__encabezado">
-          <div>
-            <p class="seccion-etiqueta">Explorar</p>
-
-            <h2 id="titulo-catalogo">Productos</h2>
-          </div>
-
-        </div>
-
-        <p id="estado" class="estado" role="status">Cargando catálogo...</p>
-
-        <div id="productos" class="productos" aria-live="polite"></div>
       </section>
       <section id="paginas-informativas" class="paginas-informativas" hidden></section>
     </main>

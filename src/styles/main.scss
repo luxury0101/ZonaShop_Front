@@ -6075,13 +6075,39 @@ body:not(.ruta-admin) > main {
 
 /* Catálogo compacto -------------------------------------------------------- */
 
+.presentacion + .nuevos {
+  margin-top: 0;
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.nuevos .cabecera-editorial {
+  margin-bottom: 1rem;
+}
+
+.nuevos .cabecera-editorial h2,
+.categorias-editoriales .cabecera-editorial h2,
+.catalogo h2 {
+  max-width: none;
+  font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.catalogo {
+  padding-block: clamp(3.5rem, 5vw, 5rem);
+}
+
+.producto::before {
+  display: none;
+}
+
 .productos {
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
-    minmax(max(220px, calc((100% - 3px) / 4)), 1fr)
+    minmax(max(190px, calc((100% - 3rem) / 4)), 1fr)
   );
-  gap: 1px;
+  gap: 1rem;
   align-items: stretch;
   background: transparent;
   border: 0;
@@ -6095,19 +6121,24 @@ body:not(.ruta-admin) > main {
 .producto {
   grid-column: auto;
   min-height: 0;
-  padding: 0 0 1.4rem;
-  border: 1px solid var(--zs-line);
+  padding: 0 0 0.35rem;
+  background: transparent;
+  border: 0;
 }
 
 .producto__visual {
+  --producto-media-inset: clamp(0.65rem, 1.5vw, 1.1rem);
+
   display: grid;
   place-items: center;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 5;
-  margin: 0 0 1.05rem;
+  aspect-ratio: 1 / 1.15;
+  margin: 0 0 0.75rem;
   padding: 0;
   color: inherit;
+  background: var(--zs-panel);
+  border: 0;
   appearance: none;
   cursor: pointer;
 }
@@ -6117,12 +6148,17 @@ body:not(.ruta-admin) > main {
   outline-offset: -5px;
 }
 
+.producto__visual::after {
+  display: none;
+}
+
 .producto__visual img {
   display: block;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
+  inset: var(--producto-media-inset);
+  width: calc(100% - var(--producto-media-inset) - var(--producto-media-inset));
+  height: calc(100% - var(--producto-media-inset) - var(--producto-media-inset));
+  aspect-ratio: 1 / 1.15;
+  object-fit: contain;
 }
 
 .producto__visual--vacio {
@@ -6133,16 +6169,16 @@ body:not(.ruta-admin) > main {
 
 .producto__informacion {
   display: grid;
-  gap: 0.3rem;
-  padding-inline: 1rem;
+  gap: 0.2rem;
+  padding-inline: 0.15rem;
 }
 
 .producto__informacion h3 {
   display: -webkit-box;
   overflow: hidden;
-  min-height: 1.3em;
+  min-height: 1.25em;
   font-family: var(--zs-ui);
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 1.3;
@@ -6156,7 +6192,7 @@ body:not(.ruta-admin) > main {
   margin: 0;
   color: var(--zs-silver);
   font-family: var(--zs-ui);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 400;
   letter-spacing: 0.015em;
   line-height: 1.35;
@@ -6169,9 +6205,9 @@ body:not(.ruta-admin) > main {
   flex-direction: column;
   gap: 0.8rem;
   min-height: 0;
-  padding: 0 1rem 1.4rem;
+  padding: 0 0 0.35rem;
   background: var(--zs-panel);
-  border: 1px solid var(--zs-line);
+  border: 0;
   animation: none;
 }
 
@@ -6184,10 +6220,8 @@ body:not(.ruta-admin) > main {
 }
 
 .producto-esqueleto__visual {
-  width: calc(100% + 2rem);
-  aspect-ratio: 4 / 5;
-  margin-inline: -1rem;
-  border-bottom: 1px solid var(--zs-line);
+  width: 100%;
+  aspect-ratio: 1 / 1.15;
 }
 
 .producto-esqueleto__nombre {
@@ -6224,12 +6258,14 @@ body:not(.ruta-admin) > main {
   }
 
   .producto__visual {
-    margin-bottom: 0.72rem;
+    --producto-media-inset: 0.45rem;
+
+    margin-bottom: 0.6rem;
   }
 
   .producto__informacion {
     gap: 0.2rem;
-    padding-inline: 0.7rem;
+    padding-inline: 0.1rem;
   }
 
   .producto__informacion h3 {
