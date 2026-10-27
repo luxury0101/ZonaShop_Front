@@ -267,8 +267,21 @@
                   </div>
                 </fieldset>
               </div>
-              <label for="producto-imagen">Imagen principal</label><div class="campo-imagen-producto"><input id="producto-imagen" type="file" accept="image/jpeg,image/png,image/webp" /><img id="vista-previa-producto" class="vista-previa-producto" alt="Vista previa principal del producto" hidden /><small>Formatos JPG, PNG o WEBP. Máximo 5 MB.</small></div>
-              <label for="producto-imagen-secundaria">Segunda imagen <span>(opcional)</span></label><div class="campo-imagen-producto"><input id="producto-imagen-secundaria" type="file" accept="image/jpeg,image/png,image/webp" /><img id="vista-previa-producto-secundaria" class="vista-previa-producto" alt="Vista previa secundaria del producto" hidden /><small>Se muestra al pasar el cursor o al usar los indicadores en móvil.</small></div>
+              <fieldset class="imagenes-producto">
+                <legend>Imágenes del producto</legend>
+                <div class="campo-imagen-producto">
+                  <label for="producto-imagen">Imagen principal</label>
+                  <input id="producto-imagen" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ayuda-imagen-principal" />
+                  <img id="vista-previa-producto" class="vista-previa-producto" alt="Vista previa principal del producto" hidden />
+                  <small id="ayuda-imagen-principal">Formatos JPG, PNG o WEBP. Máximo 5 MB.</small>
+                </div>
+                <div class="campo-imagen-producto">
+                  <label for="producto-imagen-secundaria">Segunda imagen <span>(opcional)</span></label>
+                  <input id="producto-imagen-secundaria" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ayuda-imagen-secundaria" />
+                  <img id="vista-previa-producto-secundaria" class="vista-previa-producto" alt="Vista previa secundaria del producto" hidden />
+                  <small id="ayuda-imagen-secundaria">Se muestra al pasar el cursor o al usar los indicadores en móvil.</small>
+                </div>
+              </fieldset>
               <div class="formulario-producto__acciones"><button id="boton-guardar-producto" type="submit">Crear producto</button><button id="boton-cancelar-producto" type="button" hidden>Cancelar edición</button></div>
               <p id="mensaje-producto" class="mensaje-producto" role="status" aria-live="polite"></p>
             </form>

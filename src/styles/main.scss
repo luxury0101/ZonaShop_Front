@@ -1651,17 +1651,44 @@ html {
 .campo-imagen-producto {
   display: grid;
   gap: 0.7rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1rem;
 
   small {
     color: #607083;
   }
 }
 
+.imagenes-producto {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  min-width: 0;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  border: 0;
+
+  legend {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    color: var(--zs-white);
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
 
 .vista-previa-producto {
-  width: 150px;
-  height: 120px;
-  object-fit: cover;
+  width: min(100%, 240px);
+  height: auto;
+  aspect-ratio: 4 / 5;
+  justify-self: center;
+  object-fit: contain;
+  background: var(--zs-panel);
 
   border: 1px solid $color-borde;
   border-radius: 0.65rem;
@@ -3976,6 +4003,36 @@ dialog::backdrop {
   border-radius: 0;
 }
 
+.campo-imagen-producto input[type="file"] {
+  min-height: 48px;
+  min-width: 0;
+  padding: 0.35rem;
+  overflow: hidden;
+  color: var(--zs-silver);
+  background: var(--zs-panel);
+  border: 1px solid var(--zs-line-bright);
+  font-size: 0.78rem;
+}
+
+.campo-imagen-producto input[type="file"]::file-selector-button {
+  min-height: 38px;
+  margin-right: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  color: var(--zs-ink);
+  background: var(--zs-white);
+  border: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.campo-imagen-producto small {
+  min-height: 2.6em;
+  color: var(--zs-silver-soft);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
 .vista-previa-producto,
 .miniatura-producto {
   border: 1px solid var(--zs-line);
@@ -5930,6 +5987,7 @@ body:not(.ruta-admin) > main {
 
 .configuracion-tallas {
   display: grid;
+  grid-column: 1 / -1;
   gap: 0.8rem;
   padding: 1rem;
   background: var(--zs-ink-soft);
@@ -5991,6 +6049,10 @@ body:not(.ruta-admin) > main {
 }
 
 @media (max-width: 520px) {
+  .imagenes-producto {
+    grid-template-columns: 1fr;
+  }
+
   .tallas-admin {
     grid-template-columns: repeat(3, minmax(68px, 1fr));
   }
