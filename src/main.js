@@ -83,26 +83,19 @@ function crearTexto(elemento, contenido, clase = "") {
 }
 
 
-function productoTieneTallas(producto) {
-  if (Array.isArray(producto.tallas)) {
-    return producto.tallas.length > 0;
-  }
-
-  return Boolean(
-    producto.tallas
-    && typeof producto.tallas === "object"
-    && Object.keys(producto.tallas).length,
-  );
-}
-
-
 function crearTarjetaProducto(producto) {
   const tarjeta = document.createElement("article");
 
   tarjeta.className = "producto";
 
-  const visual = document.createElement("div");
+  const visual = document.createElement("button");
   visual.className = "producto__visual";
+  visual.type = "button";
+  visual.setAttribute("aria-label", `Ver detalles de ${producto.nombre}`);
+  visual.addEventListener(
+    "click",
+    () => abrirDetalleProducto(producto, agregarAlCarrito),
+  );
 
   if (producto.imagen) {
     const imagen = document.createElement("img");
@@ -115,7 +108,6 @@ function crearTarjetaProducto(producto) {
     visual.append(imagen);
   } else {
     visual.textContent = "ZS";
-    visual.setAttribute("aria-label", `${producto.nombre}, sin imagen disponible`);
     visual.classList.add("producto__visual--vacio");
   }
 
@@ -130,41 +122,13 @@ function crearTarjetaProducto(producto) {
     "producto__precio",
   );
 
-  const boton = crearTexto(
-    "button",
-    "Agregar",
-    "producto__boton",
-  );
-
-  boton.type = "button";
-  boton.disabled = producto.agotado;
-  boton.setAttribute(
-    "aria-label",
-    producto.agotado
-      ? `${producto.nombre}, agotado`
-      : `Agregar ${producto.nombre}`,
-  );
-
-  boton.addEventListener(
-    "click",
-    () => {
-      if (productoTieneTallas(producto)) {
-        abrirDetalleProducto(producto, agregarAlCarrito);
-        return;
-      }
-      agregarAlCarrito(producto);
-    },
-  );
-
-  const acciones = document.createElement("div");
-  acciones.className = "producto__acciones";
-  acciones.append(boton);
+  const informacion = document.createElement("div");
+  informacion.className = "producto__informacion";
+  informacion.append(nombre, precio);
 
   tarjeta.append(
     visual,
-    nombre,
-    precio,
-    acciones,
+    informacion,
   );
 
   return tarjeta;
@@ -191,7 +155,7 @@ function crearEsqueletoProducto() {
   esqueleto.className = "producto-esqueleto";
   esqueleto.setAttribute("aria-hidden", "true");
 
-  ["visual", "nombre", "precio", "boton"].forEach((parte) => {
+  ["visual", "nombre", "precio"].forEach((parte) => {
     const bloque = document.createElement("span");
     bloque.className = `producto-esqueleto__${parte}`;
     esqueleto.append(bloque);

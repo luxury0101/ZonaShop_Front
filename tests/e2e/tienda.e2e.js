@@ -75,7 +75,10 @@ test("carga el catálogo y permite agregar un producto al carrito", async ({ pag
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Agregar Chaqueta Noir" }).click();
+  await expect(page.getByRole("button", { name: "Agregar Chaqueta Noir" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Ver detalles de Chaqueta Noir" }).click();
+  await expect(page.locator("#modal-detalle-producto")).toBeVisible();
+  await page.locator("#detalle-producto-agregar").click();
   await expect(page.locator("#cantidad-carrito")).toHaveText("1");
 
   await page.getByRole("button", { name: /abrir carrito/i }).click();

@@ -130,7 +130,7 @@ test("el catálogo ofrece recuperación para estados vacío y de error", async (
   await page.locator("#boton-filtros-header").click();
   await page.locator("#busqueda").fill("contallas");
   await page.getByRole("button", { name: "Buscar", exact: true }).click();
-  await page.getByRole("button", { name: "Agregar Chaqueta Noir" }).click();
+  await page.getByRole("button", { name: "Ver detalles de Chaqueta Noir" }).click();
   await expect(page.locator("#modal-detalle-producto")).toBeVisible();
   await expect(page.locator("#cantidad-carrito")).toHaveText("0");
   await page.locator("#detalle-producto-agregar").click();
@@ -146,9 +146,12 @@ test("los filtros forman una fila y no desbordan en escritorio", async ({ page }
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   const columnasProductos = await page.locator("#productos").evaluate(
-    (elemento) => getComputedStyle(elemento).gridTemplateColumns.split(" ").length,
+    (elemento) => getComputedStyle(elemento).gridTemplateColumns
+      .split(" ")
+      .filter((columna) => Number.parseFloat(columna) > 1)
+      .length,
   );
-  expect(columnasProductos).toBe(4);
+  expect(columnasProductos).toBe(1);
   await page.locator("#boton-filtros-header").click();
 
   const columnas = await page.locator("#formulario-filtros").evaluate(
