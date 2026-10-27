@@ -1648,7 +1648,6 @@ html {
   }
 }
 
-
 .campo-imagen-producto {
   display: grid;
   gap: 0.7rem;
@@ -5002,5 +5001,183 @@ body:not(.ruta-admin) > main {
 
   .panel-filtros-header {
     padding-block: 1rem 1.25rem;
+  }
+}
+
+/* Catálogo compacto -------------------------------------------------------- */
+
+.productos {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(max(220px, calc((100% - 3px) / 4)), 1fr)
+  );
+  gap: 1px;
+  align-items: stretch;
+  background: transparent;
+  border: 0;
+}
+
+.producto,
+.producto-esqueleto {
+  min-width: 0;
+}
+
+.producto {
+  grid-column: auto;
+  min-height: 0;
+  padding: 0 1.5rem 1.5rem;
+  border: 1px solid var(--zs-line);
+}
+
+.producto__visual {
+  width: calc(100% + 3rem);
+  height: auto;
+  aspect-ratio: 4 / 5;
+  margin: 0 -1.5rem 1.15rem;
+}
+
+.producto__visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.producto__visual--vacio {
+  color: var(--zs-silver);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  letter-spacing: -0.04em;
+}
+
+.producto h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 2.08em;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+
+.producto__precio {
+  margin-top: 0.25rem;
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.producto__acciones {
+  display: block;
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+
+.producto__boton {
+  width: 100%;
+}
+
+.producto-esqueleto {
+  display: flex;
+  grid-column: auto;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-height: 0;
+  padding: 0 1.5rem 1.5rem;
+  background: var(--zs-panel);
+  border: 1px solid var(--zs-line);
+  animation: none;
+}
+
+.producto-esqueleto > span {
+  display: block;
+  background:
+    linear-gradient(100deg, var(--zs-panel-raised) 30%, #292d35 50%, var(--zs-panel-raised) 70%);
+  background-size: 240% 100%;
+  animation: esqueleto-plata 1.5s ease infinite;
+}
+
+.producto-esqueleto__visual {
+  width: calc(100% + 3rem);
+  aspect-ratio: 4 / 5;
+  margin-inline: -1.5rem;
+  border-bottom: 1px solid var(--zs-line);
+}
+
+.producto-esqueleto__nombre {
+  width: 82%;
+  height: 1.6rem;
+}
+
+.producto-esqueleto__precio {
+  width: 42%;
+  height: 1.2rem;
+}
+
+.producto-esqueleto__boton {
+  width: 100%;
+  height: 48px;
+  margin-top: 0.45rem;
+}
+
+.estado--solo-lectores {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 619px) {
+  .productos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .producto,
+  .producto-esqueleto {
+    min-height: 0;
+    padding: 0 0.75rem 0.9rem;
+  }
+
+  .producto__visual,
+  .producto-esqueleto__visual {
+    width: calc(100% + 1.5rem);
+    margin-inline: -0.75rem;
+  }
+
+  .producto__visual {
+    margin-bottom: 0.8rem;
+  }
+
+  .producto h3 {
+    min-height: 2.2em;
+    font-size: clamp(1.08rem, 5.2vw, 1.35rem);
+    line-height: 1.1;
+  }
+
+  .producto__precio {
+    font-size: 1.1rem;
+  }
+
+  .producto__boton {
+    min-height: 44px;
+    padding-inline: 0.35rem;
+    font-size: 0.64rem;
+  }
+
+  .producto-esqueleto__nombre {
+    height: 1.3rem;
+  }
+
+  .producto-esqueleto__boton {
+    height: 44px;
+  }
+
+  .catalogo-vacio {
+    padding: 3rem 1rem;
   }
 }

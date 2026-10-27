@@ -75,7 +75,7 @@ test("carga el catálogo y permite agregar un producto al carrito", async ({ pag
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Agregar al carrito" }).click();
+  await page.getByRole("button", { name: "Agregar Chaqueta Noir" }).click();
   await expect(page.locator("#cantidad-carrito")).toHaveText("1");
 
   await page.getByRole("button", { name: /abrir carrito/i }).click();

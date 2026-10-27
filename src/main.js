@@ -81,6 +81,19 @@ function crearTexto(elemento, contenido, clase = "") {
 }
 
 
+function productoTieneTallas(producto) {
+  if (Array.isArray(producto.tallas)) {
+    return producto.tallas.length > 0;
+  }
+
+  return Boolean(
+    producto.tallas
+    && typeof producto.tallas === "object"
+    && Object.keys(producto.tallas).length,
+  );
+}
+
+
 function crearTarjetaProducto(producto) {
   const tarjeta = document.createElement("article");
 
@@ -94,27 +107,19 @@ function crearTarjetaProducto(producto) {
     imagen.src = producto.imagen;
     imagen.alt = producto.nombre;
     imagen.loading = "lazy";
+    imagen.decoding = "async";
+    imagen.width = 440;
+    imagen.height = 550;
     visual.append(imagen);
   } else {
-    visual.textContent = "Sin imagen";
+    visual.textContent = "ZS";
+    visual.setAttribute("aria-label", `${producto.nombre}, sin imagen disponible`);
     visual.classList.add("producto__visual--vacio");
   }
-
-  const categoria = crearTexto(
-    "span",
-    producto.categoria_nombre,
-    "producto__categoria",
-  );
 
   const nombre = crearTexto(
     "h3",
     producto.nombre,
-  );
-
-  const descripcion = crearTexto(
-    "p",
-    producto.descripcion || "Sin descripción.",
-    "producto__descripcion",
   );
 
   const precio = crearTexto(
@@ -123,58 +128,40 @@ function crearTarjetaProducto(producto) {
     "producto__precio",
   );
 
-  const disponibilidad = crearTexto(
-    "span",
-    producto.agotado
-      ? "Agotado"
-      : `${producto.existencias} disponible(s)`,
-    producto.agotado
-      ? "producto__stock producto__stock--agotado"
-      : "producto__stock",
-  );
-
   const boton = crearTexto(
     "button",
-    producto.agotado
-      ? "No disponible"
-      : "Agregar al carrito",
+    "Agregar",
     "producto__boton",
   );
 
   boton.type = "button";
   boton.disabled = producto.agotado;
+  boton.setAttribute(
+    "aria-label",
+    producto.agotado
+      ? `${producto.nombre}, agotado`
+      : `Agregar ${producto.nombre}`,
+  );
 
   boton.addEventListener(
     "click",
-    () => agregarAlCarrito(producto),
-  );
-
-  const botonDetalle = crearTexto(
-    "button",
-    "Ver detalle",
-    "producto__detalle",
-  );
-
-  botonDetalle.type = "button";
-  botonDetalle.addEventListener(
-    "click",
-    () => abrirDetalleProducto(
-      producto,
-      agregarAlCarrito,
-    ),
+    () => {
+      if (productoTieneTallas(producto)) {
+        abrirDetalleProducto(producto, agregarAlCarrito);
+        return;
+      }
+      agregarAlCarrito(producto);
+    },
   );
 
   const acciones = document.createElement("div");
   acciones.className = "producto__acciones";
-  acciones.append(botonDetalle, boton);
+  acciones.append(boton);
 
   tarjeta.append(
     visual,
-    categoria,
     nombre,
-    descripcion,
     precio,
-    disponibilidad,
     acciones,
   );
 
@@ -182,21 +169,49 @@ function crearTarjetaProducto(producto) {
 }
 
 
+function crearEstadoCatalogo(titulo, descripcion, textoBoton, manejador) {
+  const contenedor = document.createElement("div");
+  const encabezado = crearTexto("strong", titulo);
+  const mensaje = crearTexto("p", descripcion);
+  const boton = crearTexto("button", textoBoton);
+
+  contenedor.className = "catalogo-vacio";
+  boton.type = "button";
+  boton.addEventListener("click", manejador);
+  contenedor.append(encabezado, mensaje, boton);
+
+  return contenedor;
+}
+
+
+function crearEsqueletoProducto() {
+  const esqueleto = document.createElement("article");
+  esqueleto.className = "producto-esqueleto";
+  esqueleto.setAttribute("aria-hidden", "true");
+
+  ["visual", "nombre", "precio", "boton"].forEach((parte) => {
+    const bloque = document.createElement("span");
+    bloque.className = `producto-esqueleto__${parte}`;
+    esqueleto.append(bloque);
+  });
+
+  return esqueleto;
+}
+
+
 function mostrarProductos(productos) {
   contenedorProductos.replaceChildren();
+  contenedorProductos.removeAttribute("aria-busy");
+  estado.classList.remove("estado--solo-lectores");
 
   if (productos.length === 0) {
-    estado.textContent =
-      "No se encontraron productos con esos filtros.";
-
-    const vacio = document.createElement("div");
-    const mensaje = crearTexto("p", "Prueba con otra búsqueda o elimina los filtros.");
-    const limpiar = crearTexto("button", "Limpiar filtros", "boton-limpiar");
-    vacio.className = "catalogo-vacio";
-    limpiar.type = "button";
-    limpiar.addEventListener("click", limpiarFiltros);
-    vacio.append(mensaje, limpiar);
-    contenedorProductos.append(vacio);
+    estado.textContent = "0 producto(s) encontrado(s).";
+    contenedorProductos.append(crearEstadoCatalogo(
+      "No encontramos productos con esos filtros",
+      "Prueba con otra búsqueda o restablece las opciones seleccionadas.",
+      "Limpiar filtros",
+      limpiarFiltros,
+    ));
 
     return;
   }
@@ -256,16 +271,13 @@ async function cargarCategorias() {
 
 
 async function cargarProductos() {
-  estado.textContent = "Cargando catálogo...";
+  estado.textContent = "Cargando productos...";
+  estado.classList.add("estado--solo-lectores");
   botonBuscar.disabled = true;
   botonBuscar.classList.add("boton--cargando");
+  contenedorProductos.setAttribute("aria-busy", "true");
   contenedorProductos.replaceChildren(
-    ...Array.from({ length: 3 }, () => {
-      const esqueleto = document.createElement("div");
-      esqueleto.className = "producto-esqueleto";
-      esqueleto.setAttribute("aria-hidden", "true");
-      return esqueleto;
-    }),
+    ...Array.from({ length: 4 }, crearEsqueletoProducto),
   );
 
   try {
@@ -278,11 +290,15 @@ async function cargarProductos() {
     mostrarProductos(productos);
   } catch (error) {
     console.error(error);
-
-    estado.textContent =
-      "No fue posible conectar con el catálogo. " +
-      "Comprueba que el backend esté ejecutándose.";
-    contenedorProductos.replaceChildren();
+    estado.textContent = "No fue posible cargar el catálogo.";
+    estado.classList.remove("estado--solo-lectores");
+    contenedorProductos.removeAttribute("aria-busy");
+    contenedorProductos.replaceChildren(crearEstadoCatalogo(
+      "No pudimos cargar los productos",
+      "Revisa tu conexión e inténtalo nuevamente.",
+      "Reintentar",
+      cargarProductos,
+    ));
     notificar(mensajeDeError(error), "error");
   } finally {
     botonBuscar.disabled = false;

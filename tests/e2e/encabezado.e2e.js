@@ -7,21 +7,35 @@ const productos = [{
   categoria_nombre: "Ropa",
   nombre: "Chaqueta Noir",
   descripcion: "Edición esencial de ZonaShop.",
-  imagen: null,
+  imagen: "/favicon.svg",
   precio: "189900.00",
   existencias: 4,
   agotado: false,
 }];
 
 async function simularApi(page) {
+  let falloPendiente = true;
   await page.route(/^http:\/\/(localhost|127\.0\.0\.1):8000\/api\//, async (route) => {
-    const ruta = new URL(route.request().url()).pathname;
+    const url = new URL(route.request().url());
+    const ruta = url.pathname;
     if (ruta === "/api/auth/me/") {
       await route.fulfill({ json: { autenticado: false, usuario: null } });
     } else if (ruta === "/api/categorias/") {
       await route.fulfill({ json: categorias });
     } else if (ruta === "/api/productos/") {
-      await route.fulfill({ json: productos });
+      const busqueda = url.searchParams.get("buscar");
+      if (busqueda === "sinresultados") {
+        await route.fulfill({ json: [] });
+      } else if (busqueda === "contallas") {
+        await route.fulfill({
+          json: [{ ...productos[0], tallas: [{ talla: "M", stock: 2 }] }],
+        });
+      } else if (busqueda === "fallar" && falloPendiente) {
+        falloPendiente = false;
+        await route.fulfill({ status: 503, json: { detail: "Servicio no disponible" } });
+      } else {
+        await route.fulfill({ json: productos });
+      }
     } else {
       await route.fulfill({ status: 404, json: { detail: "No encontrado" } });
     }
@@ -38,6 +52,16 @@ test("el header móvil, menú y filtros funcionan a 375px", async ({ page }) => 
   await expect(header).toBeVisible();
   await expect(header).toHaveCSS("height", "60px");
   await expect(page.locator("#estado")).toHaveText("1 producto(s) encontrado(s).");
+
+  const columnasProductos = await page.locator("#productos").evaluate(
+    (elemento) => getComputedStyle(elemento).gridTemplateColumns.split(" ").length,
+  );
+  expect(columnasProductos).toBe(2);
+
+  const imagenProducto = page.locator(".producto__visual img");
+  await expect(imagenProducto).toHaveAttribute("loading", "lazy");
+  await expect(imagenProducto).toHaveAttribute("width", "440");
+  await expect(imagenProducto).toHaveAttribute("height", "550");
 
   const desborda = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
@@ -77,9 +101,38 @@ test("el header móvil, menú y filtros funcionan a 375px", async ({ page }) => 
   await expect(page.getByRole("dialog", { name: "Iniciar sesión" })).toBeVisible();
 });
 
+test("el catálogo ofrece recuperación para estados vacío y de error", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator("#boton-filtros-header").click();
+  await page.locator("#busqueda").fill("sinresultados");
+  await page.getByRole("button", { name: "Buscar", exact: true }).click();
+  await expect(page.getByText("No encontramos productos con esos filtros", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Limpiar filtros" }).last().click();
+  await expect(page.getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
+
+  await page.locator("#boton-filtros-header").click();
+  await page.locator("#busqueda").fill("fallar");
+  await page.getByRole("button", { name: "Buscar", exact: true }).click();
+  await expect(page.getByText("No pudimos cargar los productos", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Reintentar" }).click();
+  await expect(page.getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
+
+  await page.locator("#boton-filtros-header").click();
+  await page.locator("#busqueda").fill("contallas");
+  await page.getByRole("button", { name: "Buscar", exact: true }).click();
+  await page.getByRole("button", { name: "Agregar Chaqueta Noir" }).click();
+  await expect(page.locator("#modal-detalle-producto")).toBeVisible();
+  await expect(page.locator("#cantidad-carrito")).toHaveText("0");
+});
+
 test("los filtros forman una fila y no desbordan en escritorio", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
+  const columnasProductos = await page.locator("#productos").evaluate(
+    (elemento) => getComputedStyle(elemento).gridTemplateColumns.split(" ").length,
+  );
+  expect(columnasProductos).toBe(4);
   await page.locator("#boton-filtros-header").click();
 
   const columnas = await page.locator("#formulario-filtros").evaluate(
