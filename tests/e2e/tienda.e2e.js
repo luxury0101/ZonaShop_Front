@@ -120,6 +120,47 @@ test("el hero elige la imagen correcta y respeta movimiento reducido", async ({ 
   await expect(page.locator(".presentacion__monograma-texto")).toHaveCSS("stroke-dashoffset", "0px");
 });
 
+test("la cabecera difumina el hero y los títulos mantienen un ritmo legible", async ({ page }) => {
+  for (const [ancho, alto] of [
+    [375, 812],
+    [768, 900],
+    [1280, 800],
+  ]) {
+    await page.setViewportSize({ width: ancho, height: alto });
+    await page.goto("/");
+
+    const medidas = await page.evaluate(() => {
+      const header = document.querySelector(".encabezado");
+      const hero = document.querySelector(".presentacion");
+      const titulo = document.querySelector(".presentacion h1");
+      const acciones = document.querySelector(".encabezado .acciones-header");
+      const headerStyle = getComputedStyle(header);
+      const tituloStyle = getComputedStyle(titulo);
+      const accionesStyle = getComputedStyle(acciones);
+
+      return {
+        blur: headerStyle.backdropFilter || headerStyle.webkitBackdropFilter,
+        fondo: headerStyle.backgroundColor,
+        heroTop: hero.getBoundingClientRect().top,
+        altoAcciones: acciones.getBoundingClientRect().height,
+        direccionAcciones: accionesStyle.flexDirection,
+        proporcionInterlineado:
+          Number.parseFloat(tituloStyle.lineHeight) / Number.parseFloat(tituloStyle.fontSize),
+        tieneOverflow:
+          document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      };
+    });
+
+    expect(medidas.blur).toContain("blur(");
+    expect(medidas.fondo).toMatch(/rgba\([^)]*,\s*0\.[0-9]+\)/);
+    expect(Math.abs(medidas.heroTop)).toBeLessThanOrEqual(1);
+    expect(medidas.altoAcciones).toBeLessThanOrEqual(60);
+    expect(medidas.direccionAcciones).toBe("row");
+    expect(medidas.proporcionInterlineado).toBeGreaterThanOrEqual(0.97);
+    expect(medidas.tieneOverflow).toBe(false);
+  }
+});
+
 test("carga el catálogo y permite agregar un producto al carrito", async ({ page }) => {
   await page.goto("/");
 

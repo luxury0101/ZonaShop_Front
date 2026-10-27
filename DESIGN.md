@@ -19,14 +19,14 @@ typography:
     fontFamily: "Bodoni Moda, Bodoni MT, Didot, serif"
     fontSize: "clamp(4rem, 7vw, 6rem)"
     fontWeight: 400
-    lineHeight: 0.92
-    letterSpacing: "-0.04em"
+    lineHeight: 0.98
+    letterSpacing: "-0.025em"
   headline:
     fontFamily: "Bodoni Moda, Bodoni MT, Didot, serif"
     fontSize: "clamp(3rem, 6vw, 6rem)"
     fontWeight: 400
-    lineHeight: 0.9
-    letterSpacing: "-0.05em"
+    lineHeight: 0.98
+    letterSpacing: "-0.025em"
   title:
     fontFamily: "Segoe UI, Helvetica, Arial, sans-serif"
     fontSize: "0.76rem"
@@ -181,11 +181,13 @@ La paleta es casi monocromática: el marfil da la voz, la plata organiza la jera
 
 ## Layout
 
-El sistema usa un contenedor fluido de hasta 1440px con 1.5rem de margen lateral por defecto y secciones verticales amplias (`spacing.section`). La tienda pública reserva 60px para el encabezado fijo. Las composiciones editoriales pueden ser asimétricas en pantallas grandes, pero se convierten en una sola columna antes de que fotografía, copy o acciones pierdan legibilidad.
+El sistema usa un contenedor fluido de hasta 1440px con 1.5rem de margen lateral por defecto y secciones verticales amplias (`spacing.section`). La tienda pública reserva 60px para el encabezado fijo; en el hero, la fotografía continúa por debajo de una barra translúcida con desenfoque contextual. Las composiciones editoriales pueden ser asimétricas en pantallas grandes, pero se convierten en una sola columna antes de que fotografía, copy o acciones pierdan legibilidad.
 
 El catálogo parte de una retícula flexible de hasta cuatro columnas, conserva un gap de un píxel para que los filetes formen la estructura y pasa a dos columnas en móvil. Los controles nunca deben crear desplazamiento horizontal desde 375px; las imágenes de producto mantienen proporción 4:5 y recorte `cover`.
 
 **The Product Rhythm Rule.** El espacio amplio se reserva para transiciones entre historias; dentro de compra y administración prevalecen retículas compactas, alineación rigurosa y targets cómodos.
+
+**The Clear Display Rule.** Los titulares serif conservan un interlineado mínimo de `0.98` y tracking de `-0.025em`: compactos, pero sin cruces entre ascendentes, descendentes o líneas consecutivas.
 
 ## Elevation & Depth
 

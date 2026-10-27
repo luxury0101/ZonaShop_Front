@@ -2861,8 +2861,9 @@ h2,
   font-family: var(--zs-display);
   font-size: clamp(3rem, 6vw, 6rem);
   font-weight: 400;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  text-wrap: balance;
 }
 
 .filtros {
@@ -4235,8 +4236,8 @@ dialog::backdrop {
   font-family: var(--zs-display);
   font-size: clamp(3.4rem, 8vw, 6rem);
   font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 0.94;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
@@ -4840,13 +4841,16 @@ body:not(.ruta-admin) > main {
   left: 0;
   height: 60px;
   min-height: 60px;
-  background: rgba(7, 8, 10, 0.97);
-  backdrop-filter: blur(16px);
+  background: rgba(7, 8, 10, 0.58);
+  border-bottom-color: rgba(244, 244, 241, 0.14);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+  -webkit-backdrop-filter: blur(20px) saturate(135%);
+  backdrop-filter: blur(20px) saturate(135%);
 }
 
 .encabezado__contenido {
   display: grid;
-  grid-template-columns: minmax(132px, 1fr) auto minmax(132px, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   width: 100%;
   height: 60px;
@@ -4918,9 +4922,15 @@ body:not(.ruta-admin) > main {
 .encabezado .acciones-header {
   display: flex;
   grid-column: 3;
+  flex-direction: row;
   justify-self: end;
   gap: 0;
   align-items: center;
+  width: auto;
+  padding: 0;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .encabezado .boton-carrito {
@@ -5516,7 +5526,9 @@ body:not(.ruta-admin) > main {
 /* Hero editorial con fotografía estática ---------------------------------- */
 
 .presentacion {
-  min-height: calc(100svh - 60px);
+  min-height: 100svh;
+  margin-top: -60px;
+  padding-top: 60px;
   background: var(--zs-ink);
 }
 
@@ -5596,11 +5608,12 @@ body:not(.ruta-admin) > main {
 }
 
 .presentacion h1 {
-  max-width: 650px;
+  max-width: 10.5ch;
   margin-bottom: 1.5rem;
   font-size: clamp(4rem, 7vw, 6rem);
-  letter-spacing: -0.04em;
-  line-height: 0.92;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  text-wrap: balance;
   text-shadow: 0 3px 24px rgba(0, 0, 0, 0.34);
 }
 
@@ -5698,7 +5711,7 @@ body:not(.ruta-admin) > main {
   .presentacion h1 {
     margin-bottom: 1rem;
     font-size: clamp(3.7rem, 10.5vw, 5rem);
-    line-height: 0.9;
+    line-height: 0.98;
   }
 
   .presentacion__contenido > p:not(.presentacion__etiqueta) {
@@ -5707,7 +5720,10 @@ body:not(.ruta-admin) > main {
 }
 
 @media (max-width: 620px) {
-  .presentacion,
+  .presentacion {
+    min-height: 100svh;
+  }
+
   .presentacion__rejilla {
     min-height: calc(100svh - 60px);
   }
@@ -5731,7 +5747,7 @@ body:not(.ruta-admin) > main {
   .presentacion h1 {
     margin-bottom: 1rem;
     font-size: clamp(3.35rem, 16vw, 4.8rem);
-    line-height: 0.9;
+    line-height: 0.98;
   }
 
   .presentacion__contenido > p:not(.presentacion__etiqueta) {
