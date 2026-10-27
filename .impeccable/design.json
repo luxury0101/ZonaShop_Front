@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-27T09:29:19.7540787-05:00",
+  "title": "Design System: ZonaShop — Atelier Nocturno",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta Absoluta",
+        "canonical": "#07080a",
+        "tonalRamp": ["oklch(15% 0.005 260)", "oklch(27% 0.005 260)", "oklch(39% 0.005 260)", "oklch(51% 0.005 260)", "oklch(63% 0.005 260)", "oklch(75% 0.005 260)", "oklch(87% 0.005 260)", "oklch(95% 0.005 260)"]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Tinta Suave",
+        "canonical": "#0d0f12",
+        "tonalRamp": ["oklch(15% 0.007 260)", "oklch(27% 0.007 260)", "oklch(39% 0.007 260)", "oklch(51% 0.007 260)", "oklch(63% 0.007 260)", "oklch(75% 0.007 260)", "oklch(87% 0.007 260)", "oklch(95% 0.007 260)"]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel Carbón",
+        "canonical": "#12151a",
+        "tonalRamp": ["oklch(15% 0.01 260)", "oklch(27% 0.01 260)", "oklch(39% 0.01 260)", "oklch(51% 0.01 260)", "oklch(63% 0.01 260)", "oklch(75% 0.01 260)", "oklch(87% 0.01 260)", "oklch(95% 0.01 260)"]
+      },
+      "panel-raised": {
+        "role": "neutral",
+        "displayName": "Panel Elevado",
+        "canonical": "#181b21",
+        "tonalRamp": ["oklch(15% 0.012 260)", "oklch(27% 0.012 260)", "oklch(39% 0.012 260)", "oklch(51% 0.012 260)", "oklch(63% 0.012 260)", "oklch(75% 0.012 260)", "oklch(87% 0.012 260)", "oklch(95% 0.012 260)"]
+      },
+      "ivory": {
+        "role": "primary",
+        "displayName": "Marfil de Galería",
+        "canonical": "#f4f4f1",
+        "tonalRamp": ["oklch(15% 0.004 95)", "oklch(27% 0.004 95)", "oklch(39% 0.004 95)", "oklch(51% 0.004 95)", "oklch(63% 0.004 95)", "oklch(75% 0.004 95)", "oklch(87% 0.004 95)", "oklch(95% 0.004 95)"]
+      },
+      "silver": {
+        "role": "secondary",
+        "displayName": "Plata Editorial",
+        "canonical": "#b8bec7",
+        "tonalRamp": ["oklch(15% 0.015 250)", "oklch(27% 0.015 250)", "oklch(39% 0.015 250)", "oklch(51% 0.015 250)", "oklch(63% 0.015 250)", "oklch(75% 0.015 250)", "oklch(87% 0.015 250)", "oklch(95% 0.015 250)"]
+      },
+      "silver-soft": {
+        "role": "secondary",
+        "displayName": "Plata Velada",
+        "canonical": "#898f98",
+        "tonalRamp": ["oklch(15% 0.014 250)", "oklch(27% 0.014 250)", "oklch(39% 0.014 250)", "oklch(51% 0.014 250)", "oklch(63% 0.014 250)", "oklch(75% 0.014 250)", "oklch(87% 0.014 250)", "oklch(95% 0.014 250)"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Línea Grafito",
+        "canonical": "#30343c",
+        "tonalRamp": ["oklch(15% 0.014 250)", "oklch(27% 0.014 250)", "oklch(39% 0.014 250)", "oklch(51% 0.014 250)", "oklch(63% 0.014 250)", "oklch(75% 0.014 250)", "oklch(87% 0.014 250)", "oklch(95% 0.014 250)"]
+      },
+      "line-bright": {
+        "role": "neutral",
+        "displayName": "Línea Plata",
+        "canonical": "#5a606a",
+        "tonalRamp": ["oklch(15% 0.016 250)", "oklch(27% 0.016 250)", "oklch(39% 0.016 250)", "oklch(51% 0.016 250)", "oklch(63% 0.016 250)", "oklch(75% 0.016 250)", "oklch(87% 0.016 250)", "oklch(95% 0.016 250)"]
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Verde Inventario",
+        "canonical": "#9bc8aa",
+        "tonalRamp": ["oklch(15% 0.05 155)", "oklch(27% 0.05 155)", "oklch(39% 0.05 155)", "oklch(51% 0.05 155)", "oklch(63% 0.05 155)", "oklch(75% 0.05 155)", "oklch(87% 0.05 155)", "oklch(95% 0.05 155)"]
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Rosa Alerta",
+        "canonical": "#e59a9a",
+        "tonalRamp": ["oklch(15% 0.09 25)", "oklch(27% 0.09 25)", "oklch(39% 0.09 25)", "oklch(51% 0.09 25)", "oklch(63% 0.09 25)", "oklch(75% 0.09 25)", "oklch(87% 0.09 25)", "oklch(95% 0.09 25)"]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Oro Aviso",
+        "canonical": "#dbc38a",
+        "tonalRamp": ["oklch(15% 0.08 90)", "oklch(27% 0.08 90)", "oklch(39% 0.08 90)", "oklch(51% 0.08 90)", "oklch(63% 0.08 90)", "oklch(75% 0.08 90)", "oklch(87% 0.08 90)", "oklch(95% 0.08 90)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Bodoni",
+        "purpose": "Titulares hero y momentos de marca de máxima escala."
+      },
+      "headline": {
+        "displayName": "Headline Bodoni",
+        "purpose": "Títulos de sección y pausas editoriales."
+      },
+      "title": {
+        "displayName": "Título de producto",
+        "purpose": "Nombres compactos que requieren escaneo rápido."
+      },
+      "body": {
+        "displayName": "Cuerpo UI",
+        "purpose": "Lectura funcional, descripción y contenido transaccional."
+      },
+      "label": {
+        "displayName": "Etiqueta editorial",
+        "purpose": "Controles y metadatos en mayúsculas con tracking amplio."
+      }
+    },
+    "shadows": [
+      {
+        "name": "overlay-deep",
+        "value": "0 32px 90px rgba(0, 0, 0, 0.52)",
+        "purpose": "Separar diálogos y overlays modales del lienzo oscuro."
+      },
+      {
+        "name": "drawer-side",
+        "value": "24px 0 70px rgba(0, 0, 0, 0.42)",
+        "purpose": "Marcar la superposición lateral del menú público."
+      },
+      {
+        "name": "panel-floating",
+        "value": "0 24px 60px rgba(0, 0, 0, 0.34)",
+        "purpose": "Elevar filtros y paneles anclados sobre el catálogo."
+      },
+      {
+        "name": "photo-copy",
+        "value": "0 3px 24px rgba(0, 0, 0, 0.34)",
+        "purpose": "Preservar la lectura de titulares sobre fotografía."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-editorial",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Easing compartido por entradas, desplazamientos y escalado de imagen."
+      },
+      {
+        "name": "state-fast",
+        "value": "220ms ease",
+        "purpose": "Hover y foco de controles."
+      },
+      {
+        "name": "state-standard",
+        "value": "260ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Inversión y pequeño desplazamiento de botones."
+      },
+      {
+        "name": "hero-monogram-draw",
+        "value": "1.8s cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Dibujar el monograma solo en la primera vista de la sesión."
+      },
+      {
+        "name": "hero-copy-reveal",
+        "value": "700ms 1.8s cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Revelar el copy después del monograma; se elimina con prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact",
+        "value": "620px"
+      },
+      {
+        "name": "hero-stack",
+        "value": "899px"
+      },
+      {
+        "name": "desktop-controls",
+        "value": "900px"
+      },
+      {
+        "name": "wide-layout",
+        "value": "1120px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón primario",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción de mayor prioridad con inversión marfil sobre tinta.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">VER PRODUCTOS</button>",
+      "css": ".ds-btn-primary { min-height: 48px; padding: .75rem 1rem; color: var(--zs-ink); background: var(--zs-white); border: 1px solid var(--zs-white); border-radius: 0; font-family: var(--zs-ui); font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: color 260ms ease, background 260ms ease, transform 260ms var(--zs-ease); } .ds-btn-primary:hover { color: var(--zs-white); background: transparent; transform: translateY(-2px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--zs-white); outline-offset: 4px; } .ds-btn-primary:active { transform: translateY(0); }"
+    },
+    {
+      "name": "Botón secundario",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Acción de apoyo transparente con contorno plateado.",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">LIMPIAR FILTROS</button>",
+      "css": ".ds-btn-secondary { min-height: 48px; padding: .75rem 1rem; color: var(--zs-white); background: transparent; border: 1px solid var(--zs-line-bright); border-radius: 0; font-family: var(--zs-ui); font-size: .7rem; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: color 220ms ease, background 220ms ease, border-color 220ms ease, transform 220ms var(--zs-ease); } .ds-btn-secondary:hover { color: var(--zs-ink); background: var(--zs-silver); border-color: var(--zs-silver); transform: translateY(-2px); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--zs-white); outline-offset: 4px; } .ds-btn-secondary:active { transform: translateY(0); }"
+    },
+    {
+      "name": "Campo de texto",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo oscuro recto con foco de doble filete marfil.",
+      "html": "<label class=\"ds-field\">BUSCAR PRODUCTO<input class=\"ds-input\" type=\"search\" placeholder=\"Ej. camiseta\"></label>",
+      "css": ".ds-field { display: grid; gap: .55rem; color: var(--zs-silver); font-family: var(--zs-ui); font-size: .68rem; font-weight: 650; letter-spacing: .13em; text-transform: uppercase; } .ds-input { width: 100%; min-height: 48px; padding: .78rem .85rem; color: var(--zs-white); background: var(--zs-panel); border: 1px solid var(--zs-line-bright); border-radius: 0; caret-color: var(--zs-white); font-family: var(--zs-ui); transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease; } .ds-input::placeholder { color: var(--zs-silver-soft); } .ds-input:hover { border-color: var(--zs-silver); } .ds-input:focus-visible { background: var(--zs-panel-raised); border-color: var(--zs-white); outline: 0; box-shadow: 0 0 0 1px var(--zs-white); }"
+    },
+    {
+      "name": "Botón de icono",
+      "kind": "button",
+      "refersTo": "icon-button",
+      "description": "Target cuadrado de 44px con icono lineal e inversión en hover.",
+      "html": "<button class=\"ds-icon-button\" type=\"button\" aria-label=\"Abrir búsqueda\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><circle cx=\"11\" cy=\"11\" r=\"6.5\"/><path d=\"m16 16 4 4\"/></svg></button>",
+      "css": ".ds-icon-button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--zs-white); background: transparent; border: 1px solid transparent; border-radius: 0; cursor: pointer; transition: color 220ms ease, background 220ms ease, border-color 220ms ease; } .ds-icon-button svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; } .ds-icon-button:hover { color: var(--zs-ink); background: var(--zs-white); border-color: var(--zs-white); } .ds-icon-button:focus-visible { outline: 2px solid var(--zs-white); outline-offset: 4px; } .ds-icon-button:active { color: var(--zs-ink); background: var(--zs-silver); }"
+    },
+    {
+      "name": "Enlace de navegación editorial",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Enlace serif grande, recto y separado por filetes para el menú lateral.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navegación de muestra\"><a class=\"ds-nav-link\" href=\"#\">Productos</a></nav>",
+      "css": ".ds-nav { width: min(84vw, 340px); background: var(--zs-panel); border-top: 1px solid var(--zs-line); } .ds-nav-link { display: flex; align-items: center; min-height: 58px; padding: 0; color: var(--zs-white); border-bottom: 1px solid var(--zs-line); font-family: var(--zs-display); font-size: 1.45rem; letter-spacing: -.02em; text-decoration: none; transition: color 220ms ease, padding-left 260ms var(--zs-ease); } .ds-nav-link:hover { padding-left: .45rem; color: var(--zs-silver); } .ds-nav-link:focus-visible { outline: 2px solid var(--zs-white); outline-offset: -4px; } .ds-nav-link:active { color: var(--zs-white); }"
+    },
+    {
+      "name": "Tarjeta de producto",
+      "kind": "card",
+      "refersTo": "product-card",
+      "description": "Tarjeta compacta 4:5 que deja a la fotografía, el nombre y el precio llevar la jerarquía.",
+      "html": "<article class=\"ds-product\"><button class=\"ds-product-visual\" type=\"button\" aria-label=\"Ver detalles de producto\">ZS</button><div class=\"ds-product-info\"><h3>CHAQUETA NOCTURNA</h3><p>$ 189.900</p></div></article>",
+      "css": ".ds-product { overflow: hidden; width: min(100%, 280px); padding: 0 0 1.4rem; color: var(--zs-white); background: var(--zs-ink-soft); border: 1px solid var(--zs-line); border-radius: 0; transition: background 320ms ease, transform 400ms var(--zs-ease); } .ds-product:hover { background: var(--zs-panel); transform: translateY(-6px); } .ds-product-visual { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 5; margin: 0 0 1.05rem; color: var(--zs-silver); background: linear-gradient(45deg, transparent 49.5%, var(--zs-line) 50%, transparent 50.5%), var(--zs-panel-raised); border: 0; border-bottom: 1px solid var(--zs-line); border-radius: 0; font-family: var(--zs-display); font-size: 4rem; cursor: pointer; } .ds-product-visual:hover { color: var(--zs-white); } .ds-product-visual:focus-visible { outline: 2px solid var(--zs-white); outline-offset: -5px; } .ds-product-info { display: grid; gap: .3rem; padding-inline: 1rem; } .ds-product-info h3 { margin: 0; font-family: var(--zs-ui); font-size: .76rem; font-weight: 700; letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; } .ds-product-info p { margin: 0; color: var(--zs-silver); font-family: var(--zs-ui); font-size: .78rem; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Monograma hero",
+      "kind": "custom",
+      "refersTo": "hero-monogram",
+      "description": "Firma ZS outline que abre la experiencia editorial una sola vez por sesión.",
+      "html": "<div class=\"ds-monogram\" aria-hidden=\"true\"><svg viewBox=\"0 0 760 440\" focusable=\"false\"><text x=\"18\" y=\"352\">ZS</text></svg></div>",
+      "css": ".ds-monogram { width: min(100%, 760px); color: var(--zs-white); background: var(--zs-ink); } .ds-monogram svg { display: block; width: 100%; height: auto; overflow: visible; } .ds-monogram text { fill: transparent; stroke: rgba(244, 244, 241, .68); stroke-width: 1.15px; stroke-dasharray: 1350; stroke-dashoffset: 0; font-family: var(--zs-display); font-size: 390px; font-weight: 400; letter-spacing: -.12em; paint-order: stroke; transition: stroke 250ms ease; } .ds-monogram:hover text { stroke: var(--zs-white); } .ds-monogram:focus-visible { outline: 2px solid var(--zs-white); outline-offset: 4px; } @media (prefers-reduced-motion: reduce) { .ds-monogram text { animation: none; stroke-dashoffset: 0; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Atelier Nocturno",
+    "overview": "ZonaShop presenta la moda como una editorial nocturna: fondos profundos, fotografía decisiva, tipografía de alto contraste y una estructura silenciosa que deja respirar al producto. La sofisticación proviene de la proporción, el ritmo y la precisión, no de ornamentos añadidos.\n\nEl sistema combina una voz serif expresiva con una interfaz sans-serif contenida. Los controles son rectos, las divisiones son filetes plateados y el movimiento aparece solo para explicar estado, jerarquía o entrada; comprar siempre debe seguir siendo inmediato y legible en móvil y escritorio.",
+    "keyCharacteristics": [
+      "Oscuro, editorial y fotográfico.",
+      "Bodoni expresiva frente a una interfaz sans-serif sobria.",
+      "Controles rectos y superficies separadas por líneas de un píxel.",
+      "Marfil reservado para contenido y acciones de máxima prioridad.",
+      "Movimiento breve, orquestado y completamente prescindible."
+    ],
+    "rules": [
+      {
+        "name": "The One Ivory Voice Rule",
+        "body": "El marfil identifica la máxima prioridad; no se dispersa como adorno ni compite con múltiples acentos.",
+        "section": "colors"
+      },
+      {
+        "name": "The Silver Hairline Rule",
+        "body": "Las capas oscuras se separan con filetes de un píxel antes de recurrir a sombras.",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif Earns Scale Rule",
+        "body": "La serif aparece en marca y jerarquías editoriales; no se usa en controles densos ni texto utilitario.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Label Rule",
+        "body": "Las etiquetas comunican con tamaño contenido, mayúsculas y tracking amplio; nunca simulan un segundo titular.",
+        "section": "typography"
+      },
+      {
+        "name": "The Product Rhythm Rule",
+        "body": "El espacio amplio se reserva para transiciones entre historias; dentro de compra y administración prevalecen retículas compactas, alineación rigurosa y targets cómodos.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat by Default Rule",
+        "body": "Una superficie en reposo no recibe sombra; primero se resuelve con tono y línea, y solo se eleva cuando su comportamiento lo exige.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Rectilinear Control Rule",
+        "body": "Todo control principal conserva esquinas rectas; redondear una tarjeta o un botón altera el carácter de la marca.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Motion Has Memory Rule",
+        "body": "Una entrada expresiva sucede una vez por sesión; el sistema no repite movimiento ceremonial en cada visita de página.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do dejar que la fotografía y el producto ocupen el primer plano.",
+      "Do usar Bodoni para firma, titulares y pausas editoriales, y sans-serif para comprar y operar.",
+      "Do separar superficies oscuras con tono y filetes antes de añadir sombra.",
+      "Do mantener foco visible, targets cómodos y una experiencia completa sin animación.",
+      "Do usar fotografías estáticas optimizadas y marcar recursos provisionales para reemplazo."
+    ],
+    "donts": [
+      "Don't introducir colores de acento saturados que compitan con la paleta marfil y plata.",
+      "Don't redondear controles, tarjetas o diálogos; la geometría recta es parte de la identidad.",
+      "Don't convertir cada sección en un espectáculo animado ni repetir la entrada del hero dentro de la misma sesión.",
+      "Don't usar video de fondo, movimiento automático continuo o decoración abstracta donde la fotografía puede contar la historia.",
+      "Don't sacrificar claridad de compra, contraste o adaptación móvil por una composición editorial."
+    ]
+  }
+}

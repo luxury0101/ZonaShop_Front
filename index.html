@@ -122,22 +122,29 @@
     </section>
 
     <main>
-      <section class="presentacion">
+      <section class="presentacion" aria-labelledby="titulo-principal">
+        <!-- TODO: reemplazar por fotografía editorial propia de ZonaShop. -->
+        <picture class="presentacion__media">
+          <source media="(max-width: 899px)" srcset="/images/hero-mobile.webp">
+          <img
+            src="/images/hero.webp"
+            alt="Modelo con atuendo negro en una fotografía editorial de moda"
+            width="1920"
+            height="1200"
+            decoding="async"
+            fetchpriority="high"
+          >
+        </picture>
         <div class="contenedor presentacion__rejilla">
-          <div class="presentacion__contenido">
-            <p class="presentacion__etiqueta">Catálogo en línea</p>
-            <h1>Encuentra tu próximo favorito</h1>
-            <p>Consulta nuestros productos, precios y disponibilidad actualizada.</p>
-            <a class="presentacion__boton" href="#productos-catalogo">Ver productos</a>
-          </div>
-          <div class="presentacion__ilustracion" aria-hidden="true">
-            <svg viewBox="0 0 420 260" role="img">
-              <path d="M82 76h256l-20 142H102L82 76Z" fill="#fff" opacity=".96"/>
-              <path d="M145 92c0-42 24-65 65-65s65 23 65 65" fill="none" stroke="#ffd5c7" stroke-width="18" stroke-linecap="round"/>
-              <circle cx="156" cy="144" r="28" fill="#e75d32"/>
-              <rect x="204" y="119" width="82" height="18" rx="9" fill="#286da1"/>
-              <rect x="204" y="153" width="62" height="14" rx="7" fill="#9fbdd3"/>
+          <div class="presentacion__monograma" aria-hidden="true">
+            <svg viewBox="0 0 760 440" focusable="false">
+              <text class="presentacion__monograma-texto" x="18" y="352">ZS</text>
             </svg>
+          </div>
+          <div class="presentacion__contenido">
+            <h1 id="titulo-principal">Encuentra tu próximo favorito</h1>
+            <p>Descubre prendas seleccionadas para vestir tu estilo con intención.</p>
+            <a class="presentacion__boton" href="#productos-catalogo">Ver productos</a>
           </div>
         </div>
       </section>

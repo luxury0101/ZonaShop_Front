@@ -67,6 +67,59 @@ test.beforeEach(async ({ page }) => {
   await simularApi(page);
 });
 
+test("el hero usa imágenes responsive y anima una sola vez por sesión", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+
+  const hero = page.locator(".presentacion");
+  await expect(hero).toHaveClass(/presentacion--animar/);
+  await expect(page.locator(".presentacion__media img")).toHaveAttribute(
+    "src",
+    "/images/hero.webp",
+  );
+  await expect(page.locator(".presentacion__media source")).toHaveAttribute(
+    "srcset",
+    "/images/hero-mobile.webp",
+  );
+  await expect(page.locator(".presentacion__media source")).toHaveAttribute(
+    "media",
+    "(max-width: 899px)",
+  );
+  await expect(page.getByText("01 / COLECCIÓN", { exact: true })).toHaveCount(0);
+  expect(await page.evaluate(
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  )).toBe(false);
+
+  await page.reload();
+  await expect(hero).not.toHaveClass(/presentacion--animar/);
+});
+
+test("el hero elige la imagen correcta y respeta movimiento reducido", async ({ page }) => {
+  for (const [ancho, alto, archivoEsperado] of [
+    [375, 812, "/images/hero-mobile.webp"],
+    [768, 900, "/images/hero-mobile.webp"],
+    [1280, 800, "/images/hero.webp"],
+  ]) {
+    await page.setViewportSize({ width: ancho, height: alto });
+    await page.goto("/");
+    const imagen = page.locator(".presentacion__media img");
+    await expect.poll(
+      () => imagen.evaluate((elemento) => new URL(elemento.currentSrc).pathname),
+    ).toBe(archivoEsperado);
+    expect(await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    )).toBe(false);
+  }
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.evaluate(() => sessionStorage.removeItem("zonashop:hero-animado"));
+  await page.reload();
+  await expect(page.locator(".presentacion")).toHaveClass(/presentacion--animar/);
+  await expect(page.locator(".presentacion__contenido")).toHaveCSS("animation-name", "none");
+  await expect(page.locator(".presentacion__contenido")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".presentacion__monograma-texto")).toHaveCSS("stroke-dashoffset", "0px");
+});
+
 test("carga el catálogo y permite agregar un producto al carrito", async ({ page }) => {
   await page.goto("/");
 

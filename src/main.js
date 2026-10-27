@@ -59,6 +59,24 @@ const contenedorProductos = document.querySelector(
 
 const estado = document.querySelector("#estado");
 const botonBuscar = formulario.querySelector('button[type="submit"]');
+const hero = document.querySelector(".presentacion");
+
+
+function iniciarHero() {
+  if (!hero) return;
+
+  const claveAnimacion = "zonashop:hero-animado";
+  let primeraVista = true;
+
+  try {
+    primeraVista = sessionStorage.getItem(claveAnimacion) !== "si";
+    sessionStorage.setItem(claveAnimacion, "si");
+  } catch {
+    primeraVista = true;
+  }
+
+  hero.classList.toggle("presentacion--animar", primeraVista);
+}
 
 
 function formatearPrecio(valor) {
@@ -323,6 +341,7 @@ async function iniciarAplicacion() {
     return;
   }
 
+  iniciarHero();
   iniciarEncabezado();
   iniciarDetalleProducto();
   iniciarPedidos();
