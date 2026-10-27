@@ -12,45 +12,103 @@
 
   <body>
     <header class="encabezado">
-      <div class="contenedor encabezado__contenido">
-        <a class="marca" href="/">ZonaShop</a>
+      <div class="encabezado__contenido">
         <button
           id="boton-menu"
-          class="boton-menu"
+          class="boton-icono boton-menu"
           type="button"
           aria-expanded="false"
-          aria-controls="acciones-header"
+          aria-controls="menu-lateral"
           aria-label="Abrir menú"
-        >☰</button>
-        <nav id="acciones-header" class="acciones-header" aria-label="Cuenta y carrito">
-          <div id="zona-invitado" class="acciones-sesion">
-            <button id="boton-abrir-login" class="boton-enlace" type="button">
-              Iniciar sesión
-            </button>
-            <button id="boton-abrir-registro" class="boton-principal-corto" type="button">
-              Registrarse
-            </button>
-          </div>
-          <details id="menu-usuario" class="menu-usuario" hidden>
-            <summary id="nombre-usuario">Mi cuenta</summary>
-            <div class="menu-usuario__opciones">
-              <button id="boton-mis-pedidos" type="button">Mis pedidos</button>
-              <button id="boton-mi-perfil" type="button">Mi perfil</button>
-              <a id="enlace-administracion" href="/admin" hidden>Panel de administración</a>
-              <button id="boton-cerrar-sesion" type="button">Cerrar sesión</button>
-            </div>
-          </details>
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+
+        <a class="marca" href="/" aria-label="ZonaShop, ir al inicio">ZonaShop</a>
+
+        <nav id="acciones-header" class="acciones-header" aria-label="Acciones rápidas">
+          <button
+            id="boton-filtros-header"
+            class="boton-icono"
+            type="button"
+            aria-expanded="false"
+            aria-controls="panel-filtros-header"
+            aria-label="Abrir búsqueda y filtros"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
+          </button>
+          <button id="boton-cuenta-header" class="boton-icono" type="button" aria-label="Iniciar sesión">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5" /><path d="M5 20c.8-4 3.1-6 7-6s6.2 2 7 6" /></svg>
+          </button>
           <button
             id="boton-abrir-carrito"
-            class="boton-carrito"
+            class="boton-icono boton-carrito"
             type="button"
             aria-haspopup="dialog"
+            aria-label="Abrir carrito"
           >
-            Carrito <span id="cantidad-carrito">0</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 4h2l1.8 10.2a2 2 0 0 0 2 1.7h7.9a2 2 0 0 0 1.9-1.5L20 8H6" /><circle cx="9.5" cy="20" r="1" /><circle cx="17" cy="20" r="1" /></svg>
+            <span id="cantidad-carrito" aria-label="0 productos en el carrito">0</span>
           </button>
         </nav>
       </div>
     </header>
+
+    <div id="overlay-menu" class="overlay-menu" aria-hidden="true"></div>
+    <aside id="menu-lateral" class="menu-lateral" aria-label="Menú principal" aria-hidden="true" inert>
+      <div class="menu-lateral__cabecera">
+        <a class="menu-lateral__marca" href="/">ZonaShop</a>
+        <button id="boton-cerrar-menu" class="boton-icono" type="button" aria-label="Cerrar menú">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19" /></svg>
+        </button>
+      </div>
+      <nav class="menu-lateral__navegacion" aria-label="Navegación principal">
+        <a href="/">Inicio</a>
+        <a href="#productos-catalogo">Productos</a>
+        <a href="#productos-catalogo" data-abrir-categorias>Categorías</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <div class="menu-lateral__cuenta">
+        <div id="zona-invitado" class="acciones-sesion">
+          <button id="boton-abrir-login" class="boton-enlace" type="button">Iniciar sesión</button>
+          <button id="boton-abrir-registro" class="boton-principal-corto" type="button">Registrarse</button>
+        </div>
+        <details id="menu-usuario" class="menu-usuario" hidden>
+          <summary id="nombre-usuario">Mi cuenta</summary>
+          <div class="menu-usuario__opciones">
+            <button id="boton-mis-pedidos" type="button">Mis pedidos</button>
+            <button id="boton-mi-perfil" type="button">Mi perfil</button>
+            <a id="enlace-administracion" href="/admin" hidden>Panel de administración</a>
+            <button id="boton-cerrar-sesion" type="button">Cerrar sesión</button>
+          </div>
+        </details>
+      </div>
+    </aside>
+
+    <section id="panel-filtros-header" class="panel-filtros-header" aria-label="Búsqueda y filtros" hidden>
+      <form id="formulario-filtros" class="filtros contenedor">
+        <label>
+          Buscar producto
+          <input id="busqueda" type="search" placeholder="Ej. camiseta" />
+        </label>
+        <label>
+          Categoría
+          <select id="categoria">
+            <option value="">Todas las categorías</option>
+          </select>
+        </label>
+        <label>
+          Ordenar
+          <select id="orden">
+            <option value="">Más recientes</option>
+            <option value="precio">Precio: menor a mayor</option>
+            <option value="-precio">Precio: mayor a menor</option>
+          </select>
+        </label>
+        <button type="submit">Buscar</button>
+        <button id="boton-limpiar-filtros" class="boton-limpiar" type="button">Limpiar filtros</button>
+      </form>
+    </section>
 
     <main>
       <section class="presentacion">
@@ -143,35 +201,6 @@
             <h2 id="titulo-catalogo">Productos</h2>
           </div>
 
-          <form id="formulario-filtros" class="filtros">
-            <label>
-              Buscar producto
-
-              <input id="busqueda" type="search" placeholder="Ej. camiseta" />
-            </label>
-
-            <label>
-              Categoría
-
-              <select id="categoria">
-                <option value="">Todas las categorías</option>
-              </select>
-            </label>
-
-            <label>
-              Ordenar
-              <select id="orden">
-                <option value="">Más recientes</option>
-                <option value="precio">Precio: menor a mayor</option>
-                <option value="-precio">Precio: mayor a menor</option>
-              </select>
-            </label>
-
-            <button type="submit">Buscar</button>
-            <button id="boton-limpiar-filtros" class="boton-limpiar" type="button">
-              Limpiar filtros
-            </button>
-          </form>
         </div>
 
         <p id="estado" class="estado" role="status">Cargando catálogo...</p>
@@ -469,7 +498,7 @@
 
     <div id="contenedor-notificaciones" class="notificaciones" aria-live="polite" aria-atomic="false"></div>
 
-    <footer class="pie-pagina">
+    <footer id="contacto" class="pie-pagina">
       <div class="contenedor pie-pagina__rejilla">
         <section><h2>ZonaShop</h2><p>Tu catálogo en línea, fácil y seguro.</p></section>
         <section><h2>Ayuda</h2><a href="mailto:contacto@zonashop.co">Contacto</a><a href="#envios">Políticas de envío</a><a href="#devoluciones">Cambios y devoluciones</a></section>

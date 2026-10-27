@@ -12,8 +12,6 @@ let usuarioActual = null;
 
 function elementos() {
   return {
-    accionesHeader: document.querySelector("#acciones-header"),
-    botonMenu: document.querySelector("#boton-menu"),
     botonAbrirLogin: document.querySelector("#boton-abrir-login"),
     botonAbrirRegistro: document.querySelector("#boton-abrir-registro"),
     botonCancelarLogin: document.querySelector("#boton-cancelar-login"),
@@ -223,10 +221,6 @@ function registrarEventos() {
       nombre: evento.detail?.perfil?.nombre || usuarioActual.nombre,
       email: evento.detail?.perfil?.email || usuarioActual.email,
     });
-  });
-  ui.botonMenu?.addEventListener("click", () => {
-    const abierto = ui.accionesHeader.classList.toggle("acciones-header--abierto");
-    ui.botonMenu.setAttribute("aria-expanded", String(abierto));
   });
 }
 

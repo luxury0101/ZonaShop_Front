@@ -150,6 +150,10 @@ function actualizarResumen() {
   const total = obtenerValorTotalCentavos();
   if (elementos.cantidad) {
     elementos.cantidad.textContent = cantidad;
+    elementos.cantidad.setAttribute(
+      "aria-label",
+      `${cantidad} producto${cantidad === 1 ? "" : "s"} en el carrito`,
+    );
     if (cantidadAnterior !== String(cantidad)) animarContador();
   }
   if (elementos.subtotal) elementos.subtotal.textContent = formatearPrecio(total);

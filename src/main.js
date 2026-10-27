@@ -31,6 +31,7 @@ import { iniciarPedidos } from "./pedidos/pedidos.js";
 import { iniciarPerfil } from "./perfil/perfil.js";
 import { iniciarAdministracionPedidos } from "./admin/pedidos.js";
 import { iniciarNavegacionAdmin } from "./admin/navegacion.js";
+import { iniciarEncabezado } from "./ui/encabezado.js";
 
 
 const formulario = document.querySelector(
@@ -337,6 +338,7 @@ async function iniciarAplicacion() {
     return;
   }
 
+  iniciarEncabezado();
   iniciarDetalleProducto();
   iniciarPedidos();
   iniciarPerfil();

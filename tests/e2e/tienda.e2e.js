@@ -25,11 +25,12 @@ const productos = [
 ];
 
 async function simularApi(page) {
+  const origen = `http://127.0.0.1:${process.env.PLAYWRIGHT_PORT || "4173"}`;
   await page.route(/^http:\/\/(localhost|127\.0\.0\.1):8000\/api\//, async (route) => {
     const url = new URL(route.request().url());
     const headers = {
       "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Allow-Origin": "http://127.0.0.1:4173",
+      "Access-Control-Allow-Origin": origen,
     };
 
     if (url.pathname === "/api/auth/me/") {
@@ -77,7 +78,7 @@ test("carga el catálogo y permite agregar un producto al carrito", async ({ pag
   await page.getByRole("button", { name: "Agregar al carrito" }).click();
   await expect(page.locator("#cantidad-carrito")).toHaveText("1");
 
-  await page.getByRole("button", { name: /Carrito/ }).click();
+  await page.getByRole("button", { name: /abrir carrito/i }).click();
   await expect(page.getByRole("dialog", { name: "Carrito de compras" })).toBeVisible();
   await expect(page.locator("#total-carrito")).toContainText("189.900");
 });

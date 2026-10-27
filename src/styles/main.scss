@@ -4644,3 +4644,363 @@ dialog::backdrop {
   color: var(--zs-white);
   background: transparent;
 }
+
+/* Navegación pública y filtros en cabecera -------------------------------- */
+
+body:not(.ruta-admin) > main {
+  padding-top: 60px;
+}
+
+.encabezado {
+  position: fixed;
+  z-index: 100;
+  right: 0;
+  left: 0;
+  height: 60px;
+  min-height: 60px;
+  background: rgba(7, 8, 10, 0.97);
+  backdrop-filter: blur(16px);
+}
+
+.encabezado__contenido {
+  display: grid;
+  grid-template-columns: minmax(132px, 1fr) auto minmax(132px, 1fr);
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+  padding-inline: clamp(0.35rem, 2.4vw, 2rem);
+}
+
+.encabezado .marca {
+  grid-column: 2;
+  justify-self: center;
+  font-size: clamp(1.65rem, 2.2vw, 2rem);
+  white-space: nowrap;
+}
+
+.encabezado .marca::after {
+  right: 0;
+  left: 0;
+  width: auto;
+  transform: scaleX(0.22);
+  transform-origin: center;
+}
+
+.boton-icono {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  color: var(--zs-white);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    color 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease;
+}
+
+.boton-icono svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.boton-icono:hover,
+.boton-icono[aria-expanded="true"] {
+  color: var(--zs-ink);
+  background: var(--zs-white);
+  border-color: var(--zs-white);
+}
+
+.encabezado .boton-menu {
+  display: grid;
+  grid-column: 1;
+  justify-self: start;
+  padding: 0;
+  color: var(--zs-white);
+  background: transparent;
+  border-color: transparent;
+}
+
+.encabezado .acciones-header {
+  display: flex;
+  grid-column: 3;
+  justify-self: end;
+  gap: 0;
+  align-items: center;
+}
+
+.encabezado .boton-carrito {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: 0;
+  color: var(--zs-white);
+  background: transparent;
+  border-color: transparent;
+}
+
+.encabezado .boton-carrito:hover {
+  color: var(--zs-ink);
+  background: var(--zs-white);
+}
+
+.encabezado .boton-carrito #cantidad-carrito {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0 4px;
+  color: var(--zs-ink);
+  background: var(--zs-white);
+  border: 1px solid var(--zs-ink);
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  line-height: 1;
+}
+
+.overlay-menu {
+  position: fixed;
+  z-index: 110;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.68);
+  opacity: 1;
+  transition: opacity 320ms var(--zs-ease);
+}
+
+.overlay-menu[aria-hidden="true"] {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.menu-lateral {
+  position: fixed;
+  z-index: 120;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(84vw, 340px);
+  padding: 0 clamp(1.25rem, 5vw, 2rem) max(1.5rem, env(safe-area-inset-bottom));
+  color: var(--zs-white);
+  background: var(--zs-panel);
+  border-right: 1px solid var(--zs-line-bright);
+  box-shadow: 24px 0 70px rgba(0, 0, 0, 0.42);
+  transform: translateX(0);
+  transition: transform 420ms var(--zs-ease);
+}
+
+.menu-lateral[aria-hidden="true"] {
+  pointer-events: none;
+  transform: translateX(-105%);
+}
+
+.menu-lateral__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  border-bottom: 1px solid var(--zs-line);
+}
+
+.menu-lateral__marca {
+  font-family: var(--zs-display);
+  font-size: 1.9rem;
+  letter-spacing: -0.035em;
+  text-decoration: none;
+}
+
+.menu-lateral__navegacion {
+  align-self: center;
+  border-top: 1px solid var(--zs-line);
+}
+
+.menu-lateral__navegacion a {
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  color: var(--zs-white);
+  border-bottom: 1px solid var(--zs-line);
+  font-family: var(--zs-display);
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  transition:
+    color 220ms ease,
+    padding-left 260ms var(--zs-ease);
+}
+
+.menu-lateral__navegacion a:hover {
+  padding-left: 0.45rem;
+  color: var(--zs-silver);
+}
+
+.menu-lateral__cuenta {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--zs-line);
+}
+
+.menu-lateral .acciones-sesion {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.menu-lateral .boton-enlace,
+.menu-lateral .boton-principal-corto,
+.menu-lateral .menu-usuario summary {
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.menu-lateral .boton-enlace {
+  color: var(--zs-ink);
+  background: var(--zs-white);
+  border: 1px solid var(--zs-white);
+}
+
+.menu-lateral .boton-principal-corto {
+  color: var(--zs-white);
+  background: transparent;
+  border: 1px solid var(--zs-line-bright);
+}
+
+.menu-lateral .menu-usuario__opciones {
+  position: static;
+  min-width: 0;
+  margin-top: 0.75rem;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.menu-lateral .menu-usuario__opciones::before {
+  display: none;
+}
+
+.menu-publico-abierto {
+  overflow: hidden;
+}
+
+.panel-filtros-header {
+  position: fixed;
+  z-index: 90;
+  top: 60px;
+  right: 0;
+  left: 0;
+  overflow-y: auto;
+  max-height: calc(100dvh - 60px);
+  padding-block: 1.25rem;
+  color: var(--zs-white);
+  background: rgba(18, 21, 26, 0.99);
+  border-bottom: 1px solid var(--zs-line-bright);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+  animation: panel-filtros-entrada 320ms var(--zs-ease) both;
+}
+
+.panel-filtros-header[hidden] {
+  display: none;
+}
+
+.panel-filtros-header .filtros {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  align-items: end;
+}
+
+.panel-filtros-header .filtros label:first-child {
+  grid-column: auto;
+}
+
+.panel-filtros-header .filtros button {
+  width: 100%;
+}
+
+.catalogo__encabezado {
+  grid-template-columns: 1fr;
+}
+
+#productos-catalogo,
+#contacto {
+  scroll-margin-top: 76px;
+}
+
+.ruta-admin > .overlay-menu,
+.ruta-admin > .menu-lateral,
+.ruta-admin > .panel-filtros-header {
+  display: none;
+}
+
+.ruta-admin > main {
+  padding-top: 0;
+}
+
+@keyframes panel-filtros-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 900px) {
+  .panel-filtros-header {
+    padding-block: 1rem;
+  }
+
+  .panel-filtros-header .filtros {
+    grid-template-columns: minmax(210px, 1.45fr) minmax(170px, 1fr) minmax(190px, 1fr) auto auto;
+  }
+
+  .panel-filtros-header .filtros button {
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .encabezado__contenido {
+    grid-template-columns: 44px minmax(104px, 1fr) 132px;
+    padding-inline: 0.25rem;
+  }
+
+  .encabezado .marca {
+    font-size: 1.55rem;
+  }
+
+  .panel-filtros-header {
+    padding-block: 1rem 1.25rem;
+  }
+}
