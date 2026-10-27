@@ -7,6 +7,7 @@ import {
 } from "../api/catalogo.js";
 import { mensajeDeError, notificar } from "../ui/notificaciones.js";
 
+const TALLAS = ["XS", "S", "M", "L", "XL"];
 
 const elementos = {
   formulario: document.querySelector(
@@ -30,6 +31,8 @@ const elementos = {
   existencias: document.querySelector(
     "#producto-existencias",
   ),
+  usaTallas: document.querySelector("#producto-usa-tallas"),
+  grupoTallas: document.querySelector("#producto-tallas"),
   imagen: document.querySelector(
     "#producto-imagen",
   ),
@@ -64,8 +67,31 @@ const elementos = {
     ),
 };
 
+elementos.camposTallas = Array.from(
+  document.querySelectorAll("#producto-tallas [data-talla]"),
+);
+
 
 let productoPendienteDeEliminar = null;
+
+
+function actualizarTotalTallas() {
+  if (!elementos.usaTallas?.checked) return;
+  const total = elementos.camposTallas.reduce(
+    (suma, campo) => suma + (Number(campo.value) || 0),
+    0,
+  );
+  elementos.existencias.value = String(total);
+}
+
+
+function mostrarConfiguracionTallas(usaTallas) {
+  elementos.usaTallas.checked = usaTallas;
+  elementos.grupoTallas.hidden = !usaTallas;
+  elementos.existencias.disabled = usaTallas;
+  elementos.existencias.required = !usaTallas;
+  if (usaTallas) actualizarTotalTallas();
+}
 
 
 function formatearPrecio(valor) {
@@ -106,6 +132,10 @@ function limpiarFormulario() {
   elementos.vistaPrevia.removeAttribute("src");
 
   elementos.botonCancelar.hidden = true;
+  elementos.camposTallas.forEach((campo) => {
+    campo.value = "0";
+  });
+  mostrarConfiguracionTallas(false);
 }
 
 
@@ -135,6 +165,12 @@ function seleccionarProducto(producto) {
   elementos.precio.value = producto.precio;
   elementos.existencias.value =
     producto.existencias;
+  const tallas = Array.isArray(producto.tallas) ? producto.tallas : [];
+  elementos.camposTallas.forEach((campo) => {
+    const registro = tallas.find((item) => item.talla === campo.dataset.talla);
+    campo.value = String(registro?.stock ?? 0);
+  });
+  mostrarConfiguracionTallas(tallas.length > 0);
 
   if (producto.imagen) {
     elementos.vistaPrevia.src = producto.imagen;
@@ -304,6 +340,15 @@ async function manejarFormulario(evento) {
   const existencias = Number(
     elementos.existencias.value,
   );
+  const usaTallas = elementos.usaTallas.checked;
+  const tallas = usaTallas
+    ? TALLAS.map((talla) => ({
+      talla,
+      stock: Number(
+        elementos.camposTallas.find((campo) => campo.dataset.talla === talla)?.value,
+      ),
+    }))
+    : [];
 
   if (!categoria || !nombre) {
     mostrarMensaje(
@@ -321,10 +366,15 @@ async function manejarFormulario(evento) {
     return;
   }
 
-  if (
-    !Number.isInteger(existencias) ||
-    existencias < 0
-  ) {
+  if (usaTallas && tallas.some((item) => !Number.isInteger(item.stock) || item.stock < 0)) {
+    mostrarMensaje(
+      "El stock de cada talla debe ser un entero mayor o igual a cero.",
+      true,
+    );
+    return;
+  }
+
+  if (!usaTallas && (!Number.isInteger(existencias) || existencias < 0)) {
     mostrarMensaje(
       "Las existencias deben ser un entero mayor o igual a cero.",
       true,
@@ -352,6 +402,7 @@ async function manejarFormulario(evento) {
     descripcion,
     precio,
     existencias,
+    tallas,
     imagen,
   };
 
@@ -467,6 +518,14 @@ export async function iniciarAdministracionProductos() {
       elementos.vistaPrevia.hidden = false;
     },
   );
+
+  elementos.usaTallas?.addEventListener("change", () => {
+    mostrarConfiguracionTallas(elementos.usaTallas.checked);
+  });
+
+  elementos.camposTallas.forEach((campo) => {
+    campo.addEventListener("input", actualizarTotalTallas);
+  });
 
   elementos.botonCancelar?.addEventListener(
     "click",

@@ -56,6 +56,7 @@ export function obtenerProductos({
   categoria = "",
   busqueda = "",
   orden = "",
+  talla = "",
 } = {}) {
   const parametros = new URLSearchParams();
 
@@ -75,6 +76,10 @@ export function obtenerProductos({
 
   if (orden) {
     parametros.set("orden", orden);
+  }
+
+  if (talla) {
+    parametros.set("talla", talla);
   }
 
   const consulta = parametros.toString();
@@ -98,6 +103,7 @@ function construirDatosProducto({
   descripcion = "",
   precio,
   existencias,
+  tallas = [],
   imagen,
 }) {
   const datos = new FormData();
@@ -107,6 +113,7 @@ function construirDatosProducto({
   datos.append("descripcion", descripcion);
   datos.append("precio", String(precio));
   datos.append("existencias", String(existencias));
+  datos.append("tallas", JSON.stringify(tallas));
 
   if (imagen instanceof File) {
     datos.append("imagen", imagen);

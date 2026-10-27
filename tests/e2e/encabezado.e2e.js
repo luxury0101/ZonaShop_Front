@@ -28,7 +28,16 @@ async function simularApi(page) {
         await route.fulfill({ json: [] });
       } else if (busqueda === "contallas") {
         await route.fulfill({
-          json: [{ ...productos[0], tallas: [{ talla: "M", stock: 2 }] }],
+          json: [{
+            ...productos[0],
+            tallas: [
+              { talla: "XS", stock: 3, agotada: false },
+              { talla: "S", stock: 0, agotada: true },
+              { talla: "M", stock: 2, agotada: false },
+              { talla: "L", stock: 6, agotada: false },
+              { talla: "XL", stock: 0, agotada: true },
+            ],
+          }],
         });
       } else if (busqueda === "fallar" && falloPendiente) {
         falloPendiente = false;
@@ -124,6 +133,13 @@ test("el catálogo ofrece recuperación para estados vacío y de error", async (
   await page.getByRole("button", { name: "Agregar Chaqueta Noir" }).click();
   await expect(page.locator("#modal-detalle-producto")).toBeVisible();
   await expect(page.locator("#cantidad-carrito")).toHaveText("0");
+  await page.locator("#detalle-producto-agregar").click();
+  await expect(page.locator("#detalle-producto-error")).toHaveText("Elige una talla");
+  await expect(page.getByRole("button", { name: "Talla S, agotada" })).toBeDisabled();
+  await page.getByRole("button", { name: "Seleccionar talla M" }).click();
+  await expect(page.locator("#detalle-producto-stock-bajo")).toHaveText("Quedan 2 unidades");
+  await page.locator("#detalle-producto-agregar").click();
+  await expect(page.locator("#cantidad-carrito")).toHaveText("1");
 });
 
 test("los filtros forman una fila y no desbordan en escritorio", async ({ page }) => {
@@ -138,7 +154,7 @@ test("los filtros forman una fila y no desbordan en escritorio", async ({ page }
   const columnas = await page.locator("#formulario-filtros").evaluate(
     (elemento) => getComputedStyle(elemento).gridTemplateColumns.split(" ").length,
   );
-  expect(columnas).toBe(5);
+  expect(columnas).toBe(6);
   expect(await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
   )).toBe(false);

@@ -150,6 +150,33 @@ describe("carrito", () => {
       .toContain("Solo quedan 1 unidades disponibles");
   });
 
+  it("mantiene tallas distintas como artículos separados", async () => {
+    const { agregarAlCarrito, iniciarCarrito } = await cargarModulo();
+    const producto = {
+      id: 8,
+      nombre: "Camisa oversize",
+      precio: "89900.00",
+      existencias: 5,
+      agotado: false,
+      tallas: [
+        { talla: "S", stock: 2 },
+        { talla: "M", stock: 3 },
+      ],
+    };
+
+    await iniciarCarrito();
+    agregarAlCarrito({ ...producto, talla: "S", existencias: 2 });
+    agregarAlCarrito({ ...producto, talla: "M", existencias: 3 });
+
+    const guardado = JSON.parse(localStorage.getItem("zonashop_carrito"));
+    expect(guardado).toEqual([
+      expect.objectContaining({ id: 8, talla: "S", cantidad: 1 }),
+      expect.objectContaining({ id: 8, talla: "M", cantidad: 1 }),
+    ]);
+    expect(document.querySelector("#lista-carrito").textContent).toContain("Talla: S");
+    expect(document.querySelector("#lista-carrito").textContent).toContain("Talla: M");
+  });
+
   it("revalida precio y existencias al restaurar el carrito", async () => {
     localStorage.setItem(
       "zonashop_carrito",

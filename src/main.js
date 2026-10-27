@@ -47,6 +47,7 @@ const campoBusqueda = document.querySelector(
 );
 
 const selectorOrden = document.querySelector("#orden");
+const selectorTalla = document.querySelector("#talla");
 const botonLimpiarFiltros = document.querySelector(
   "#boton-limpiar-filtros",
 );
@@ -285,6 +286,7 @@ async function cargarProductos() {
       categoria: selectorCategoria.value,
       busqueda: campoBusqueda.value,
       orden: selectorOrden.value,
+      talla: selectorTalla.value,
     });
 
     mostrarProductos(productos);
@@ -311,6 +313,7 @@ function limpiarFiltros() {
   campoBusqueda.value = "";
   selectorCategoria.value = "";
   selectorOrden.value = "";
+  selectorTalla.value = "";
   cargarProductos();
 }
 
@@ -333,6 +336,7 @@ selectorCategoria.addEventListener(
 
 
 selectorOrden.addEventListener("change", cargarProductos);
+selectorTalla.addEventListener("change", cargarProductos);
 
 
 botonLimpiarFiltros.addEventListener("click", limpiarFiltros);

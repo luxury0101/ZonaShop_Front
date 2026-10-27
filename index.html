@@ -98,6 +98,17 @@
           </select>
         </label>
         <label>
+          Talla
+          <select id="talla">
+            <option value="">Todas las tallas</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+        </label>
+        <label>
           Ordenar
           <select id="orden">
             <option value="">Más recientes</option>
@@ -179,6 +190,20 @@
               <label for="producto-descripcion">Descripción</label><textarea id="producto-descripcion" rows="3"></textarea>
               <label for="producto-precio">Precio</label><input id="producto-precio" type="number" min="0.01" step="0.01" required />
               <label for="producto-existencias">Existencias</label><input id="producto-existencias" type="number" min="0" step="1" required />
+              <div class="configuracion-tallas">
+                <label class="configuracion-tallas__interruptor" for="producto-usa-tallas"><input id="producto-usa-tallas" type="checkbox" /> Este producto usa tallas</label>
+                <fieldset id="producto-tallas" hidden>
+                  <legend>Stock por talla</legend>
+                  <p>El total de existencias se calcula automáticamente.</p>
+                  <div class="tallas-admin">
+                    <label for="producto-talla-xs">XS<input id="producto-talla-xs" data-talla="XS" type="number" min="0" step="1" value="0" /></label>
+                    <label for="producto-talla-s">S<input id="producto-talla-s" data-talla="S" type="number" min="0" step="1" value="0" /></label>
+                    <label for="producto-talla-m">M<input id="producto-talla-m" data-talla="M" type="number" min="0" step="1" value="0" /></label>
+                    <label for="producto-talla-l">L<input id="producto-talla-l" data-talla="L" type="number" min="0" step="1" value="0" /></label>
+                    <label for="producto-talla-xl">XL<input id="producto-talla-xl" data-talla="XL" type="number" min="0" step="1" value="0" /></label>
+                  </div>
+                </fieldset>
+              </div>
               <label for="producto-imagen">Imagen</label><div class="campo-imagen-producto"><input id="producto-imagen" type="file" accept="image/jpeg,image/png,image/webp" /><img id="vista-previa-producto" class="vista-previa-producto" alt="Vista previa del producto" hidden /><small>Formatos JPG, PNG o WEBP. Máximo 5 MB.</small></div>
               <div class="formulario-producto__acciones"><button id="boton-guardar-producto" type="submit">Crear producto</button><button id="boton-cancelar-producto" type="button" hidden>Cancelar edición</button></div>
               <p id="mensaje-producto" class="mensaje-producto" role="status" aria-live="polite"></p>
@@ -338,7 +363,7 @@
 
 
 
-    <dialog id="modal-detalle-producto" class="modal-detalle-producto">
+    <dialog id="modal-detalle-producto" class="modal-detalle-producto" aria-labelledby="detalle-producto-nombre">
       <div class="detalle-producto">
         <button
           id="boton-cerrar-detalle-producto"
@@ -372,6 +397,12 @@
           <p id="detalle-producto-descripcion"></p>
           <strong id="detalle-producto-precio"></strong>
           <span id="detalle-producto-stock"></span>
+          <fieldset id="detalle-producto-tallas" class="detalle-producto__tallas" tabindex="-1" hidden>
+            <legend>Selecciona tu talla</legend>
+            <div id="detalle-producto-opciones-talla" class="detalle-producto__opciones-talla"></div>
+          </fieldset>
+          <p id="detalle-producto-stock-bajo" class="detalle-producto__stock-bajo" aria-live="polite" hidden></p>
+          <p id="detalle-producto-error" class="detalle-producto__error" role="alert" aria-live="assertive"></p>
           <button id="detalle-producto-agregar" type="button">
             Agregar al carrito
           </button>

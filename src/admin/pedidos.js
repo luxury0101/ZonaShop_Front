@@ -69,7 +69,7 @@ function crearTarjeta(pedido) {
   productos.className = "pedido-admin__productos";
   pedido.items.forEach((item) => {
     const producto = document.createElement("li");
-    producto.textContent = `${item.nombre_producto} × ${item.cantidad} — ${formatearPrecio(item.subtotal)}`;
+    producto.textContent = `${item.nombre_producto}${item.talla ? ` · Talla ${item.talla}` : ""} × ${item.cantidad} — ${formatearPrecio(item.subtotal)}`;
     productos.append(producto);
   });
 

@@ -40,6 +40,19 @@ function convertirACentavos(valor) {
   return Number.isFinite(numero) ? Math.round(numero * 100) : 0;
 }
 
+function claveItem(item) {
+  return `${item.id}::${item.talla || ""}`;
+}
+
+function stockDelProducto(producto, talla = "") {
+  const tallas = Array.isArray(producto.tallas) ? producto.tallas : [];
+  if (tallas.length === 0) {
+    return talla ? 0 : Number(producto.existencias);
+  }
+  if (!talla) return 0;
+  return Number(tallas.find((item) => item.talla === talla)?.stock || 0);
+}
+
 function formatearPrecio(centavos) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -82,6 +95,7 @@ function adaptarCarritoCuenta(items) {
     precioCentavos: convertirACentavos(item.precio),
     cantidad: item.cantidad,
     existencias: item.existencias,
+    talla: item.talla || "",
     imagen: item.imagen || "",
   }));
 }
@@ -114,6 +128,7 @@ function cargarCarrito() {
       ? datos.filter((item) => item && item.id != null && Number.isInteger(item.cantidad) && item.cantidad > 0)
         .map((item) => ({
           ...item,
+          talla: item.talla || "",
           precioCentavos: Number.isInteger(item.precioCentavos)
             ? item.precioCentavos
             : convertirACentavos(item.precio),
@@ -168,13 +183,13 @@ function actualizarResumen() {
   });
 }
 
-function cambiarCantidad(productoId, nuevaCantidad) {
-  const item = carrito.find((producto) => String(producto.id) === String(productoId));
+function cambiarCantidad(clave, nuevaCantidad) {
+  const item = carrito.find((producto) => claveItem(producto) === clave);
   if (!item) return;
   const cantidad = Number(nuevaCantidad);
   const limite = Number(item.existencias);
   if (!Number.isInteger(cantidad) || cantidad < 1) {
-    eliminarDelCarrito(productoId);
+    eliminarDelCarrito(clave);
     return;
   }
   if (Number.isFinite(limite) && cantidad > limite) {
@@ -188,9 +203,9 @@ function cambiarCantidad(productoId, nuevaCantidad) {
   renderizarCarrito();
 }
 
-function eliminarDelCarrito(productoId) {
-  const item = carrito.find((producto) => String(producto.id) === String(productoId));
-  carrito = carrito.filter((producto) => String(producto.id) !== String(productoId));
+function eliminarDelCarrito(clave) {
+  const item = carrito.find((producto) => claveItem(producto) === clave);
+  carrito = carrito.filter((producto) => claveItem(producto) !== clave);
   guardarCarrito();
   renderizarCarrito();
   avisar(`${item?.nombre || "Producto"} eliminado del carrito`, "informacion");
@@ -202,21 +217,23 @@ function crearControlCantidad(item) {
   const botonRestar = document.createElement("button");
   botonRestar.type = "button";
   botonRestar.textContent = "−";
-  botonRestar.setAttribute("aria-label", `Restar una unidad de ${item.nombre}`);
+  const descripcion = `${item.nombre}${item.talla ? ` talla ${item.talla}` : ""}`;
+  const clave = claveItem(item);
+  botonRestar.setAttribute("aria-label", `Restar una unidad de ${descripcion}`);
   const entrada = document.createElement("input");
   entrada.type = "number";
   entrada.min = "1";
   entrada.max = String(item.existencias);
   entrada.value = String(item.cantidad);
-  entrada.setAttribute("aria-label", `Cantidad de ${item.nombre}`);
+  entrada.setAttribute("aria-label", `Cantidad de ${descripcion}`);
   const botonSumar = document.createElement("button");
   botonSumar.type = "button";
   botonSumar.textContent = "+";
-  botonSumar.setAttribute("aria-label", `Agregar una unidad de ${item.nombre}`);
+  botonSumar.setAttribute("aria-label", `Agregar una unidad de ${descripcion}`);
   botonSumar.disabled = item.cantidad >= Number(item.existencias);
-  botonRestar.addEventListener("click", () => cambiarCantidad(item.id, item.cantidad - 1));
-  entrada.addEventListener("change", () => cambiarCantidad(item.id, Number(entrada.value)));
-  botonSumar.addEventListener("click", () => cambiarCantidad(item.id, item.cantidad + 1));
+  botonRestar.addEventListener("click", () => cambiarCantidad(clave, item.cantidad - 1));
+  entrada.addEventListener("change", () => cambiarCantidad(clave, Number(entrada.value)));
+  botonSumar.addEventListener("click", () => cambiarCantidad(clave, item.cantidad + 1));
   contenedor.append(botonRestar, entrada, botonSumar);
   return contenedor;
 }
@@ -240,7 +257,14 @@ function crearItemCarrito(item) {
   nombre.textContent = item.nombre;
   const precioUnitario = document.createElement("p");
   precioUnitario.textContent = `${formatearPrecio(item.precioCentavos)} por unidad`;
-  informacion.append(nombre, precioUnitario);
+  informacion.append(nombre);
+  if (item.talla) {
+    const talla = document.createElement("p");
+    talla.className = "item-carrito__talla";
+    talla.textContent = `Talla: ${item.talla}`;
+    informacion.append(talla);
+  }
+  informacion.append(precioUnitario);
   const subtotal = document.createElement("strong");
   subtotal.className = "item-carrito__subtotal";
   subtotal.textContent = formatearPrecio(item.precioCentavos * item.cantidad);
@@ -248,7 +272,7 @@ function crearItemCarrito(item) {
   botonEliminar.type = "button";
   botonEliminar.className = "item-carrito__eliminar";
   botonEliminar.textContent = "Eliminar";
-  botonEliminar.addEventListener("click", () => eliminarDelCarrito(item.id));
+  botonEliminar.addEventListener("click", () => eliminarDelCarrito(claveItem(item)));
   articulo.append(visual, informacion, crearControlCantidad(item), subtotal, botonEliminar);
   return articulo;
 }
@@ -299,8 +323,9 @@ async function revalidarCarrito() {
       }
       return;
     }
-    const existencias = Number(producto.existencias);
-    if (producto.agotado || !Number.isFinite(existencias) || existencias < 1) {
+    const talla = item.talla || "";
+    const existencias = stockDelProducto(producto, talla);
+    if (!Number.isFinite(existencias) || existencias < 1) {
       productosAjustados += 1;
       return;
     }
@@ -315,6 +340,7 @@ async function revalidarCarrito() {
       precioCentavos,
       cantidad,
       existencias,
+      talla,
       imagen: producto.imagen || "",
     });
   });
@@ -329,12 +355,20 @@ async function revalidarCarrito() {
 }
 
 export function agregarAlCarrito(producto) {
-  const existencias = Number(producto.existencias);
+  const tallas = Array.isArray(producto.tallas) ? producto.tallas : [];
+  const talla = producto.talla || "";
+  if (tallas.length > 0 && !talla) {
+    avisar("Elige una talla", "advertencia");
+    return;
+  }
+  const existencias = tallas.length > 0
+    ? stockDelProducto(producto, talla)
+    : Number(producto.existencias);
   if (producto.agotado || !Number.isFinite(existencias) || existencias < 1) {
     avisar(`${producto.nombre} no tiene stock disponible`, "error");
     return;
   }
-  const itemExistente = carrito.find((item) => String(item.id) === String(producto.id));
+  const itemExistente = carrito.find((item) => claveItem(item) === claveItem({ id: producto.id, talla }));
   if (itemExistente) {
     itemExistente.existencias = existencias;
     itemExistente.precioCentavos = convertirACentavos(producto.precio);
@@ -352,6 +386,7 @@ export function agregarAlCarrito(producto) {
       precioCentavos: convertirACentavos(producto.precio),
       cantidad: 1,
       existencias,
+      talla,
       imagen: producto.imagen || "",
     });
   }
@@ -367,7 +402,7 @@ function mostrarResumenPago() {
     const fila = document.createElement("div");
     const descripcion = document.createElement("span");
     const subtotal = document.createElement("strong");
-    descripcion.textContent = `${item.nombre} × ${item.cantidad}`;
+    descripcion.textContent = `${item.nombre}${item.talla ? ` · Talla ${item.talla}` : ""} × ${item.cantidad}`;
     subtotal.textContent = formatearPrecio(item.precioCentavos * item.cantidad);
     fila.append(descripcion, subtotal);
     elementos.resumenPago.append(fila);

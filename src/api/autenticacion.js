@@ -36,7 +36,7 @@ export function guardarCarritoCuenta(items, fusionar = false) {
   return clienteApi("/api/auth/carrito/", {
     method: "PUT",
     body: JSON.stringify({
-      items: items.map(({ id, cantidad }) => ({ id, cantidad })),
+      items: items.map(({ id, cantidad, talla = "" }) => ({ id, cantidad, talla })),
       fusionar,
     }),
   });
@@ -47,7 +47,7 @@ export function completarCompra(items, envio, guardarDireccion = false) {
   return clienteApi("/api/auth/pedidos/", {
     method: "POST",
     body: JSON.stringify({
-      items: items.map(({ id, cantidad }) => ({ id, cantidad })),
+      items: items.map(({ id, cantidad, talla = "" }) => ({ id, cantidad, talla })),
       envio,
       guardarDireccion,
     }),

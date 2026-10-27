@@ -54,7 +54,7 @@ function crearPedido(pedido) {
     const nombre = document.createElement("span");
     const unitario = document.createElement("small");
     const subtotal = document.createElement("strong");
-    nombre.textContent = `${item.nombre_producto} × ${item.cantidad}`;
+    nombre.textContent = `${item.nombre_producto}${item.talla ? ` · Talla ${item.talla}` : ""} × ${item.cantidad}`;
     unitario.textContent = `${formatearPrecio(item.precio_unitario)} por unidad`;
     subtotal.textContent = formatearPrecio(item.subtotal);
     descripcion.append(nombre, unitario);
