@@ -1,4 +1,4 @@
-import { abrirLogin } from "../auth/sesion.js";
+import { abrirLogin, obtenerUsuarioActual } from "../auth/sesion.js";
 
 const SELECTOR_INTERACTIVOS = [
   "a[href]",
@@ -18,7 +18,6 @@ export function iniciarEncabezado() {
   const panelFiltros = document.querySelector("#panel-filtros-header");
   const formularioFiltros = document.querySelector("#formulario-filtros");
   const botonCuenta = document.querySelector("#boton-cuenta-header");
-  const enlaceCategorias = document.querySelector("[data-abrir-categorias]");
 
   if (!botonMenu || !menu || !overlay || !botonFiltros || !panelFiltros) return;
 
@@ -68,8 +67,7 @@ export function iniciarEncabezado() {
   botonFiltros.addEventListener("click", () => establecerFiltros(!filtrosAbiertos(), true));
 
   botonCuenta?.addEventListener("click", () => {
-    const zonaInvitado = document.querySelector("#zona-invitado");
-    if (!zonaInvitado?.hidden) {
+    if (!obtenerUsuarioActual()) {
       establecerMenu(false);
       abrirLogin();
       return;
@@ -80,13 +78,7 @@ export function iniciarEncabezado() {
 
   formularioFiltros?.addEventListener("submit", () => establecerFiltros(false));
 
-  enlaceCategorias?.addEventListener("click", () => {
-    establecerMenu(false);
-    establecerFiltros(true);
-    requestAnimationFrame(() => document.querySelector("#categoria")?.focus());
-  });
-
-  menu.querySelectorAll("a:not([data-abrir-categorias])").forEach((enlace) => {
+  menu.querySelectorAll("a").forEach((enlace) => {
     enlace.addEventListener("click", () => establecerMenu(false));
   });
 

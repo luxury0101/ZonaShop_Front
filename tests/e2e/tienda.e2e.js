@@ -162,12 +162,19 @@ test("la cabecera difumina el hero y los títulos mantienen un ritmo legible", a
   }
 });
 
-test("carga el catálogo y permite agregar un producto al carrito", async ({ page }) => {
+test("abre una categoría independiente y permite agregar un producto al carrito", async ({ page }) => {
   await page.goto("/");
 
   await expect(
     page.getByRole("heading", { name: "Encuentra tu próximo favorito" }),
   ).toBeVisible();
+  await expect(page.locator("#productos-catalogo")).toBeHidden();
+  const categoria = page.getByRole("link", { name: "Ver productos de Ropa" });
+  await expect(categoria).toHaveAttribute("href", "/categoria/1-ropa");
+  await categoria.click();
+  await expect(page).toHaveURL(/\/categoria\/1-ropa$/);
+  await expect(page.getByRole("heading", { name: "Ropa", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Encuentra tu próximo favorito" })).toBeHidden();
   await expect(page.locator("#productos").getByRole("heading", { name: "Chaqueta Noir" })).toBeVisible();
 
   await expect(page.getByRole("button", { name: "Agregar Chaqueta Noir" })).toHaveCount(0);
@@ -209,7 +216,7 @@ test("las páginas informativas y los canales de contacto son reales y responsiv
 
   await expect(page.getByRole("heading", { name: "Políticas de envío", exact: true })).toBeVisible();
   await expect(page.getByText("[tiempo de entrega]", { exact: false })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Volver a la tienda" })).toHaveAttribute("href", "/#productos-catalogo");
+  await expect(page.getByRole("link", { name: "Volver a la tienda" })).toHaveAttribute("href", "/#categorias-destacadas");
   await expect(page.getByRole("heading", { name: "Encuentra tu próximo favorito" })).toBeHidden();
   expect(await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,

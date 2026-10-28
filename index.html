@@ -64,8 +64,8 @@
       </div>
       <nav class="menu-lateral__navegacion" aria-label="Navegación principal">
         <a href="/">Inicio</a>
-        <a href="/#productos-catalogo">Productos</a>
-        <a href="/#productos-catalogo" data-abrir-categorias>Categorías</a>
+        <a href="/productos">Productos</a>
+        <a href="/#categorias-destacadas">Categorías</a>
         <a href="/#contacto-directo">Contacto</a>
       </nav>
       <div class="menu-lateral__cuenta">
@@ -144,14 +144,14 @@
           <div class="presentacion__contenido">
             <h1 id="titulo-principal">Encuentra tu próximo favorito</h1>
             <p>Descubre prendas seleccionadas para vestir tu estilo con intención.</p>
-            <a class="presentacion__boton" href="#productos-catalogo">Ver productos</a>
+            <a class="presentacion__boton" href="#categorias-destacadas">Ver categorías</a>
           </div>
         </div>
       </section>
       <section id="productos-nuevos-seccion" class="nuevos inicio-editorial contenedor" aria-labelledby="titulo-nuevos">
         <header class="cabecera-editorial cabecera-editorial--enlace">
           <div><h2 id="titulo-nuevos">Nuevos</h2><p>Las piezas más recientes de ZonaShop.</p></div>
-          <a href="#productos-catalogo">Ver todo</a>
+          <a href="/productos">Ver todo</a>
         </header>
         <div id="productos-nuevos" class="productos productos--nuevos" aria-live="polite"></div>
       </section>
@@ -163,12 +163,13 @@
         <div id="categorias-mosaico" class="categorias-mosaico" aria-live="polite"></div>
       </section>
 
-      <section id="productos-catalogo" class="catalogo contenedor" aria-labelledby="titulo-catalogo">
+      <section id="productos-catalogo" class="catalogo contenedor" aria-labelledby="titulo-catalogo" hidden>
         <div class="catalogo__encabezado">
           <div>
-            <p class="seccion-etiqueta">Explorar</p>
-            <h2 id="titulo-catalogo">Productos</h2>
+            <p id="etiqueta-catalogo" class="seccion-etiqueta">Catálogo</p>
+            <h1 id="titulo-catalogo">Productos</h1>
           </div>
+          <a class="catalogo__volver" href="/#categorias-destacadas">Todas las categorías</a>
         </div>
         <p id="estado" class="estado" role="status">Cargando catálogo...</p>
         <div id="productos" class="productos" aria-live="polite"></div>
@@ -180,7 +181,7 @@
         <div class="banner-editorial__velo"></div>
         <div class="contenedor banner-editorial__contenido">
           <h2 id="titulo-banner-editorial">Una nueva forma de vestir lo cotidiano</h2>
-          <a href="#productos-catalogo">Descubrir la colección</a>
+          <a href="/productos">Descubrir la colección</a>
         </div>
       </section>
 

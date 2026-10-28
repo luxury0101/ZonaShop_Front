@@ -56,7 +56,7 @@ test.beforeEach(async ({ page }) => simularApi(page));
 
 test("el header móvil, menú y filtros funcionan a 375px", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
+  await page.goto("/productos");
 
   const header = page.locator(".encabezado");
   await expect(header).toBeVisible();
@@ -105,6 +105,8 @@ test("el header móvil, menú y filtros funcionan a 375px", async ({ page }) => 
   )).toBe(1);
   await page.locator("#busqueda").fill("Chaqueta");
   await page.getByRole("button", { name: "Buscar", exact: true }).click();
+  await expect(page).toHaveURL(/\/productos\?buscar=Chaqueta$/);
+  await expect(page.locator("#estado")).toHaveText("1 producto(s) encontrado(s).");
   await expect(page.locator("#panel-filtros-header")).toBeHidden();
 
   await page.locator("#boton-cuenta-header").click();
@@ -112,7 +114,7 @@ test("el header móvil, menú y filtros funcionan a 375px", async ({ page }) => 
 });
 
 test("el catálogo ofrece recuperación para estados vacío y de error", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/productos");
 
   await page.locator("#boton-filtros-header").click();
   await page.locator("#busqueda").fill("sinresultados");
@@ -145,7 +147,8 @@ test("el catálogo ofrece recuperación para estados vacío y de error", async (
 
 test("los filtros forman una fila y no desbordan en escritorio", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/productos");
+  await expect(page.locator("#estado")).toHaveText("1 producto(s) encontrado(s).");
   const columnasProductos = await page.locator("#productos").evaluate(
     (elemento) => getComputedStyle(elemento).gridTemplateColumns
       .split(" ")

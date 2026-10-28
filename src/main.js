@@ -33,6 +33,13 @@ import { iniciarAdministracionPedidos } from "./admin/pedidos.js";
 import { iniciarNavegacionAdmin } from "./admin/navegacion.js";
 import { iniciarEncabezado } from "./ui/encabezado.js";
 import { iniciarPaginasInformativas } from "./paginas/informativas.js";
+import {
+  analizarRutaCatalogo,
+  crearConsultaFiltros,
+  crearRutaCategoria,
+  crearSlug,
+  leerFiltrosBusqueda,
+} from "./catalogo/rutas.js";
 
 
 const formulario = document.querySelector(
@@ -60,6 +67,9 @@ const contenedorProductos = document.querySelector(
 const estado = document.querySelector("#estado");
 const botonBuscar = formulario.querySelector('button[type="submit"]');
 const hero = document.querySelector(".presentacion");
+const seccionCatalogo = document.querySelector("#productos-catalogo");
+const tituloCatalogo = document.querySelector("#titulo-catalogo");
+const etiquetaCatalogo = document.querySelector("#etiqueta-catalogo");
 const categoriasMosaico = document.querySelector("#categorias-mosaico");
 const productosNuevos = document.querySelector("#productos-nuevos");
 const formularioSuscripcion = document.querySelector("#formulario-suscripcion");
@@ -71,6 +81,8 @@ const IMAGENES_CATEGORIA = [
   "/images/categoria-hombre.webp",
   "/images/categoria-ninos.webp",
 ];
+
+let categoriasDisponibles = [];
 
 
 function iniciarHero() {
@@ -96,6 +108,96 @@ function formatearPrecio(valor) {
     currency: "COP",
     maximumFractionDigits: 0,
   }).format(Number(valor));
+}
+
+
+function obtenerRutaCatalogoActual() {
+  return analizarRutaCatalogo(window.location.pathname);
+}
+
+
+function obtenerCategoriaDeRuta(categorias, ruta) {
+  if (ruta.tipo !== "categoria") return null;
+  return categorias.find((categoria) => (
+    (ruta.id && Number(categoria.id) === ruta.id)
+    || (!ruta.id && crearSlug(categoria.nombre) === ruta.slug)
+  )) || null;
+}
+
+
+function aplicarFiltrosDeLaUrl() {
+  const filtros = leerFiltrosBusqueda(window.location.search);
+  campoBusqueda.value = filtros.busqueda;
+  selectorOrden.value = Array.from(selectorOrden.options)
+    .some((opcion) => opcion.value === filtros.orden) ? filtros.orden : "";
+  selectorTalla.value = Array.from(selectorTalla.options)
+    .some((opcion) => opcion.value === filtros.talla) ? filtros.talla : "";
+}
+
+
+function configurarVistaCatalogo(categorias) {
+  const ruta = obtenerRutaCatalogoActual();
+
+  if (ruta.tipo === "inicio") {
+    document.body.classList.add("ruta-inicio");
+    seccionCatalogo.hidden = true;
+    return { ruta, categoria: null, valida: true };
+  }
+
+  if (ruta.tipo !== "productos" && ruta.tipo !== "categoria") {
+    return { ruta, categoria: null, valida: false };
+  }
+
+  document.body.classList.add("ruta-catalogo");
+  seccionCatalogo.hidden = false;
+  aplicarFiltrosDeLaUrl();
+
+  if (ruta.tipo === "productos") {
+    selectorCategoria.value = "";
+    etiquetaCatalogo.textContent = "Catálogo";
+    tituloCatalogo.textContent = "Productos";
+    document.title = "Productos | ZonaShop";
+    return { ruta, categoria: null, valida: true };
+  }
+
+  const categoria = obtenerCategoriaDeRuta(categorias, ruta);
+  if (!categoria) {
+    etiquetaCatalogo.textContent = "Catálogo";
+    tituloCatalogo.textContent = "Categoría no encontrada";
+    document.title = "Categoría no encontrada | ZonaShop";
+    return { ruta, categoria: null, valida: false };
+  }
+
+  selectorCategoria.value = String(categoria.id);
+  etiquetaCatalogo.textContent = "Categoría";
+  tituloCatalogo.textContent = categoria.nombre;
+  document.title = `${categoria.nombre} | ZonaShop`;
+  return { ruta, categoria, valida: true };
+}
+
+
+function obtenerConsultaFiltrosActuales() {
+  return crearConsultaFiltros({
+    busqueda: campoBusqueda.value,
+    orden: selectorOrden.value,
+    talla: selectorTalla.value,
+  });
+}
+
+
+function navegarAResultados() {
+  const categoria = categoriasDisponibles.find(
+    (elemento) => String(elemento.id) === selectorCategoria.value,
+  );
+  const ruta = categoria ? crearRutaCategoria(categoria) : "/productos";
+  window.location.assign(`${ruta}${obtenerConsultaFiltrosActuales()}`);
+}
+
+
+function sincronizarConsultaCatalogo() {
+  const ruta = obtenerRutaCatalogoActual();
+  if (ruta.tipo !== "productos" && ruta.tipo !== "categoria") return;
+  window.history.replaceState({}, "", `${window.location.pathname}${obtenerConsultaFiltrosActuales()}`);
 }
 
 
@@ -329,10 +431,10 @@ function renderizarCategorias(categorias) {
   categoriasMosaico.hidden = false;
 
   categorias.forEach((categoria, indice) => {
-    const boton = document.createElement("button");
-    boton.type = "button";
-    boton.className = "categoria-editorial";
-    boton.setAttribute("aria-label", `Ver productos de ${categoria.nombre}`);
+    const enlace = document.createElement("a");
+    enlace.href = crearRutaCategoria(categoria);
+    enlace.className = "categoria-editorial";
+    enlace.setAttribute("aria-label", `Ver productos de ${categoria.nombre}`);
 
     const imagen = document.createElement("img");
     imagen.src = imagenParaCategoria(categoria, indice);
@@ -348,13 +450,8 @@ function renderizarCategorias(categorias) {
       `${categoria.cantidad_productos ?? 0} producto(s)`,
       "categoria-editorial__cantidad",
     );
-    boton.append(imagen, nombre, cantidad);
-    boton.addEventListener("click", async () => {
-      selectorCategoria.value = String(categoria.id);
-      await cargarProductos();
-      document.querySelector("#productos-catalogo")?.scrollIntoView({ block: "start" });
-    });
-    categoriasMosaico.append(boton);
+    enlace.append(imagen, nombre, cantidad);
+    categoriasMosaico.append(enlace);
   });
 }
 
@@ -428,10 +525,12 @@ function iniciarSuscripcion() {
 
 
 function limpiarFiltros() {
+  const ruta = obtenerRutaCatalogoActual();
   campoBusqueda.value = "";
-  selectorCategoria.value = "";
   selectorOrden.value = "";
   selectorTalla.value = "";
+  if (ruta.tipo !== "categoria") selectorCategoria.value = "";
+  sincronizarConsultaCatalogo();
   cargarProductos();
 }
 
@@ -440,7 +539,7 @@ formulario.addEventListener(
   "submit",
   (evento) => {
     evento.preventDefault();
-    cargarProductos();
+    navegarAResultados();
   },
 );
 
@@ -448,13 +547,24 @@ formulario.addEventListener(
 selectorCategoria.addEventListener(
   "change",
   () => {
-    cargarProductos();
+    navegarAResultados();
   },
 );
 
 
-selectorOrden.addEventListener("change", cargarProductos);
-selectorTalla.addEventListener("change", cargarProductos);
+function actualizarFiltroCatalogo() {
+  const ruta = obtenerRutaCatalogoActual();
+  if (ruta.tipo !== "productos" && ruta.tipo !== "categoria") {
+    navegarAResultados();
+    return;
+  }
+  sincronizarConsultaCatalogo();
+  cargarProductos();
+}
+
+
+selectorOrden.addEventListener("change", actualizarFiltroCatalogo);
+selectorTalla.addEventListener("change", actualizarFiltroCatalogo);
 
 
 botonLimpiarFiltros.addEventListener("click", limpiarFiltros);
@@ -500,9 +610,29 @@ async function iniciarAplicacion() {
       cargarCategorias(),
     ]);
 
-    const productos = await cargarProductos();
+    categoriasDisponibles = categorias;
     renderizarCategorias(categorias);
-    renderizarNuevos(productos);
+    const vista = configurarVistaCatalogo(categorias);
+
+    if (vista.ruta.tipo === "inicio" || vista.ruta.tipo === "otra") {
+      const productos = await obtenerProductos();
+      renderizarNuevos(productos);
+      return;
+    }
+
+    if (vista.valida) {
+      await cargarProductos();
+      return;
+    }
+
+    estado.textContent = "No encontramos esa categoría.";
+    estado.classList.remove("estado--solo-lectores");
+    contenedorProductos.replaceChildren(crearEstadoCatalogo(
+      "Categoría no encontrada",
+      "Vuelve a categorías y elige una opción disponible.",
+      "Ver categorías",
+      () => window.location.assign("/#categorias-destacadas"),
+    ));
   } catch (error) {
     console.error(
       "No fue posible iniciar la aplicación:",
@@ -520,9 +650,14 @@ window.addEventListener(
     if (window.location.pathname.startsWith("/admin")) return;
     try {
       const categorias = await cargarCategorias();
-      const productos = await cargarProductos();
+      categoriasDisponibles = categorias;
       renderizarCategorias(categorias);
-      renderizarNuevos(productos);
+      const vista = configurarVistaCatalogo(categorias);
+      if (vista.ruta.tipo === "inicio" || vista.ruta.tipo === "otra") {
+        renderizarNuevos(await obtenerProductos());
+      } else if (vista.valida) {
+        await cargarProductos();
+      }
     } catch (error) {
       console.error(
         "No fue posible actualizar el catálogo:",
@@ -537,15 +672,12 @@ window.addEventListener(
   "productos:actualizados",
   async () => {
     if (window.location.pathname.startsWith("/admin")) return;
-    const productos = await cargarProductos();
-    if (
-      !selectorCategoria.value &&
-      !campoBusqueda.value.trim() &&
-      !selectorOrden.value &&
-      !selectorTalla.value
-    ) {
-      renderizarNuevos(productos);
+    const ruta = obtenerRutaCatalogoActual();
+    if (ruta.tipo === "inicio" || ruta.tipo === "otra") {
+      renderizarNuevos(await obtenerProductos());
+      return;
     }
+    await cargarProductos();
   },
 );
 

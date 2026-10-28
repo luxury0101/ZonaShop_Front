@@ -189,7 +189,7 @@ function crearPagina(configuracion) {
 
   const volver = document.createElement("a");
   volver.className = "pagina-informativa__volver";
-  volver.href = "/#productos-catalogo";
+  volver.href = "/#categorias-destacadas";
   volver.textContent = "Volver a la tienda";
   contenido.append(volver);
   cuerpo.append(indice, contenido);
