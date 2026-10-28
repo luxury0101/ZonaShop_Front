@@ -18,6 +18,7 @@ function elementos() {
     botonCancelarRegistro: document.querySelector("#boton-cancelar-registro"),
     botonCerrarSesion: document.querySelector("#boton-cerrar-sesion"),
     botonCerrarSesionAdmin: document.querySelector("#boton-cerrar-sesion-admin"),
+    botonIrRegistro: document.querySelector("#boton-ir-registro"),
     botonLogin: document.querySelector("#boton-login"),
     botonRegistro: document.querySelector("#boton-registro"),
     formularioLogin: document.querySelector("#formulario-login"),
@@ -198,10 +199,21 @@ export function abrirLogin() {
 }
 
 
+function abrirRegistroDesdeLogin() {
+  const ui = elementos();
+  mostrarMensaje(ui.mensajeLogin, "");
+  mostrarMensaje(ui.mensajeRegistro, "");
+  ui.modalLogin?.close();
+  ui.modalRegistro?.showModal();
+  requestAnimationFrame(() => document.querySelector("#registro-nombre")?.focus());
+}
+
+
 function registrarEventos() {
   const ui = elementos();
   ui.botonAbrirLogin?.addEventListener("click", abrirLogin);
   ui.botonAbrirRegistro?.addEventListener("click", () => ui.modalRegistro.showModal());
+  ui.botonIrRegistro?.addEventListener("click", abrirRegistroDesdeLogin);
   ui.botonCancelarLogin?.addEventListener("click", () => ui.modalLogin.close());
   ui.botonCancelarRegistro?.addEventListener("click", () => ui.modalRegistro.close());
   ui.formularioLogin?.addEventListener("submit", manejarLogin);

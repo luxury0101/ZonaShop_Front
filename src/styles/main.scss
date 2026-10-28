@@ -5517,6 +5517,45 @@ body::before {
   border-color: var(--zs-silver);
 }
 
+.formulario-autenticacion__alternativa {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--zs-line);
+}
+
+.formulario-autenticacion__alternativa p {
+  margin: 0;
+  color: var(--zs-silver);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.formulario-autenticacion__alternativa button {
+  width: 100%;
+  min-height: 48px;
+  color: var(--zs-white);
+  background: transparent;
+  border: 1px solid var(--zs-line-bright);
+  border-radius: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+
+.formulario-autenticacion__alternativa button:hover,
+.formulario-autenticacion__alternativa button:focus-visible {
+  color: var(--zs-ink);
+  background: var(--zs-silver);
+  border-color: var(--zs-silver);
+}
+
 .carrito-vacio strong,
 .catalogo-vacio strong {
   display: block;

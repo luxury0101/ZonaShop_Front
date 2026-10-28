@@ -111,6 +111,10 @@ test("el header móvil, menú y filtros funcionan a 375px", async ({ page }) => 
 
   await page.locator("#boton-cuenta-header").click();
   await expect(page.getByRole("dialog", { name: "Iniciar sesión" })).toBeVisible();
+  await page.getByRole("button", { name: "Crear una cuenta" }).click();
+  await expect(page.getByRole("dialog", { name: "Iniciar sesión" })).toBeHidden();
+  await expect(page.getByRole("dialog", { name: "Crear cuenta" })).toBeVisible();
+  await expect(page.locator("#registro-nombre")).toBeFocused();
 });
 
 test("el catálogo ofrece recuperación para estados vacío y de error", async ({ page }) => {
